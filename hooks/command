@@ -1,0 +1,28 @@
+#!/bin/bash
+set -eo pipefail
+
+basedir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
+
+. "$basedir/lib/shared.bash"
+. "$basedir/lib/diff.bash"
+. "$basedir/lib/watch.bash"
+. "$basedir/lib/trigger.bash"
+
+pipeline_yml=();
+index_of_pipelines_to_trigger=();
+
+diff=$(run_diff)
+get_index_of_pipelines_to_trigger "$diff"
+
+if [ "${#index_of_pipelines_to_trigger[@]}" -eq 0 ]; then
+  echo "No changes detected"
+else
+  pipeline_yml+=("steps:")
+  generate_pipeline_yml
+  output=$(printf '%s\n' "${pipeline_yml[@]}")
+
+  if [[ -n ${DEBUG:-} ]] ; then
+    echo >&2 "$output"
+  fi
+  echo "$output" | buildkite-agent pipeline upload
+fi
