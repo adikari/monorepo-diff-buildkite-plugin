@@ -25,8 +25,7 @@ This plugin will assist you in triggering pipelines by watching folders in your 
                 async: true
           wait: true
           hooks:
-            - label: "Tag successful build"
-              command: "echo "$(git rev-parse HEAD)" > last_successful_build"
+            - command: "echo "$(git rev-parse HEAD)" > last_successful_build"
 ```
 
 ## Configuration
@@ -66,7 +65,52 @@ git diff --name-only "$LAST_SUCCESSFUL_BUILD_COMMIT"
 
 set -ueo pipefail
 
-git describe --tags --match production-* --abbrev=0
+LATEST_BUILT_TAG=$(git describe --tags --match foo-service-* --abbrev=0)
+git diff --name-only "$LATEST_TAG"
+```
+
+### `watch`
+
+Declare a list of
+
+```yaml
+- path: app/cms/
+  config: # Required [trigger step configuration]
+    trigger: cms-deploy # Required [trigger pipeline slug]
+```
+
+#### `path`
+
+If the `path` specified here in the appears in the `diff` output, a `trigger` step will be added to the dynamically generated pipeline.yml
+
+#### `config`
+
+The configuration for the `trigger` step https://buildkite.com/docs/pipelines/trigger-step
+
+By default, it will pass the following values to the `build` attributes unless an alternative values are provided
+
+```yaml
+- path: app/cms/
+  config:
+    trigger: cms-deploy
+    build:
+      commit: $BUILDKITE_COMMIT
+      branch: $BUILDKITE_BRANCH
+```
+
+### `wait` (optional)
+
+By setting `wait` to `true`, the build will wait until the triggered pipeline builds are successful before proceeding
+
+### `hooks` (optional)
+
+Currently supports a list of `commands` you wish to execute after the `watched` pipelines have been triggered
+
+```yaml
+hooks:
+  - command: upload unit tests reports
+  - command: echo success
+
 ```
 
 ## References
