@@ -63,7 +63,7 @@ function add_build() {
 
   pipeline_yml+=("    build:")
   add_build_commit "$(read_pipeline_config "$pipeline" "BUILD_COMMIT")"
-  # add_build_message "$(read_pipeline_config "$pipeline" "BUILD_MESSAGE")"
+  add_build_message "$(read_pipeline_config "$pipeline" "BUILD_MESSAGE")"
   add_build_branch "$(read_pipeline_config "$pipeline" "BUILD_BRANCH")"
   add_build_env "$pipeline"
 }
@@ -79,7 +79,7 @@ function add_build_message() {
   local build_message=$1
   default_message="${BUILDKITE_PIPELINE_SLUG:-} Build: #${BUILDKITE_BUILD_NUMBER:-}"
 
-  pipeline_yml+=("      message: ${build_message:-$default_message}")
+  pipeline_yml+=("      message: \"${build_message:-$default_message}\"")
 }
 
 function add_build_branch() {
