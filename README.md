@@ -6,42 +6,42 @@ This plugin will assist you in triggering pipelines by watching folders in your 
 
 ### Simple
 
-```yml
-  steps:
-    - label: "Triggering pipelines"
-      plugins:
-        chronotc/monorepo-diff:
-          diff: "git diff --name-only HEAD~1"
-          watch:
-            - path: "foo-service/"
-              config:
-                trigger: "deploy-foo-service"
+```yaml
+steps:
+  - label: "Triggering pipelines"
+    plugins:
+      chronotc/monorepo-diff:
+        diff: "git diff --name-only HEAD~1"
+        watch:
+          - path: "foo-service/"
+            config:
+              trigger: "deploy-foo-service"
 ```
 
 ### Detailed
 
-```yml
-  steps:
-    - label: "Triggering pipelines"
-      plugins:
-        chronotc/monorepo-diff:
-          diff: "git diff --name-only $(head -n 1 last_successful_build)"
-          watch:
-            - path: "foo-service/"
-              config:
-                trigger: "deploy-foo-service"
-                build:
-                  message: "Deploying foo service"
-                  env:
-                    - HELLO=123
-                    - AWS_REGION
-            - path: "ops/terraform/"
-              config:
-                trigger: "provision-terraform-resources"
-                async: true
-          wait: true
-          hooks:
-            - command: "echo "$(git rev-parse HEAD)" > last_successful_build"
+```yaml
+steps:
+  - label: "Triggering pipelines"
+    plugins:
+      chronotc/monorepo-diff:
+        diff: "git diff --name-only $(head -n 1 last_successful_build)"
+        watch:
+          - path: "foo-service/"
+            config:
+              trigger: "deploy-foo-service"
+              build:
+                message: "Deploying foo service"
+                env:
+                  - HELLO=123
+                  - AWS_REGION
+          - path: "ops/terraform/"
+            config:
+              trigger: "provision-terraform-resources"
+              async: true
+        wait: true
+        hooks:
+          - command: "echo "$(git rev-parse HEAD)" > last_successful_build"
 ```
 
 ## Configuration
@@ -127,6 +127,26 @@ hooks:
   - command: upload unit tests reports
   - command: echo success
 
+```
+
+## Environment
+
+### `DEBUG` (optional)
+
+By turning `DEBUG` on, the generated pipeline will be displayed prior to upload
+
+```yaml
+steps:
+  - label: "Triggering pipelines"
+    env:
+      DEBUG: true
+    plugins:
+      chronotc/monorepo-diff:
+        diff: "git diff --name-only HEAD~1"
+        watch:
+          - path: "foo-service/"
+            config:
+              trigger: "deploy-foo-service"
 ```
 
 ## References
