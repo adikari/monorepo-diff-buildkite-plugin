@@ -4,11 +4,27 @@ This plugin will assist you in triggering pipelines by watching folders in your 
 
 ## Example
 
+### Simple
+
 ```yml
   steps:
     - label: "Triggering pipelines"
       plugins:
-        monorepo-diff:
+        chronotc/monorepo-diff:
+          diff: "git diff --name-only HEAD~1"
+          watch:
+            - path: "foo-service/"
+              config:
+                trigger: "deploy-foo-service"
+```
+
+### Detailed
+
+```yml
+  steps:
+    - label: "Triggering pipelines"
+      plugins:
+        chronotc/monorepo-diff:
           diff: "git diff --name-only $(head -n 1 last_successful_build)"
           watch:
             - path: "foo-service/"
