@@ -77,7 +77,7 @@ function add_build_commit() {
 
 function add_build_message() {
   local build_message=$1
-  default_message="${BUILDKITE_PIPELINE_SLUG:-} Build: #${BUILDKITE_BUILD_NUMBER:-}"
+  default_message="${BUILDKITE_MESSAGE:-}"
 
   pipeline_yml+=("      message: \"${build_message:-$default_message}\"")
 }
