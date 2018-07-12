@@ -78,8 +78,9 @@ function add_build_commit() {
 function add_build_message() {
   local build_message=$1
   default_message="${BUILDKITE_MESSAGE:-}"
+  sanitized_build_message=$(sanitize_string "${build_message:-$default_message}")
 
-  pipeline_yml+=("      message: \"${build_message:-$default_message}\"")
+  pipeline_yml+=("      message: \"$sanitized_build_message\"")
 }
 
 function add_build_branch() {
@@ -129,4 +130,10 @@ function add_hooks() {
   while IFS=$'\n' read -r command ; do
     add_command "$command"
   done <<< "$(plugin_read_list HOOKS COMMAND)"
+}
+
+function sanitize_string() {
+  local string=$1
+  escaped_quotes="${string//\"/\\\"}"
+  echo "$escaped_quotes"
 }
