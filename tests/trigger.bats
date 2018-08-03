@@ -245,3 +245,20 @@ load '/usr/local/lib/bats/load.bash'
   assert_output --partial "  - command: echo test"
   assert_output --partial "  - command: aws s3 ls"
 }
+
+@test "Preserves quotes in commit messages" {
+  export BUILDKITE_MESSAGE="Hello world \"stuff\" \n multiline"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_DIFF="cat $PWD/tests/mocks/diff1"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_0_PATH="services/foo"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_0_CONFIG_TRIGGER="slug-for-foo"
+  export DEBUG=true
+
+  stub buildkite-agent \
+    "pipeline upload : echo uploading"
+
+  run $PWD/hooks/command
+
+  unstub buildkite-agent
+  assert_success
+  assert_output --partial '    message: "Hello world \"stuff\" \n multiline"'
+}
