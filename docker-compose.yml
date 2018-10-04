@@ -5,3 +5,8 @@ services:
     image: buildkite/plugin-tester
     volumes:
       - .:/plugin
+  lint:
+    image: buildkite/plugin-linter
+    command: ['--id', 'chronotc/monorepo-diff']
+    volumes:
+      - ".:/plugin"
