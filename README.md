@@ -6,11 +6,11 @@ This plugin will assist you in triggering pipelines by watching folders in your 
 
 ### Simple
 
-```yaml
+```yml
 steps:
   - label: "Triggering pipelines"
     plugins:
-      chronotc/monorepo-diff:
+      chronotc/monorepo-diff#v1.0.0:
         diff: "git diff --name-only HEAD~1"
         watch:
           - path: "foo-service/"
@@ -20,11 +20,11 @@ steps:
 
 ### Detailed
 
-```yaml
+```yml
 steps:
   - label: "Triggering pipelines"
     plugins:
-      chronotc/monorepo-diff:
+      chronotc/monorepo-diff#v1.0.0:
         diff: "git diff --name-only $(head -n 1 last_successful_build)"
         watch:
           - path: "foo-service/"
@@ -41,7 +41,7 @@ steps:
               async: true
         wait: true
         hooks:
-          - command: "echo "$(git rev-parse HEAD)" > last_successful_build"
+          - command: "echo $(git rev-parse HEAD) > last_successful_build"
 ```
 
 ## Configuration
@@ -160,3 +160,7 @@ https://stackoverflow.com/questions/1527234/finding-a-branch-point-with-git
 Ensure that all tests are in the `./tests`
 
 `docker-compose run --rm tests`
+
+### To run lint
+
+`docker-compose run --rm lint`

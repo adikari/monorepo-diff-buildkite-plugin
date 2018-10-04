@@ -1,0 +1,41 @@
+name: Monorepo Diff
+description: Trigger pipelines on changes in watched folders
+author: https://github.com/chronotc
+requirements:
+  - git
+configuration:
+  properties:
+    diff:
+      type: string
+    watch:
+      type: array
+      properties:
+        path:
+          type: string
+        config:
+          type: object
+          properties:
+            trigger:
+              type: string
+            async:
+              type: boolean
+            build:
+              type: object
+              properties:
+                message:
+                  type: string
+                commit:
+                  type: string
+                branch:
+                  type: string
+                env:
+                  type: array
+    wait:
+      type: boolean
+    hooks:
+      type: array
+      properties:
+        command:
+          type: string
+  required:
+    - watch

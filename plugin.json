@@ -1,7 +1,0 @@
-{
-  "name": "monorepo-diff",
-  "description": "Trigger pipelines on changes in watched folders",
-  "author": "@chronotc",
-  "public": true,
-  "requirements": []
-}
