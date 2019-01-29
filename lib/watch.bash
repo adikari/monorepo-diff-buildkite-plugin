@@ -4,12 +4,12 @@ set -ueo pipefail
 function has_changed() {
   local diff_output=$1
   local watched_path=$2
-
-  if echo "$diff_output" | grep -q "^$watched_path" ; then
-    return 0
-  else
-    return 1
-  fi
+  for path in $watched_path; do
+    if echo "$diff_output" | grep -q "^$path" ; then
+      return 0
+    fi
+  done
+  return 1
 }
 
 function get_index_of_pipelines_to_trigger() {
