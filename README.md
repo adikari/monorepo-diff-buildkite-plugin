@@ -10,12 +10,12 @@ This plugin will assist you in triggering pipelines by watching folders in your 
 steps:
   - label: "Triggering pipelines"
     plugins:
-      chronotc/monorepo-diff#v1.0.0:
-        diff: "git diff --name-only HEAD~1"
-        watch:
-          - path: "foo-service/"
-            config:
-              trigger: "deploy-foo-service"
+      - chronotc/monorepo-diff#v1.0.0:
+          diff: "git diff --name-only HEAD~1"
+          watch:
+            - path: "foo-service/"
+              config:
+                trigger: "deploy-foo-service"
 ```
 
 ### Detailed
@@ -24,24 +24,24 @@ steps:
 steps:
   - label: "Triggering pipelines"
     plugins:
-      chronotc/monorepo-diff#v1.0.0:
-        diff: "git diff --name-only $(head -n 1 last_successful_build)"
-        watch:
-          - path: "foo-service/"
-            config:
-              trigger: "deploy-foo-service"
-              build:
-                message: "Deploying foo service"
-                env:
-                  - HELLO=123
-                  - AWS_REGION
-          - path: "ops/terraform/"
-            config:
-              trigger: "provision-terraform-resources"
-              async: true
-        wait: true
-        hooks:
-          - command: "echo $(git rev-parse HEAD) > last_successful_build"
+      - chronotc/monorepo-diff#v1.0.0:
+          diff: "git diff --name-only $(head -n 1 last_successful_build)"
+          watch:
+            - path: "foo-service/"
+              config:
+                trigger: "deploy-foo-service"
+                build:
+                  message: "Deploying foo service"
+                  env:
+                    - HELLO=123
+                    - AWS_REGION
+            - path: "ops/terraform/"
+              config:
+                trigger: "provision-terraform-resources"
+                async: true
+          wait: true
+          hooks:
+            - command: "echo $(git rev-parse HEAD) > last_successful_build"
 ```
 
 ## Configuration
@@ -141,12 +141,12 @@ steps:
     env:
       DEBUG: true
     plugins:
-      chronotc/monorepo-diff:
-        diff: "git diff --name-only HEAD~1"
-        watch:
-          - path: "foo-service/"
-            config:
-              trigger: "deploy-foo-service"
+      - chronotc/monorepo-diff:
+          diff: "git diff --name-only HEAD~1"
+          watch:
+            - path: "foo-service/"
+              config:
+                trigger: "deploy-foo-service"
 ```
 
 ## References
