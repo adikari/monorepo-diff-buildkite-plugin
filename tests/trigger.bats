@@ -44,6 +44,34 @@ load '/usr/local/lib/bats/load.bash'
   assert_output --partial "  - trigger: slug-for-bar"
 }
 
+@test "Generates trigger with multiple paths" {
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_DIFF="cat $PWD/tests/mocks/diff1"
+  # mixed string and array behavior
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_0_PATH="services/foo"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_0_CONFIG_TRIGGER="slug-for-foo"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_1_PATH="services/path-not-in-diff-1"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_1_CONFIG_TRIGGER="slug-for-path-not-in-diff"
+  # path not in diff
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_2_PATH_0="services/path-not-in-diff-2"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_2_CONFIG_TRIGGER="slug-for-path-not-in-diff"
+  # one path in diff, one path not in diff
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_3_PATH_0="services/bar"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_3_PATH_1="services/far"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_3_CONFIG_TRIGGER="slug-for-bar"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_3_CONFIG_LABEL="Bar service deployment"
+  export DEBUG=true
+
+  stub buildkite-agent \
+    "pipeline upload : echo uploading"
+
+  run $PWD/hooks/command
+
+  unstub buildkite-agent
+  assert_success
+  assert_output --partial "  - trigger: slug-for-foo"
+  assert_output --partial "  - trigger: slug-for-bar"
+}
+
 @test "Uses user defined label if it exist" {
   export BUILDKITE_PLUGIN_MONOREPO_DIFF_DIFF="cat $PWD/tests/mocks/diff1"
   export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_0_PATH="services/foo"
