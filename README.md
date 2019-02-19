@@ -35,7 +35,9 @@ steps:
                   env:
                     - HELLO=123
                     - AWS_REGION
-            - path: "ops/terraform/"
+            - path:
+                - "ops/terraform/"
+                - "ops/templates/terraform/"
               config:
                 trigger: "provision-terraform-resources"
                 async: true
@@ -93,11 +95,18 @@ Declare a list of
 - path: app/cms/
   config: # Required [trigger step configuration]
     trigger: cms-deploy # Required [trigger pipeline slug]
+- path:
+    - services/email
+    - assets/images/email
+  config:
+    trigger: email-deploy
 ```
 
 #### `path`
 
 If the `path` specified here in the appears in the `diff` output, a `trigger` step will be added to the dynamically generated pipeline.yml
+
+A list of paths can be provided to trigger the desired pipeline. Changes in any of the paths will initiate the pipeline provided in trigger.
 
 #### `config`
 
