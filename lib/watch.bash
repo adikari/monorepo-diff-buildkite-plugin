@@ -5,7 +5,7 @@ function has_changed() {
   local diff_output=$1
   local watched_path=$2
   for path in $watched_path; do
-    if echo "$diff_output" | grep -q "^$path" ; then
+    if grep -q "^$path" <<< "$diff_output"; then
       return 0
     fi
   done
