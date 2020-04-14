@@ -48,7 +48,7 @@ steps:
 
 ## Configuration
 
-### `diff` (optional)
+## `diff` (optional)
 
 This will run the script provided to determine the folder changes.
 Depending on your use case, you may want to determine the point where the branch occurs
@@ -87,7 +87,7 @@ LATEST_BUILT_TAG=$(git describe --tags --match foo-service-* --abbrev=0)
 git diff --name-only "$LATEST_TAG"
 ```
 
-### `watch`
+## `watch`
 
 Declare a list of
 
@@ -102,13 +102,20 @@ Declare a list of
     trigger: email-deploy
 ```
 
-#### `path`
+### `path`
 
 If the `path` specified here in the appears in the `diff` output, a `trigger` step will be added to the dynamically generated pipeline.yml
 
 A list of paths can be provided to trigger the desired pipeline. Changes in any of the paths will initiate the pipeline provided in trigger.
 
-#### `config`
+### `config`
+
+Configuration supports 2 different step types.
+
+- [Trigger](https://buildkite.com/docs/pipelines/trigger-step)
+- [Command](https://buildkite.com/docs/pipelines/command-step)
+
+#### Trigger
 
 The configuration for the `trigger` step https://buildkite.com/docs/pipelines/trigger-step
 
@@ -136,6 +143,24 @@ hooks:
   - command: upload unit tests reports
   - command: echo success
 
+```
+
+#### Command
+
+```yaml
+- path: app/cms/
+  config:
+    command: "netlify --production deploy"
+```
+
+There is currently limited support for command configuration. Only the `command` property can be provided at this point in time.
+
+Using commands, it is also possible to use this to upload other pipeline definitions
+
+```yaml
+- path: app/cms/
+  config:
+    command: "buildkite-agent pipeline upload ./cms-team.yml"
 ```
 
 ## Environment
