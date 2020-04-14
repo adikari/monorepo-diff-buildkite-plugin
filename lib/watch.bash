@@ -12,7 +12,7 @@ function has_changed() {
   return 1
 }
 
-function get_index_of_pipelines_to_trigger() {
+function populate_pipelines_to_trigger() {
   local diff_output=$1
 
   watch_index=0
@@ -20,7 +20,7 @@ function get_index_of_pipelines_to_trigger() {
     echo >&2 "Comparing watch path: ${watched_path}"
     if has_changed "$diff_output" "$watched_path" ; then
       echo >&2 "Detected changes in watched path: $watched_path"
-      index_of_pipelines_to_trigger+=("$watch_index")
+      pipelines_to_trigger+=("${watch_index} ${watched_path}")
     fi
     watch_index=$((watch_index+1))
   done <<< "$(plugin_read_list WATCH PATH)"

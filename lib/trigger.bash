@@ -2,36 +2,67 @@
 set -ueo pipefail
 
 function generate_pipeline_yml() {
-  for pipeline_index in "${index_of_pipelines_to_trigger[@]}";
+  for pipeline in "${pipelines_to_trigger[@]}";
     do
-      trigger "$pipeline_index"
+      set -- $pipeline
+      # Word split on purpose using spaces
+
+      local pipeline_index=$1
+      local pipeline_path=$2
+      add_action "$pipeline_index" "$pipeline_path"
     done
   add_wait
   add_hooks
 }
 
-function trigger() {
-  local pipeline=$1
-  local trigger
-  trigger=$(read_pipeline_config "$pipeline" "TRIGGER")
-  echo >&2 "Generating trigger for pipeline: ${trigger}"
-  add_trigger "${trigger}"
-  add_label "$(read_pipeline_config "$pipeline" "LABEL")"
-  add_async "$(read_pipeline_config "$pipeline" "ASYNC")"
-  add_branches "$(read_pipeline_config "$pipeline" "BRANCHES")"
-  add_build "$pipeline"
+function add_action() {
+  local pipeline_index=$1
+  local pipeline_path=$2
+
+  local action_trigger
+  local command
+
+  action_trigger=$(read_pipeline_config "$pipeline_index" "TRIGGER")
+  action_command=$(read_pipeline_config "$pipeline_index" "COMMAND")
+
+  if [[ -n $action_trigger ]]
+  then
+    add_action_trigger "$pipeline_index" "$pipeline_path"
+  elif [[ -n $action_command ]]
+  then
+    add_action_command "$pipeline_index" "$pipeline_path"
+  else
+    echo "Invalid config. Pipeline trigger or command is required"
+  fi
 }
 
-function add_trigger() {
-  local trigger=$1
+function add_action_command() {
+  local pipeline_index=$1
+  local pipeline_path=$2
 
-  if [[ -n $trigger ]];
-    then
-      pipeline_yml+=("  - trigger: ${trigger}")
-    else
-      echo "Invalid config. Pipeline trigger is required"
-      # exit 1
-  fi
+  echo >&2 "Generating command for path: $pipeline_path"
+
+  local command
+  command=$(read_pipeline_config "$pipeline_index" "COMMAND")
+
+  pipeline_yml+=("  - command: ${command}")
+}
+
+function add_action_trigger() {
+  local pipeline_index=$1
+  local pipeline_path=$2
+
+  echo >&2 "Generating trigger for path: $pipeline_path"
+
+  local trigger
+  trigger=$(read_pipeline_config "$pipeline_index" "TRIGGER")
+
+  pipeline_yml+=("  - trigger: ${trigger}")
+
+  add_label "$(read_pipeline_config "$pipeline_index" "LABEL")"
+  add_async "$(read_pipeline_config "$pipeline_index" "ASYNC")"
+  add_branches "$(read_pipeline_config "$pipeline_index" "BRANCHES")"
+  add_build "$pipeline_index"
 }
 
 function add_label() {
