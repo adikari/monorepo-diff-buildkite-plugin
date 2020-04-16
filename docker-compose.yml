@@ -2,11 +2,11 @@
 version: '3'
 services:
   tests:
-    image: buildkite/plugin-tester
+    image: buildkite/plugin-tester:latest
     volumes:
       - .:/plugin
   lint:
-    image: buildkite/plugin-linter
+    image: buildkite/plugin-linter:latest
     command: ['--id', 'chronotc/monorepo-diff']
     volumes:
       - ".:/plugin"
