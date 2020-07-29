@@ -8,6 +8,8 @@ basedir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
 . "$basedir/lib/watch.bash"
 . "$basedir/lib/trigger.bash"
 
+echo "+++ :one: monorepo-diff" ;
+
 pipeline_yml=();
 index_of_pipelines_to_trigger=();
 

@@ -7,3 +7,34 @@ steps:
     plugins:
       - docker-compose#v3.3.0:
           run: tests
+  - label: ":bomb: Triggering"
+    plugins:
+      - chronotc/monorepo-diff#${BUILDKITE_COMMIT}:
+          diff: "cat ./e2e/one-match-one-miss"
+          watch:
+            - path: "foo-service/"
+              config:
+                trigger: "foo-service"
+            - path: "hello-service/"
+              config:
+                trigger: "this-pipeline-does-not-exists"
+          wait: true
+  - label: ":bomb: Triggering"
+    plugins:
+      - chronotc/monorepo-diff#${BUILDKITE_COMMIT}:
+          diff: "cat ./e2e/multiple-paths"
+          watch:
+            - path: "user-service/"
+              config:
+                trigger: "user-service"
+            - path:
+                - "user-service/infrastructure/"
+                - "product-service/infrastructure/"
+              config:
+                trigger: "validate-infrastructure"
+            - path:
+                - "do-not-trigger/"
+              config:
+                trigger: "this-pipeline-does-not-exists"
+          wait: true
+
