@@ -1,0 +1,9 @@
+steps:
+  - label: ":lint-roller: Lint"
+    command: "echo linting"
+  - wait
+  - label: ":test_tube: Tests"
+    command: "echo testing"
+  - wait
+  - label: ":serverless: Deploying ${BUILDKITE_COMMIT}"
+    command: "echo deploying-lambdas"

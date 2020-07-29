@@ -51,8 +51,16 @@ steps:
               config:
                 command: "echo hello-world"
             - path:
+                - "global/"
+              config:
+                command: "buildkite-agent pipeline upload ./e2e/global/.buildkite/pipeline.yml"
+            - path:
                 - "do-not-trigger/"
               config:
                 trigger: "this-pipeline-does-not-exists"
+            - path:
+                - "do-not-run-command/"
+              config:
+                command: "echo this-does-not-run"
           wait: true
 

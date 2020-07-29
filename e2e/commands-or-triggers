@@ -1,3 +1,4 @@
 user-service/infrastructure/cloudfront.yaml
 user-service/serverless.yaml
 world/bin/cli
+global/route53.yaml
