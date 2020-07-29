@@ -40,7 +40,7 @@ steps:
   - label: ":bomb: Triggering"
     plugins:
       - chronotc/monorepo-diff#${BUILDKITE_COMMIT}:
-          diff: "cat ./e2e/multiple-paths"
+          diff: "cat ./e2e/commands-or-triggers"
           watch:
             - path: "user-service/"
               config:
