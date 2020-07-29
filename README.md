@@ -6,7 +6,7 @@ This plugin will assist you in triggering pipelines by watching folders in your 
 
 ### Simple
 
-```yml
+```yaml
 steps:
   - label: "Triggering pipelines"
     plugins:
@@ -20,7 +20,7 @@ steps:
 
 ### Detailed
 
-```yml
+```yaml
 steps:
   - label: "Triggering pipelines"
     plugins:
@@ -104,7 +104,7 @@ Declare a list of
 
 ### `path`
 
-If the `path` specified here in the appears in the `diff` output, a `trigger` step will be added to the dynamically generated pipeline.yml
+If the `path` specified here in the appears in the `diff` output, a `trigger` step will be added to the dynamically generated pipeline.yaml
 
 A list of paths can be provided to trigger the desired pipeline. Changes in any of the paths will initiate the pipeline provided in trigger.
 
@@ -158,9 +158,15 @@ There is currently limited support for command configuration. Only the `command`
 Using commands, it is also possible to use this to upload other pipeline definitions
 
 ```yaml
-- path: app/cms/
+- path: frontend/
   config:
-    command: "buildkite-agent pipeline upload ./cms-team.yml"
+    command: "buildkite-agent pipeline upload ./frontend/.buildkite/pipeline.yaml"
+- path: infrastructure/
+  config:
+    command: "buildkite-agent pipeline upload ./infrastructure/.buildkite/pipeline.yaml"
+- path: backend/
+  config:
+    command: "buildkite-agent pipeline upload ./backend/.buildkite/pipeline.yaml"
 ```
 
 ## Environment
