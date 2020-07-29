@@ -22,7 +22,7 @@ steps:
   - label: ":bomb: Triggering"
     plugins:
       - chronotc/monorepo-diff#${BUILDKITE_COMMIT}:
-          diff: "cat ./e2e/one-match-one-miss"
+          diff: "cat ./e2e/multiple-paths"
           watch:
             - path: "user-service/"
               config:
