@@ -13,6 +13,9 @@ steps:
       - chronotc/monorepo-diff#v1.1.1:
           diff: "git diff --name-only HEAD~1"
           watch:
+            - path: "bar-service/"
+              config:
+                command: "echo deploy-bar"
             - path: "foo-service/"
               config:
                 trigger: "deploy-foo-service"
@@ -27,6 +30,11 @@ steps:
       - chronotc/monorepo-diff#v1.1.1:
           diff: "git diff --name-only $(head -n 1 last_successful_build)"
           watch:
+            - path:
+                - "ops/terraform/"
+                - "ops/templates/terraform/"
+              config:
+                command: "buildkite-agent pipeline upload ops/.buildkite/pipeline.yml"
             - path: "foo-service/"
               config:
                 trigger: "deploy-foo-service"
@@ -35,12 +43,7 @@ steps:
                   env:
                     - HELLO=123
                     - AWS_REGION
-            - path:
-                - "ops/terraform/"
-                - "ops/templates/terraform/"
-              config:
-                trigger: "provision-terraform-resources"
-                async: true
+            
           wait: true
           hooks:
             - command: "echo $(git rev-parse HEAD) > last_successful_build"
