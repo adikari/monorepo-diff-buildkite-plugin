@@ -37,4 +37,30 @@ steps:
               config:
                 trigger: "this-pipeline-does-not-exists"
           wait: true
+  - label: ":bomb: Triggering"
+    plugins:
+      - chronotc/monorepo-diff#${BUILDKITE_COMMIT}:
+          diff: "cat ./e2e/commands-or-triggers"
+          watch:
+            - path: "user-service/"
+              config:
+                trigger: "user-service"
+            - path:
+                - "hello/bin/"
+                - "world/bin/"
+              config:
+                command: "echo hello-world"
+            - path:
+                - "global/"
+              config:
+                command: "buildkite-agent pipeline upload ./e2e/global/.buildkite/pipeline.yml"
+            - path:
+                - "do-not-trigger/"
+              config:
+                trigger: "this-pipeline-does-not-exists"
+            - path:
+                - "do-not-run-command/"
+              config:
+                command: "echo this-does-not-run"
+          wait: true
 

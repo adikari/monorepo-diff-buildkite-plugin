@@ -22,7 +22,29 @@ load '/usr/local/lib/bats/load.bash'
   assert_output --partial "steps:"
 }
 
-@test "Generates trigger" {
+@test "Generates command step" {
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_DIFF="cat $PWD/tests/mocks/diff1"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_0_PATH="services/foo"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_0_CONFIG_COMMAND="echo 123"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_1_PATH="services/path-not-in-diff"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_1_CONFIG_COMMAND="cat does-not-exist"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_2_PATH="services/bar"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_2_CONFIG_COMMAND="./diff 123"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_2_CONFIG_LABEL="Bar service deployment"
+  export DEBUG=true
+
+  stub buildkite-agent \
+    "pipeline upload : echo uploading"
+
+  run $PWD/hooks/command
+
+  unstub buildkite-agent
+  assert_success
+  assert_output --partial "  - command: echo 123"
+  assert_output --partial "  - command: ./diff 123"
+}
+
+@test "Generates trigger step" {
   export BUILDKITE_PLUGIN_MONOREPO_DIFF_DIFF="cat $PWD/tests/mocks/diff1"
   export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_0_PATH="services/foo"
   export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_0_CONFIG_TRIGGER="slug-for-foo"
@@ -44,7 +66,7 @@ load '/usr/local/lib/bats/load.bash'
   assert_output --partial "  - trigger: slug-for-bar"
 }
 
-@test "Generates trigger with multiple paths" {
+@test "Generates trigger step with multiple paths" {
   export BUILDKITE_PLUGIN_MONOREPO_DIFF_DIFF="cat $PWD/tests/mocks/diff1"
   # mixed string and array behavior
   export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_0_PATH="services/foo"

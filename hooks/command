@@ -11,12 +11,12 @@ basedir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
 echo "--- :one: monorepo-diff" ;
 
 pipeline_yml=();
-index_of_pipelines_to_trigger=();
+pipelines_to_trigger=();
 
 diff=$(run_diff)
-get_index_of_pipelines_to_trigger "$diff"
+populate_pipelines_to_trigger "$diff"
 
-if [ "${#index_of_pipelines_to_trigger[@]}" -eq 0 ]; then
+if [ "${#pipelines_to_trigger[@]}" -eq 0 ]; then
   echo "No changes detected"
 else
   pipeline_yml+=("steps:")

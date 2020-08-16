@@ -6,13 +6,16 @@ This plugin will assist you in triggering pipelines by watching folders in your 
 
 ### Simple
 
-```yml
+```yaml
 steps:
   - label: "Triggering pipelines"
     plugins:
       - chronotc/monorepo-diff#v1.1.1:
           diff: "git diff --name-only HEAD~1"
           watch:
+            - path: "bar-service/"
+              config:
+                command: "echo deploy-bar"
             - path: "foo-service/"
               config:
                 trigger: "deploy-foo-service"
@@ -20,13 +23,18 @@ steps:
 
 ### Detailed
 
-```yml
+```yaml
 steps:
   - label: "Triggering pipelines"
     plugins:
       - chronotc/monorepo-diff#v1.1.1:
           diff: "git diff --name-only $(head -n 1 last_successful_build)"
           watch:
+            - path:
+                - "ops/terraform/"
+                - "ops/templates/terraform/"
+              config:
+                command: "buildkite-agent pipeline upload ops/.buildkite/pipeline.yml"
             - path: "foo-service/"
               config:
                 trigger: "deploy-foo-service"
@@ -35,12 +43,7 @@ steps:
                   env:
                     - HELLO=123
                     - AWS_REGION
-            - path:
-                - "ops/terraform/"
-                - "ops/templates/terraform/"
-              config:
-                trigger: "provision-terraform-resources"
-                async: true
+            
           wait: true
           hooks:
             - command: "echo $(git rev-parse HEAD) > last_successful_build"
@@ -48,7 +51,7 @@ steps:
 
 ## Configuration
 
-### `diff` (optional)
+## `diff` (optional)
 
 This will run the script provided to determine the folder changes.
 Depending on your use case, you may want to determine the point where the branch occurs
@@ -87,7 +90,7 @@ LATEST_BUILT_TAG=$(git describe --tags --match foo-service-* --abbrev=0)
 git diff --name-only "$LATEST_TAG"
 ```
 
-### `watch`
+## `watch`
 
 Declare a list of
 
@@ -102,13 +105,20 @@ Declare a list of
     trigger: email-deploy
 ```
 
-#### `path`
+### `path`
 
-If the `path` specified here in the appears in the `diff` output, a `trigger` step will be added to the dynamically generated pipeline.yml
+If the `path` specified here in the appears in the `diff` output, a `trigger` step will be added to the dynamically generated pipeline.yaml
 
 A list of paths can be provided to trigger the desired pipeline. Changes in any of the paths will initiate the pipeline provided in trigger.
 
-#### `config`
+### `config`
+
+Configuration supports 2 different step types.
+
+- [Trigger](https://buildkite.com/docs/pipelines/trigger-step)
+- [Command](https://buildkite.com/docs/pipelines/command-step)
+
+#### Trigger
 
 The configuration for the `trigger` step https://buildkite.com/docs/pipelines/trigger-step
 
@@ -136,6 +146,30 @@ hooks:
   - command: upload unit tests reports
   - command: echo success
 
+```
+
+#### Command
+
+```yaml
+- path: app/cms/
+  config:
+    command: "netlify --production deploy"
+```
+
+There is currently limited support for command configuration. Only the `command` property can be provided at this point in time.
+
+Using commands, it is also possible to use this to upload other pipeline definitions
+
+```yaml
+- path: frontend/
+  config:
+    command: "buildkite-agent pipeline upload ./frontend/.buildkite/pipeline.yaml"
+- path: infrastructure/
+  config:
+    command: "buildkite-agent pipeline upload ./infrastructure/.buildkite/pipeline.yaml"
+- path: backend/
+  config:
+    command: "buildkite-agent pipeline upload ./backend/.buildkite/pipeline.yaml"
 ```
 
 ## Environment
