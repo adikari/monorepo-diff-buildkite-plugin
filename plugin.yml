@@ -16,6 +16,8 @@ configuration:
         config:
           type: object
           properties:
+            command:
+              type: string
             trigger:
               type: string
             async:
