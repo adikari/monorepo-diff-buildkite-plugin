@@ -35,9 +35,11 @@ steps:
                 - "ops/templates/terraform/"
               config:
                 command: "buildkite-agent pipeline upload ops/.buildkite/pipeline.yml"
+                label: "Upload pipeline"
             - path: "foo-service/"
               config:
                 trigger: "deploy-foo-service"
+                label: "Triggered deploy"
                 build:
                   message: "Deploying foo service"
                   env:
@@ -135,6 +137,8 @@ By default, it will pass the following values to the `build` attributes unless a
 
 ### `wait` (optional)
 
+Default: `true`
+
 By setting `wait` to `true`, the build will wait until the triggered pipeline builds are successful before proceeding
 
 ### `hooks` (optional)
@@ -154,6 +158,9 @@ hooks:
 - path: app/cms/
   config:
     command: "netlify --production deploy"
+    label: ":netlify: Deploy to production"
+    agents:
+      queue: "deploy"
 ```
 
 There is currently limited support for command configuration. Only the `command` property can be provided at this point in time.

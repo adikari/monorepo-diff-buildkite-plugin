@@ -46,6 +46,9 @@ function add_action_command() {
   command=$(read_pipeline_config "$pipeline_index" "COMMAND")
 
   pipeline_yml+=("  - command: ${command}")
+
+  add_label "$(read_pipeline_config "$pipeline_index" "LABEL")"
+  add_agents "$pipeline_index"
 }
 
 function add_action_trigger() {
@@ -69,7 +72,22 @@ function add_label() {
   local label=$1
 
   if [[ -n $label ]]; then
-    pipeline_yml+=("    label: ${label}")
+    pipeline_yml+=("    label: \"${label}\"")
+  fi
+}
+
+function add_agents() {
+  local pipeline=$1
+
+  pipeline_yml+=("    agents:")
+  add_agents_queue "$(read_pipeline_config "$pipeline" "AGENTS_QUEUE")"
+}
+
+function add_agents_queue() {
+  local queue=$1
+
+  if [[ -n $queue ]]; then
+    pipeline_yml+=("      queue: ${queue}")
   fi
 }
 
