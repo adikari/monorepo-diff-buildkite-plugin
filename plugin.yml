@@ -22,6 +22,8 @@ configuration:
               type: string
             async:
               type: boolean
+            label:
+              type: string
             build:
               type: object
               properties:
@@ -33,6 +35,11 @@ configuration:
                   type: string
                 env:
                   type: array
+            agents:
+              type: object
+              properties:
+                queue:
+                  type: string
     wait:
       type: boolean
     hooks:
