@@ -29,6 +29,7 @@ steps:
     plugins:
       - chronotc/monorepo-diff#v1.3.0:
           diff: "git diff --name-only $(head -n 1 last_successful_build)"
+          interpolation: false
           watch:
             - path:
                 - "ops/terraform/"
@@ -91,6 +92,12 @@ set -ueo pipefail
 LATEST_BUILT_TAG=$(git describe --tags --match foo-service-* --abbrev=0)
 git diff --name-only "$LATEST_TAG"
 ```
+
+### `interpolation` (optional)
+
+This controls the pipeline interpolation on upload, and defaults to `true`.
+If set to `false` it adds `--no-interpolation` to the `buildkite pipeline upload`,
+to avoid trying to interpolate the commit message, which can cause failures.
 
 ## `watch`
 
