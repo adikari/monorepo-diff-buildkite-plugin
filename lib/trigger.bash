@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ueo pipefail
+set -uexo pipefail
 
 function generate_pipeline_yml() {
   for pipeline in "${pipelines_to_trigger[@]}";
