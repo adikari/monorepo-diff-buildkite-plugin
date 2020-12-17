@@ -49,6 +49,7 @@ function add_action_command() {
 
   add_label "$(read_pipeline_config "$pipeline_index" "LABEL")"
   add_agents "$pipeline_index"
+  add_build_env "$pipeline_index"
 }
 
 function add_action_trigger() {
