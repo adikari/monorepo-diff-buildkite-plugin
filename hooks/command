@@ -28,7 +28,7 @@ else
   fi
 
   NO_INTERPOLATION="foo"
-  if [ "${BUILDKITE_PLUGIN_MONOREPO_DIFF_INTERPOLATION}" = "false" ]; then
+  if [ "${BUILDKITE_PLUGIN_MONOREPO_DIFF_INTERPOLATION-}" = "false" ]; then
     NO_INTERPOLATION="--no-interpolation"
   fi
 
