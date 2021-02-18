@@ -86,8 +86,8 @@ function add_agents() {
 function add_agents_queue() {
   local queue=$1
 
-  if [[ -n $queue ]]; then
-    pipeline_yml+=("      queue: ${queue}")
+  if [[ -n "$queue" ]]; then
+    pipeline_yml+=("      queue: \"${queue}\"")
   fi
 }
 
