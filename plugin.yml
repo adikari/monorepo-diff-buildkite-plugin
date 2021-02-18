@@ -40,6 +40,8 @@ configuration:
               properties:
                 queue:
                   type: string
+            artifacts:
+              type: array
     wait:
       type: boolean
     hooks:

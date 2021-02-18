@@ -49,6 +49,7 @@ function add_action_command() {
 
   add_label "$(read_pipeline_config "$pipeline_index" "LABEL")"
   add_agents "$pipeline_index"
+  add_artifacts "$pipeline_index"
 }
 
 function add_action_trigger() {
@@ -81,6 +82,24 @@ function add_agents() {
 
   pipeline_yml+=("    agents:")
   add_agents_queue "$(read_pipeline_config "$pipeline" "AGENTS_QUEUE")"
+}
+
+function add_artifacts() {
+  local pipeline=$1
+
+  local prefix="BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_${pipeline}_CONFIG_ARTIFACTS"
+  local parameter="${prefix}_0"
+
+  pipeline_yml+=("    artifacts:")
+  if [[ -n "${!parameter:-}" ]]; then
+    local i=0
+    local parameter="${prefix}_${i}"
+    while [[ -n "${!parameter:-}" ]]; do
+      pipeline_yml+=("        - ${!parameter}")
+      i=$((i+1))
+      parameter="${prefix}_${i}"
+    done
+  fi
 }
 
 function add_agents_queue() {
