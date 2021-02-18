@@ -7,6 +7,8 @@ configuration:
   properties:
     diff:
       type: string
+    interpolation:
+      type: boolean
     watch:
       type: array
       properties:
