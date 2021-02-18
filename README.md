@@ -37,6 +37,14 @@ steps:
               config:
                 command: "buildkite-agent pipeline upload ops/.buildkite/pipeline.yml"
                 label: "Upload pipeline"
+                retry:
+                  automatic:
+                  - limit: 2
+                    exit_status: -1
+                agents:
+                  queue: performance
+                artifacts:
+                  - "logs/*"
             - path: "foo-service/"
               config:
                 trigger: "deploy-foo-service"
@@ -46,7 +54,7 @@ steps:
                   env:
                     - HELLO=123
                     - AWS_REGION
-            
+
           wait: true
           hooks:
             - command: "echo $(git rev-parse HEAD) > last_successful_build"
