@@ -183,6 +183,7 @@ function add_hooks() {
 
 function sanitize_string() {
   local string=$1
-  escaped_quotes="${string//\"/\\\"}"
-  echo "$escaped_quotes"
+  escaped="${string//\"/\\\"}"
+  escaped="${escaped//\$/\$\$}"
+  echo "$escaped"
 }
