@@ -90,7 +90,7 @@ function add_artifacts() {
   local prefix="BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_${pipeline}_CONFIG_ARTIFACTS"
   local parameter="${prefix}_0"
 
-  pipeline_yml+=("    artifacts:")
+  pipeline_yml+=("    artifact_paths:")
   if [[ -n "${!parameter:-}" ]]; then
     local i=0
     local parameter="${prefix}_${i}"

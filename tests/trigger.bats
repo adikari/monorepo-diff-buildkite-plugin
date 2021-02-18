@@ -375,7 +375,7 @@ load '/usr/local/lib/bats/load.bash'
   assert_success
   assert_output --partial "  - command: echo 123"
   assert_output --partial "  - command: ./diff 123"
-  assert_output --partial "    artifacts:"
+  assert_output --partial "    artifact_paths:"
   assert_output --partial "    - logs/test1.txt"
   assert_output --partial "    - logs/tests/*"
 }
