@@ -27,7 +27,7 @@ else
     echo >&2 "$output"
   fi
 
-  NO_INTERPOLATION="foo"
+  NO_INTERPOLATION=""
   if [ "${BUILDKITE_PLUGIN_MONOREPO_DIFF_INTERPOLATION-}" = "false" ]; then
     NO_INTERPOLATION="--no-interpolation"
   fi

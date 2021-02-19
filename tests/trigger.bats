@@ -353,7 +353,7 @@ load '/usr/local/lib/bats/load.bash'
   assert_output --partial "  - command: echo 123"
   assert_output --partial "  - command: ./diff 123"
   assert_output --partial "    agents:"
-  assert_output --partial "      queue: fast"
+  assert_output --partial "      queue: \"fast\""
 }
 
 @test "Generates command step with artifacts if defined" {
