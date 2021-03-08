@@ -45,6 +45,8 @@ steps:
                   queue: performance
                 artifacts:
                   - "logs/*"
+                env:
+                  - FOO=bar
             - path: "foo-service/"
               config:
                 trigger: "deploy-foo-service"
@@ -176,6 +178,8 @@ hooks:
     label: ":netlify: Deploy to production"
     agents:
       queue: "deploy"
+    env:
+      FOO: bar
 ```
 
 There is currently limited support for command configuration. Only the `command` property can be provided at this point in time.

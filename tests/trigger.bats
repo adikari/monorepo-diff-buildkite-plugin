@@ -379,3 +379,27 @@ load '/usr/local/lib/bats/load.bash'
   assert_output --partial "    - logs/test1.txt"
   assert_output --partial "    - logs/tests/*"
 }
+
+@test "Generates command step with env if defined" {
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_DIFF="cat $PWD/tests/mocks/diff1"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_0_PATH="services/foo"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_0_CONFIG_COMMAND="echo 123"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_0_CONFIG_ENV_0="FOO=bar"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_0_CONFIG_ENV_1="X=y"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_1_PATH="services/bar"
+  export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_1_CONFIG_COMMAND="./diff 123"
+  export DEBUG=true
+
+  stub buildkite-agent \
+    "pipeline upload : echo uploading"
+
+  run $PWD/hooks/command
+
+  unstub buildkite-agent
+  assert_success
+  assert_output --partial "  - command: echo 123"
+  assert_output --partial "    env:"
+  assert_output --partial "      FOO: bar"
+  assert_output --partial "      X: y"
+  assert_output --partial "  - command: ./diff 123"
+}

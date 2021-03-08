@@ -44,6 +44,8 @@ configuration:
                   type: string
             artifacts:
               type: array
+            env:
+              type: array
     wait:
       type: boolean
     hooks:

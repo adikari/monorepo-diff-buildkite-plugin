@@ -45,9 +45,10 @@ function read_pipeline_config() {
   echo "${!parameter:-}"
 }
 
-function read_pipeline_build_env() {
+function read_pipeline_read_env() {
   local pipeline_index=$1
-  local prefix="BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_${pipeline_index}_CONFIG_BUILD_ENV"
+  local config_key=$2
+  local prefix="BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_${pipeline_index}_CONFIG_${config_key}"
   local parameter="${prefix}_0"
 
   if [[ -n "${!parameter:-}" ]]; then
