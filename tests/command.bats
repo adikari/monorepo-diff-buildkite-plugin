@@ -10,7 +10,6 @@ load '/usr/local/lib/bats/load.bash'
   export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_1_CONFIG_TRIGGER="slug-for-path-not-in-diff"
   export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_2_PATH="services/bar"
   export BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_2_CONFIG_TRIGGER="slug-for-bar"
-
   run $PWD/hooks/command
 
   assert_success

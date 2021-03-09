@@ -50,6 +50,7 @@ function add_action_command() {
   add_label "$(read_pipeline_config "$pipeline_index" "LABEL")"
   add_agents "$pipeline_index"
   add_artifacts "$pipeline_index"
+  add_envs "$pipeline_index"
 }
 
 function add_action_trigger() {
@@ -99,6 +100,25 @@ function add_artifacts() {
       i=$((i+1))
       parameter="${prefix}_${i}"
     done
+  fi
+}
+
+function add_envs () {
+  local pipeline=$1
+  local env
+  envs=$(read_pipeline_read_env "$pipeline" "ENV")
+  echo $envs
+
+  if [[ -n "$envs" ]]; then
+    pipeline_yml+=("    env:")
+    while IFS=$'\n' read -r env ; do
+      IFS='=' read -r key value <<< "$env"
+      if [[ -n "$value" ]]; then
+        pipeline_yml+=("      ${key}: ${value}")
+      else
+        pipeline_yml+=("      ${key}: ${!key}")
+      fi
+    done <<< "$envs"
   fi
 }
 
@@ -161,7 +181,7 @@ function add_build_branch() {
 function add_build_env() {
   local pipeline=$1
   local build_env
-  build_envs=$(read_pipeline_build_env "$pipeline")
+  build_envs=$(read_pipeline_read_env "$pipeline" "BUILD_ENV")
 
   if [[ -n "$build_envs" ]]; then
     pipeline_yml+=("      env:")
