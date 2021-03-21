@@ -2,10 +2,6 @@
 set -ueo pipefail
 
 function generate_pipeline_yml() {
-  pipeline_yml+=("env:")
-  add_pipeline_env
-
-  pipeline_yml+=("steps:")
   for pipeline in "${pipelines_to_trigger[@]}";
     do
       set -- $pipeline
@@ -17,29 +13,6 @@ function generate_pipeline_yml() {
     done
   add_wait
   add_hooks
-}
-
-function add_pipeline_env() {
-  local prefix="BUILDKITE_PLUGIN_MONOREPO_DIFF_ENV"
-  local parameter="${prefix}_0"
-
-  if [[ -n "${!parameter:-}" ]]; then
-    local i=0
-    local parameter="${prefix}_${i}"
-    local env
-    while [[ -n "${!parameter:-}" ]]; do
-      while IFS=$'\n' read -r env ; do
-        IFS='=' read -r key value <<< "$env"
-        if [[ -n "$value" ]]; then
-          pipeline_yml+=("  ${key}: ${value}")
-        else
-          pipeline_yml+=("  ${key}: ${!key}")
-        fi
-      done <<< "${!parameter:-}"
-      i=$((i+1))
-      parameter="${prefix}_${i}"
-    done
-  fi
 }
 
 function add_action() {

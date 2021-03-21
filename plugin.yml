@@ -53,7 +53,5 @@ configuration:
       properties:
         command:
           type: string
-    env:
-      type: array
   required:
     - watch
