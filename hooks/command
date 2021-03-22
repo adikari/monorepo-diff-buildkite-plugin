@@ -19,7 +19,6 @@ populate_pipelines_to_trigger "$diff"
 if [ "${#pipelines_to_trigger[@]}" -eq 0 ]; then
   echo "No changes detected"
 else
-  pipeline_yml+=("steps:")
   generate_pipeline_yml
   output=$(printf '%s\n' "${pipeline_yml[@]}")
 
