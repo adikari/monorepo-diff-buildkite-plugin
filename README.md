@@ -2,6 +2,8 @@
 
 This plugin will assist you in triggering pipelines by watching folders in your `monorepo`.
 
+Check out this post to learn [**How to set up Continuous Integration for monorepo using Buildkite**](https://adikari.medium.com/set-up-continuous-integration-for-monorepo-using-buildkite-61539bb0ed76).
+
 ## Example
 
 ### Simple
