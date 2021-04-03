@@ -235,3 +235,9 @@ Ensure that all tests are in the `./tests`
 ### To run lint
 
 `docker-compose run --rm lint`
+
+### To run e2e tests
+1. Install [buildkite cli](https://github.com/buildkite/cli)
+2. Install [buildkite agent](https://buildkite.com/docs/agent/v3/installation)
+
+`bk local run`
