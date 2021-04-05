@@ -4,8 +4,8 @@ import (
 	"fmt"
 )
 
-func populatePipelineToTriger() string {
-	msg := "triggering pipeline"
+func uploadPipeline() string {
+	msg := "uploading pipelines"
 	fmt.Println(msg)
 	return msg
 }
