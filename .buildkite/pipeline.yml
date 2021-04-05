@@ -9,7 +9,7 @@ steps:
           run: tests
   - label: ":bomb: Triggering"
     plugins:
-      - chronotc/monorepo-diff#${BUILDKITE_COMMIT}:
+      - chronotc/monorepo-diff#go-rewrite:
           diff: "cat ./e2e/one-match-one-miss"
           watch:
             - path: "foo-service/"
@@ -21,7 +21,7 @@ steps:
           wait: true
   - label: ":bomb: Triggering"
     plugins:
-      - chronotc/monorepo-diff#${BUILDKITE_COMMIT}:
+      - chronotc/monorepo-diff#go-rewrite:
           diff: "cat ./e2e/multiple-paths"
           watch:
             - path: "user-service/"
@@ -39,7 +39,7 @@ steps:
           wait: true
   - label: ":bomb: Triggering"
     plugins:
-      - chronotc/monorepo-diff#${BUILDKITE_COMMIT}:
+      - chronotc/monorepo-diff#go-rewrite:
           diff: "cat ./e2e/commands-or-triggers"
           watch:
             - path: "user-service/"
