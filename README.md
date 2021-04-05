@@ -236,8 +236,10 @@ Ensure that all tests are in the `./tests`
 
 `docker-compose run --rm lint`
 
-### To run e2e tests locally (against master)
+### To run e2e tests locally
 1. Install [buildkite cli](https://github.com/buildkite/cli)
 2. Install [buildkite agent](https://buildkite.com/docs/agent/v3/installation)
+3. Push your changes to github
+4. Replace all occurances of `chronotc/monorepo-diff#${BUILDKITE_COMMIT}` in `.buildkite/pipeline.yml` to `your-fork#your-branch`
 
 `bk local run`
