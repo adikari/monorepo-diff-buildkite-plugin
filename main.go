@@ -7,10 +7,9 @@ import (
 func setupLogger() {
 	log.SetFormatter(&log.TextFormatter{
 		FullTimestamp: true,
-		PadLevelText:  true,
 	})
 
-	ll, err := log.ParseLevel(PluginConfig.logLevel)
+	ll, err := log.ParseLevel(pluginConfig.logLevel)
 
 	if err != nil {
 		ll = log.InfoLevel
@@ -24,7 +23,6 @@ func main() {
 
 	changed := diff("")
 
-	log.Debug("debug message")
 	log.Info(changed)
 	// perform diff
 	// get list of pipelines to trigger based on the diff

@@ -6,7 +6,6 @@ type config struct {
 	logLevel string
 }
 
-// PluginConfig is map of all configs for plugin
-var PluginConfig = config{
+var pluginConfig = config{
 	logLevel: env(pluginPrefix+"LOG_LEVEL", "info"),
 }
