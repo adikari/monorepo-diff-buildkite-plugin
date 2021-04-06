@@ -17,7 +17,7 @@ diff=$(run_diff)
 populate_pipelines_to_trigger "$diff"
 
 echo "here -------"
-echo $BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH
+# echo $BUILDKITE_PLUGIN_MONOREPO_GIT_DIFF
 
 if [ "${#pipelines_to_trigger[@]}" -eq 0 ]; then
   echo "No changes detected"
@@ -34,6 +34,7 @@ else
   if [ "${BUILDKITE_PLUGIN_MONOREPO_DIFF_INTERPOLATION-}" = "false" ]; then
     NO_INTERPOLATION="--no-interpolation"
   fi
+  echo "$output"
 
   echo "$output" | buildkite-agent pipeline upload ${NO_INTERPOLATION}
 fi
