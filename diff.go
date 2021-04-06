@@ -6,20 +6,13 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func commandArgs(command string) (string, []string) {
-	split := strings.Split(command, " ")
-
-	return split[0], split[1:]
-}
-
 func diff(command string) []string {
-	if command == "" {
-		command = "git diff --name-only HEAD~1"
-	}
-
 	log.Infof("Running diff command: %s", command)
 
-	output := executeCommand(commandArgs(command))
+	split := strings.Split(command, " ")
+	cmd, args := split[0], split[1:]
+
+	output := executeCommand(cmd, args)
 
 	log.Debug("Output from diff:\n" + output)
 
