@@ -18,3 +18,9 @@ func diff(command string) []string {
 
 	return strings.Split(strings.TrimSpace(output), "\n")
 }
+
+func pipelinesToTrigger() []string {
+	changedFiles := diff(pluginConfig.diffCmd)
+
+	return changedFiles
+}

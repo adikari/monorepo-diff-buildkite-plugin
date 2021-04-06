@@ -21,10 +21,11 @@ func setupLogger() {
 func main() {
 	setupLogger()
 
-	changedFiles := diff(pluginConfig.diffCmd)
+	pipelines := pipelinesToTrigger()
 
-	log.Info(changedFiles)
-	// perform diff
+	log.Info(pipelines)
+
+	// TODO
 	// get list of pipelines to trigger based on the diff
 	// generate pipeline_yml
 	// upload pipeline
