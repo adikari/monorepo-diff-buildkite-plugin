@@ -209,11 +209,10 @@ By turning `DEBUG` on, the generated pipeline will be displayed prior to upload
 ```yaml
 steps:
   - label: "Triggering pipelines"
-    env:
-      DEBUG: true
     plugins:
       - chronotc/monorepo-diff:
           diff: "git diff --name-only HEAD~1"
+          log_level: "debug" # defaults to "info"
           watch:
             - path: "foo-service/"
               config:
