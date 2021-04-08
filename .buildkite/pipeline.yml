@@ -1,16 +1,15 @@
 steps:
-  # - label: ":lint-roller: Lint"
-  #   plugins:
-  #     - docker-compose#v3.3.0:
-  #         run: lint
-  # - label: ":test_tube: Tests"
-  #   plugins:
-  #     - docker-compose#v3.3.0:
-  #         run: tests
+  - label: ":lint-roller: Lint"
+    plugins:
+      - docker-compose#v3.3.0:
+          run: lint
+  - label: ":test_tube: Tests"
+    plugins:
+      - docker-compose#v3.3.0:
+          run: tests
   - label: ":bomb: Triggering"
     plugins:
-      # - chronotc/monorepo-diff#go-rewrite:
-      - file:///Users/subash.adhikari/code/monorepo-diff-buildkite-plugin:
+      - chronotc/monorepo-diff#${BUILDKITE_COMMIT}:
           diff: "cat ./e2e/one-match-one-miss"
           watch:
             - path: "foo-service/"
@@ -20,49 +19,48 @@ steps:
               config:
                 trigger: "this-pipeline-does-not-exists"
           wait: true
-  # - label: ":bomb: Triggering"
-  #   plugins:
-  #     - chronotc/monorepo-diff#go-rewrite:
-  #         diff: "cat ./e2e/multiple-paths"
-  #         watch:
-  #           - path: "user-service/"
-  #             config:
-  #               trigger: "user-service"
-  #           - path:
-  #               - "user-service/infrastructure/"
-  #               - "product-service/infrastructure/"
-  #             config:
-  #               trigger: "validate-infrastructure"
-  #           - path:
-  #               - "do-not-trigger/"
-  #             config:
-  #               trigger: "this-pipeline-does-not-exists"
-  #         wait: true
-  #- label: ":bomb: Triggering"
-  #  plugins:
-  #    - file:///Users/subash.adhikari/code/monorepo-diff-buildkite-plugin:
-  #   #- chronotc/monorepo-diff#go-rewrite:
-  #        diff: "cat ./e2e/commands-or-triggers"
-  #        watch:
-  #          - path: "user-service/"
-  #            config:
-  #              trigger: "user-service"
-  #          - path:
-  #              - "hello/bin/"
-  #              - "world/bin/"
-  #            config:
-  #              command: "echo hello-world"
-  #          - path:
-  #              - "global/"
-  #            config:
-  #              command: "buildkite-agent pipeline upload ./e2e/global/.buildkite/pipeline.yml"
-  #          - path:
-  #              - "do-not-trigger/"
-  #            config:
-  #              trigger: "this-pipeline-does-not-exists"
-  #          - path:
-  #              - "do-not-run-command/"
-  #            config:
-  #              command: "echo this-does-not-run"
-  #        wait: true
+  - label: ":bomb: Triggering"
+    plugins:
+      - chronotc/monorepo-diff#${BUILDKITE_COMMIT}:
+          diff: "cat ./e2e/multiple-paths"
+          watch:
+            - path: "user-service/"
+              config:
+                trigger: "user-service"
+            - path:
+                - "user-service/infrastructure/"
+                - "product-service/infrastructure/"
+              config:
+                trigger: "validate-infrastructure"
+            - path:
+                - "do-not-trigger/"
+              config:
+                trigger: "this-pipeline-does-not-exists"
+          wait: true
+  - label: ":bomb: Triggering"
+    plugins:
+      - chronotc/monorepo-diff#${BUILDKITE_COMMIT}:
+          diff: "cat ./e2e/commands-or-triggers"
+          watch:
+            - path: "user-service/"
+              config:
+                trigger: "user-service"
+            - path:
+                - "hello/bin/"
+                - "world/bin/"
+              config:
+                command: "echo hello-world"
+            - path:
+                - "global/"
+              config:
+                command: "buildkite-agent pipeline upload ./e2e/global/.buildkite/pipeline.yml"
+            - path:
+                - "do-not-trigger/"
+              config:
+                trigger: "this-pipeline-does-not-exists"
+            - path:
+                - "do-not-run-command/"
+              config:
+                command: "echo this-does-not-run"
+          wait: true
 

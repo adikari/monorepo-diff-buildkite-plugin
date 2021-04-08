@@ -16,9 +16,6 @@ pipelines_to_trigger=();
 diff=$(run_diff)
 populate_pipelines_to_trigger "$diff"
 
-echo "here -------"
-# echo $BUILDKITE_PLUGIN_MONOREPO_GIT_DIFF
-
 if [ "${#pipelines_to_trigger[@]}" -eq 0 ]; then
   echo "No changes detected"
 else

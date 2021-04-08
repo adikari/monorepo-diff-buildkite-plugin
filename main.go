@@ -19,9 +19,10 @@ func setupLogger() {
 }
 
 func main() {
+	log.Info("--- :one: monorepo-diff")
 	setupLogger()
 
-	pipelines := pipelinesToTrigger()
+	pipelines := pipelinesToTrigger(pluginConfig.diffCmd)
 
 	log.Info(pipelines)
 

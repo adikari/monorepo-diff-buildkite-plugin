@@ -3,7 +3,7 @@ package main
 import "testing"
 
 func TestUploadPipeline(t *testing.T) {
-	want := "uploading pipeline"
+	want := "uploading pipelines"
 	got := uploadPipeline()
 
 	if want != got {
