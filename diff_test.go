@@ -1,8 +1,9 @@
 package main
 
 import (
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDiff(t *testing.T) {
@@ -15,7 +16,5 @@ func TestDiff(t *testing.T) {
 
 	got := diff("cat ./tests/mocks/diff1")
 
-	if !reflect.DeepEqual(want, got) {
-		t.Errorf(`diff(), got %q, want "%v"`, got, want)
-	}
+	assert.Equal(t, want, got)
 }
