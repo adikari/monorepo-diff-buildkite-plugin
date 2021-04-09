@@ -44,7 +44,6 @@ type PipelineConfig struct {
 type WatchConfig struct {
 	RawPath interface{} `json:"path"`
 	Paths   []string
-	Path    string
 	Config  PipelineConfig
 }
 
@@ -76,7 +75,7 @@ func (s *Plugin) UnmarshalJSON(data []byte) error {
 	for i, p := range s.Watch {
 		switch p.RawPath.(type) {
 		case string:
-			s.Watch[i].Path = s.Watch[i].RawPath.(string)
+			s.Watch[i].Paths = []string{s.Watch[i].RawPath.(string)}
 		case []interface{}:
 			for _, v := range s.Watch[i].RawPath.([]interface{}) {
 				s.Watch[i].Paths = append(s.Watch[i].Paths, v.(string))
