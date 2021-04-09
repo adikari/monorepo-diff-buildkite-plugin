@@ -2,17 +2,8 @@ package main
 
 import (
 	"log"
-	"os"
 	"os/exec"
 )
-
-func env(key, fb string) string {
-	if value, ok := os.LookupEnv(key); ok {
-		return value
-	}
-
-	return fb
-}
 
 func unique(intSlice []int) []int {
 	keys := make(map[int]bool)

@@ -16,14 +16,7 @@ pipelines_to_trigger=();
 diff=$(run_diff)
 populate_pipelines_to_trigger "$diff"
 
-echo $pipelines_to_trigger
-echo $BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_0_PATH
-echo $BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_0_CONFIG_TRIGGER
-
-echo "ls"
-echo $(cat .buildkite/pipeline.yml)
-
-echo $BUILDKITE_PLUGIN_MONOREPO_DIFF_WATCH_1_PATH
+printenv
 
 if [ "${#pipelines_to_trigger[@]}" -eq 0 ]; then
   echo "No changes detected"

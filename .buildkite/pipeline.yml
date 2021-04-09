@@ -15,9 +15,20 @@ steps:
             - path: "foo-service/"
               config:
                 trigger: "foo-service"
-            - path: "hello-service/"
-              config:
-                trigger: "this-pipeline-does-not-exists"
+              label: "hello"
+              build:
+                message: "hello"
+                env:
+                  FOO: "hello"
+              agents:
+                queue: "deploy"
+              env:
+                FOO: "test"
+                BAR: "rest"
+
+          #   - path: "hello-service/"
+          #     config:
+          #       trigger: "this-pipeline-does-not-exists"
           wait: true
   # - label: ":bomb: Triggering"
   #   plugins:

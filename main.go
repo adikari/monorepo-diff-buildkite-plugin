@@ -9,7 +9,7 @@ func setupLogger() {
 		FullTimestamp: true,
 	})
 
-	ll, err := log.ParseLevel(pluginConfig.logLevel)
+	ll, err := log.ParseLevel(plugin.LogLevel)
 
 	if err != nil {
 		ll = log.InfoLevel
@@ -22,9 +22,8 @@ func main() {
 	log.Info("--- :one: monorepo-diff")
 	setupLogger()
 
-	pipelines := pipelinesToTrigger(pluginConfig.diffCmd)
-
-	log.Info(pipelines)
+	// pipelines := pipelinesToTrigger(plugin.Diff)
+	initConfig()
 
 	// TODO
 	// get list of pipelines to trigger based on the diff
