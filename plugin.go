@@ -28,15 +28,16 @@ type BuildConfig struct {
 	Env     map[string]string
 }
 
-// TriggerConfig Plugin trigger configuration
-type TriggerConfig struct {
-	Trigger string
-	Label   string
-	Build   BuildConfig
-	Command string
-	Async   bool
-	Agents  AgentConfig
-	Env     map[string]string
+// PipelineConfig Plugin trigger configuration
+type PipelineConfig struct {
+	Trigger   string
+	Label     string
+	Build     BuildConfig
+	Command   string
+	Async     bool
+	Agents    AgentConfig
+	Artifacts []string
+	Env       map[string]string
 }
 
 // WatchConfig Plugin watch configuration
@@ -44,7 +45,7 @@ type WatchConfig struct {
 	RawPath interface{} `json:"path"`
 	Paths   []string
 	Path    string
-	Config  TriggerConfig
+	Config  PipelineConfig
 }
 
 // Plugin buildkite monorepo diff plugin structure

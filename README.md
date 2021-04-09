@@ -200,11 +200,9 @@ Using commands, it is also possible to use this to upload other pipeline definit
     command: "buildkite-agent pipeline upload ./backend/.buildkite/pipeline.yaml"
 ```
 
-## Environment
+### `Logging`
 
-### `DEBUG` (optional)
-
-By turning `DEBUG` on, the generated pipeline will be displayed prior to upload
+Add `log_level` property to set the log level. Supported log levels are `debug` and `info`. Defaults to `info`.
 
 ```yaml
 steps:

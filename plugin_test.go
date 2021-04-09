@@ -82,6 +82,7 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						"agents": {
 							"queue": "queue-1"
 						},
+						"artifacts": [ "artifiact-1" ],
 						"env": {
 							"foo": "bar"
 						}
@@ -103,10 +104,10 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 			{Command: "another-hook-command"},
 		},
 		Watch: []WatchConfig{
-			{Path: "watch-path-1", Config: TriggerConfig{Trigger: "service-2"}},
+			{Path: "watch-path-1", Config: PipelineConfig{Trigger: "service-2"}},
 			{
 				Paths: []string{"watch-path-1", "watch-path-2"},
-				Config: TriggerConfig{
+				Config: PipelineConfig{
 					Trigger: "service-1",
 					Label:   "hello",
 					Build: BuildConfig{
@@ -118,8 +119,9 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 							"bar": "foo",
 						},
 					},
-					Async:  true,
-					Agents: AgentConfig{Queue: "queue-1"},
+					Async:     true,
+					Agents:    AgentConfig{Queue: "queue-1"},
+					Artifacts: []string{"artifiact-1"},
 					Env: map[string]string{
 						"foo": "bar",
 					},
