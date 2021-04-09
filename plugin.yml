@@ -15,7 +15,7 @@ configuration:
       type: array
       properties:
         path:
-          type: array
+          type: [string, array]
           minimum: 1
         config:
           type: object

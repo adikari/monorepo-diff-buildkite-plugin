@@ -41,8 +41,10 @@ type TriggerConfig struct {
 
 // WatchConfig Plugin watch configuration
 type WatchConfig struct {
-	Path   []string
-	Config TriggerConfig
+	RawPath interface{} `json:"path"`
+	Paths   []string
+	Path    string
+	Config  TriggerConfig
 }
 
 // Plugin buildkite monorepo diff plugin structure
@@ -69,6 +71,19 @@ func (s *Plugin) UnmarshalJSON(data []byte) error {
 	_ = json.Unmarshal(data, def)
 
 	*s = Plugin(*def)
+
+	for i, p := range s.Watch {
+		switch p.RawPath.(type) {
+		case string:
+			s.Watch[i].Path = s.Watch[i].RawPath.(string)
+		case []interface{}:
+			for _, v := range s.Watch[i].RawPath.([]interface{}) {
+				s.Watch[i].Paths = append(s.Watch[i].Paths, v.(string))
+			}
+		}
+		s.Watch[i].RawPath = nil
+	}
+
 	return nil
 }
 

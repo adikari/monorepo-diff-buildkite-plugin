@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/davecgh/go-spew/spew"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -30,5 +29,4 @@ func main() {
 
 	setupLogger(plugin.LogLevel)
 	uploadPipeline(plugin)
-	spew.Dump(plugin)
 }

@@ -56,6 +56,12 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 			],
 			"watch": [
 				{
+					"path": "watch-path-1",
+					"config": {
+						"trigger": "service-2"
+					}
+				},
+				{
 					"path": [
 						"watch-path-1",
 						"watch-path-2"
@@ -97,8 +103,9 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 			{Command: "another-hook-command"},
 		},
 		Watch: []WatchConfig{
+			{Path: "watch-path-1", Config: TriggerConfig{Trigger: "service-2"}},
 			{
-				Path: []string{"watch-path-1", "watch-path-2"},
+				Paths: []string{"watch-path-1", "watch-path-2"},
 				Config: TriggerConfig{
 					Trigger: "service-1",
 					Label:   "hello",
