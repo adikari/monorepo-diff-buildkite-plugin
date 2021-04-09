@@ -6,6 +6,18 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+func uploadPipeline(plugin Plugin) error {
+	msg := "uploading pipelines"
+	log.Println(msg)
+	return nil
+}
+
+func pipelinesToTrigger(diffCmd string) []string {
+	changedFiles := diff(diffCmd)
+
+	return changedFiles
+}
+
 func diff(command string) []string {
 	log.Infof("Running diff command: %s", command)
 
@@ -17,16 +29,4 @@ func diff(command string) []string {
 	log.Debug("Output from diff:\n" + output)
 
 	return strings.Split(strings.TrimSpace(output), "\n")
-}
-
-func pipelinesToTrigger(diffCmd string) []string {
-	changedFiles := diff(diffCmd)
-
-	return changedFiles
-}
-
-func uploadPipeline() string {
-	msg := "uploading pipelines"
-	log.Println(msg)
-	return msg
 }

@@ -26,11 +26,12 @@ func TestDiff(t *testing.T) {
 
 	assert.Equal(t, want, got)
 }
-func TestUploadPipeline(t *testing.T) {
-	want := "uploading pipelines"
-	got := uploadPipeline()
 
-	if want != got {
-		t.Errorf(`uploadPipeline(), got %q, want "%v"`, got, want)
-	}
-}
+// func TestUploadPipeline(t *testing.T) {
+// 	want := "uploading pipelines"
+// 	got := uploadPipeline()
+
+// 	if want != got {
+// 		t.Errorf(`uploadPipeline(), got %q, want "%v"`, got, want)
+// 	}
+// }

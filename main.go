@@ -1,8 +1,6 @@
 package main
 
 import (
-	"os"
-
 	"github.com/davecgh/go-spew/spew"
 	log "github.com/sirupsen/logrus"
 )
@@ -28,16 +26,9 @@ func main() {
 
 	if err != nil {
 		log.Fatal(err)
-		os.Exit(1)
 	}
 
 	setupLogger(plugin.LogLevel)
-
+	uploadPipeline(plugin)
 	spew.Dump(plugin)
-	// pipelines := pipelinesToTrigger(plugin.Diff)
-
-	// TODO
-	// get list of pipelines to trigger based on the diff
-	// generate pipeline_yml
-	// upload pipeline
 }
