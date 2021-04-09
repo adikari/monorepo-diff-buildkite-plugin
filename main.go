@@ -1,15 +1,17 @@
 package main
 
 import (
+	"os"
+
 	log "github.com/sirupsen/logrus"
 )
 
-func setupLogger() {
+func setupLogger(logLevel string) {
 	log.SetFormatter(&log.TextFormatter{
 		FullTimestamp: true,
 	})
 
-	ll, err := log.ParseLevel(plugin.LogLevel)
+	ll, err := log.ParseLevel(logLevel)
 
 	if err != nil {
 		ll = log.InfoLevel
@@ -20,10 +22,17 @@ func setupLogger() {
 
 func main() {
 	log.Info("--- :one: monorepo-diff")
-	setupLogger()
+
+	plugin, err := initializePlugin()
+
+	if err != nil {
+		log.Fatal(err)
+		os.Exit(1)
+	}
+
+	setupLogger(plugin.LogLevel)
 
 	// pipelines := pipelinesToTrigger(plugin.Diff)
-	initConfig()
 
 	// TODO
 	// get list of pipelines to trigger based on the diff

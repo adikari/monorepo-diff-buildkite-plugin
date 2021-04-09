@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 	"os/exec"
 )
 
@@ -28,4 +29,12 @@ func executeCommand(command string, args []string) string {
 	}
 
 	return string(stdout)
+}
+
+func env(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+
+	return fallback
 }
