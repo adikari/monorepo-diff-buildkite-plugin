@@ -1,9 +1,10 @@
 package main
 
 import (
-	"log"
 	"os"
 	"os/exec"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func unique(intSlice []int) []int {
@@ -25,7 +26,11 @@ func executeCommand(command string, args []string) string {
 	stdout, err := cmd.Output()
 
 	if err != nil {
-		log.Fatalf(err.Error())
+		log.Debugf(
+			"\ncommand = '%s', \nargs = '%s', \nerror = '%s'",
+			command, args, err.Error(),
+		)
+		log.Fatalf("'%s' command failed.", command)
 	}
 
 	return string(stdout)
