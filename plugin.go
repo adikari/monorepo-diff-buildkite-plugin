@@ -10,47 +10,65 @@ import (
 
 const pluginName = "github.com/chronotc/monorepo-diff"
 
+// HookConfig Plugin hook configuration
+type HookConfig struct {
+	Command string
+}
+
+// AgentConfig Plugin agent configuration
+type AgentConfig struct {
+	Queue string
+}
+
+// BuildConfig Plugin build configuration
+type BuildConfig struct {
+	Message string
+	Branch  string
+	Commit  string
+	Env     map[string]string
+}
+
+// TriggerConfig Plugin trigger configuration
+type TriggerConfig struct {
+	Trigger string
+	Label   string
+	Build   BuildConfig
+	Command string
+	Async   bool
+	Agents  AgentConfig
+	Env     map[string]string
+}
+
+// WatchConfig Plugin watch configuration
+type WatchConfig struct {
+	Path   []string
+	Config TriggerConfig
+}
+
 // Plugin buildkite monorepo diff plugin structure
 type Plugin struct {
 	Diff          string
 	Wait          bool
-	LogLevel      string
+	LogLevel      string `json:"log_level"`
 	Interpolation bool
-	Hooks         []struct{ Command string }
-	Watch         []struct {
-		Path   string
-		Config struct {
-			Trigger string
-		}
-		Label string
-		Build struct {
-			Message string
-			Branch  string
-			Commit  string
-			Env     map[string]string
-		}
-		Command string
-		Async   bool
-		Agents  struct {
-			Queue string
-		}
-		Env map[string]string
-	}
+	Hooks         []HookConfig
+	Watch         []WatchConfig
 }
 
 // UnmarshalJSON set defaults properties
 func (s *Plugin) UnmarshalJSON(data []byte) error {
 	type plain Plugin
-	test := &plain{
+
+	def := &plain{
 		Diff:          "git diff --name-only HEAD~1",
 		Wait:          false,
 		LogLevel:      "info",
 		Interpolation: false,
 	}
 
-	_ = json.Unmarshal(data, test)
+	_ = json.Unmarshal(data, def)
 
-	*s = Plugin(*test)
+	*s = Plugin(*def)
 	return nil
 }
 
