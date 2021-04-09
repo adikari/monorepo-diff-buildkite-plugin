@@ -1,23 +1,21 @@
 package main
 
 import (
+	"encoding/json"
 	"errors"
 	"strings"
 
-	"github.com/creasty/defaults"
 	log "github.com/sirupsen/logrus"
-
-	"gopkg.in/yaml.v2"
 )
 
 const pluginName = "github.com/chronotc/monorepo-diff"
 
 // Plugin buildkite monorepo diff plugin structure
 type Plugin struct {
-	Diff          string `default:"git diff --name-only HEAD~1"`
-	Wait          bool   `default:"false"`
-	LogLevel      string `default:"hello" yaml:"log_level"`
-	Interpolation bool   `default:"false"`
+	Diff          string
+	Wait          bool
+	LogLevel      string
+	Interpolation bool
 	Hooks         []struct{ Command string }
 	Watch         []struct {
 		Path   string
@@ -40,27 +38,30 @@ type Plugin struct {
 	}
 }
 
-// UnmarshalYAML set defaults properties unmarshalled yaml
-func (s *Plugin) UnmarshalYAML(unmarshal func(interface{}) error) error {
-	defaults.Set(s)
-
+// UnmarshalJSON set defaults properties
+func (s *Plugin) UnmarshalJSON(data []byte) error {
 	type plain Plugin
-	if err := unmarshal((*plain)(s)); err != nil {
-		return err
+	test := &plain{
+		Diff:          "git diff --name-only HEAD~1",
+		Wait:          false,
+		LogLevel:      "info",
+		Interpolation: false,
 	}
 
+	_ = json.Unmarshal(data, test)
+
+	*s = Plugin(*test)
 	return nil
 }
 
-func initializePlugin() (Plugin, error) {
-	data := env("BUILDKITE_PLUGINS", "")
+func initializePlugin(data string) (Plugin, error) {
 	var plugins []map[string]Plugin
 
-	err := yaml.Unmarshal([]byte(data), &plugins)
+	err := json.Unmarshal([]byte(data), &plugins)
 
 	if err != nil {
 		log.Debug(err)
-		log.Fatal("Failed to parse plugin configuration")
+		return Plugin{}, errors.New("Failed to parse plugin configuration")
 	}
 
 	for _, p := range plugins {

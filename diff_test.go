@@ -1,10 +1,19 @@
 package main
 
 import (
+	"io/ioutil"
+	"os"
 	"testing"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/stretchr/testify/assert"
 )
+
+func TestMain(m *testing.M) {
+	log.SetOutput(ioutil.Discard)
+	os.Exit(m.Run())
+}
 
 func TestDiff(t *testing.T) {
 	want := []string{

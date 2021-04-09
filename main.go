@@ -24,7 +24,7 @@ func setupLogger(logLevel string) {
 func main() {
 	log.Info("--- :one: monorepo-diff")
 
-	plugin, err := initializePlugin()
+	plugin, err := initializePlugin(env("BUILDKITE_PLUGINS", ""))
 
 	if err != nil {
 		log.Fatal(err)
