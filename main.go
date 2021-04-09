@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 
+	"github.com/davecgh/go-spew/spew"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -32,6 +33,7 @@ func main() {
 
 	setupLogger(plugin.LogLevel)
 
+	spew.Dump(plugin)
 	// pipelines := pipelinesToTrigger(plugin.Diff)
 
 	// TODO

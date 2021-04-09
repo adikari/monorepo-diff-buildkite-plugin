@@ -4,6 +4,7 @@ import (
 	"errors"
 	"strings"
 
+	"github.com/creasty/defaults"
 	log "github.com/sirupsen/logrus"
 
 	"gopkg.in/yaml.v2"
@@ -13,10 +14,10 @@ const pluginName = "github.com/chronotc/monorepo-diff"
 
 // Plugin buildkite monorepo diff plugin structure
 type Plugin struct {
-	Diff          string
-	Wait          bool
-	LogLevel      string `yaml:"log_level"`
-	Interpolation bool
+	Diff          string `default:"git diff --name-only HEAD~1"`
+	Wait          bool   `default:"false"`
+	LogLevel      string `default:"hello" yaml:"log_level"`
+	Interpolation bool   `default:"false"`
 	Hooks         []struct{ Command string }
 	Watch         []struct {
 		Path   string
@@ -37,6 +38,18 @@ type Plugin struct {
 		}
 		Env map[string]string
 	}
+}
+
+// UnmarshalYAML set defaults properties unmarshalled yaml
+func (s *Plugin) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	defaults.Set(s)
+
+	type plain Plugin
+	if err := unmarshal((*plain)(s)); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func initializePlugin() (Plugin, error) {
