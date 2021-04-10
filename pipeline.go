@@ -1,21 +1,52 @@
 package main
 
 import (
+	"reflect"
 	"strings"
 
 	log "github.com/sirupsen/logrus"
 )
 
 func uploadPipeline(plugin Plugin) error {
-	msg := "uploading pipelines"
-	log.Println(msg)
+	changedFiles := diff(plugin.Diff)
+	pipelinesToTrigger(changedFiles, plugin.Watch)
 	return nil
 }
 
-func pipelinesToTrigger(diffCmd string) []string {
-	changedFiles := diff(diffCmd)
+func pipelinesToTrigger(files []string, watch []WatchConfig) []PipelineConfig {
+	pipelines := []PipelineConfig{}
 
-	return changedFiles
+	for _, w := range watch {
+		for _, p := range w.Paths {
+			for _, f := range files {
+				if strings.HasPrefix(f, p) {
+					pipelines = append(pipelines, w.Config)
+					break
+				}
+			}
+		}
+	}
+
+	return dedupPipelines(pipelines)
+}
+
+func dedupPipelines(pipelines []PipelineConfig) []PipelineConfig {
+	unique := []PipelineConfig{}
+	for _, p := range pipelines {
+		duplicate := false
+		for _, t := range unique {
+			if reflect.DeepEqual(p, t) {
+				duplicate = true
+				break
+			}
+		}
+
+		if !duplicate {
+			unique = append(unique, p)
+		}
+	}
+
+	return unique
 }
 
 func diff(command string) []string {
