@@ -14,34 +14,19 @@ const pluginName = "github.com/chronotc/monorepo-diff"
 // 1. Trigger or Command is required
 // 2. path or paths, only one is allowed
 
+// Plugin buildkite monorepo diff plugin structure
+type Plugin struct {
+	Diff          string
+	Wait          bool
+	LogLevel      string `json:"log_level"`
+	Interpolation bool
+	Hooks         []HookConfig
+	Watch         []WatchConfig
+}
+
 // HookConfig Plugin hook configuration
 type HookConfig struct {
 	Command string
-}
-
-// Agent is Buildkite agent definition
-type Agent struct {
-	Queue string
-}
-
-// Build is buildkite build definition
-type Build struct {
-	Message string
-	Branch  string
-	Commit  string
-	Env     map[string]string
-}
-
-// Step is buildkite pipeline definition
-type Step struct {
-	Trigger   string
-	Label     string
-	Build     Build
-	Command   string
-	Async     bool
-	Agents    Agent
-	Artifacts []string
-	Env       map[string]string
 }
 
 // WatchConfig Plugin watch configuration
@@ -51,14 +36,29 @@ type WatchConfig struct {
 	Step    Step `json:"config"`
 }
 
-// Plugin buildkite monorepo diff plugin structure
-type Plugin struct {
-	Diff          string
-	Wait          bool
-	LogLevel      string `json:"log_level"`
-	Interpolation bool
-	Hooks         []HookConfig
-	Watch         []WatchConfig
+// Step is buildkite pipeline definition
+type Step struct {
+	Trigger   string            `yaml:"trigger,omitempty"`
+	Label     string            `yaml:"label,omitempty"`
+	Build     Build             `yaml:"build,omitempty"`
+	Command   string            `yaml:"command,omitempty"`
+	Agents    Agent             `yaml:"agents,omitempty"`
+	Artifacts []string          `yaml:"artifacts,omitempty"`
+	Env       map[string]string `yaml:"env,omitempty"`
+	Async     bool
+}
+
+// Agent is Buildkite agent definition
+type Agent struct {
+	Queue string `yaml:"queue,omitempty"`
+}
+
+// Build is buildkite build definition
+type Build struct {
+	Message string            `yaml:"message,omitempty"`
+	Branch  string            `yaml:"branch,omitempty"`
+	Commit  string            `yaml:"commit,omitempty"`
+	Env     map[string]string `yaml:"env,omitempty"`
 }
 
 // UnmarshalJSON set defaults properties

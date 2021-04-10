@@ -66,6 +66,38 @@ func TestPipelinesToTriggerGetsListOfPipelines(t *testing.T) {
 	assert.Equal(t, want, got)
 }
 
+// func testGeneratePipeline(t *testing.T) {
+// 	want := `
+// steps:
+//   - trigger: user-service
+//     build:
+//       commit: 5d93a0b58a42157201ae2ab0e7f8120ad4651489
+//       message: "chore: revert pipeline"
+//       branch: go-rewrite
+//   - command: echo hello-world
+//     agents:
+// 			queue: deploy
+//     artifact_paths:
+//   - command: cat some-file
+// 		agents:
+// 			queue: team
+//     artifact_paths:
+// 			- src/*
+// 			- coverage/**/*
+//   - wait
+// `
+
+// 	steps := []Step{
+// 		{
+// 			Trigger: "foo-service-pipeline",
+// 		},
+// 	}
+
+// 	got := uploadPipeline(steps)
+
+// 	assert.Equal(t, want, got)
+// }
+
 // func TestUploadPipeline(t *testing.T) {
 // 	want := "uploading pipelines"
 // 	got := uploadPipeline()

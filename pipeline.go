@@ -1,21 +1,54 @@
 package main
 
 import (
+	"errors"
+	"io/ioutil"
+	"os"
 	"reflect"
 	"strings"
 
 	log "github.com/sirupsen/logrus"
+	"gopkg.in/yaml.v2"
 )
 
-func uploadPipeline(plugin Plugin) error {
-	steps := stepsToTrigger(
-		diff(plugin.Diff),
-		plugin.Watch,
-	)
+// Pipeline is Buildkite pipeline definition
+type Pipeline struct {
+	Steps []Step
+}
 
-	generatePipeline(steps)
+func uploadPipeline(plugin Plugin) error {
+	steps := stepsToTrigger(diff(plugin.Diff), plugin.Watch)
+
+	pipeline, err := generatePipeline(steps)
+	defer os.Remove(pipeline.Name())
+
+	if err != nil {
+		return err
+	}
+
+	// TODO: remove dry run
+	args := []string{"pipeline", "upload", pipeline.Name(), "--dry-run"}
+
+	if plugin.Interpolation {
+		args = append(args, "--no-interpolation")
+	}
+
+	executeCommand("buildkite-agent", args)
 
 	return nil
+}
+
+func diff(command string) []string {
+	log.Infof("Running diff command: %s", command)
+
+	split := strings.Split(command, " ")
+	cmd, args := split[0], split[1:]
+
+	output := executeCommand(cmd, args)
+
+	log.Debug("Output from diff:\n" + output)
+
+	return strings.Split(strings.TrimSpace(output), "\n")
 }
 
 func stepsToTrigger(files []string, watch []WatchConfig) []Step {
@@ -54,15 +87,25 @@ func dedupSteps(steps []Step) []Step {
 	return unique
 }
 
-func diff(command string) []string {
-	log.Infof("Running diff command: %s", command)
+func generatePipeline(steps []Step) (*os.File, error) {
+	tmp, err := ioutil.TempFile(os.TempDir(), "bmrd-")
+	pipeline := Pipeline{Steps: steps}
 
-	split := strings.Split(command, " ")
-	cmd, args := split[0], split[1:]
+	if err != nil {
+		log.Debug(err)
+		return nil, errors.New("Could not create temporary pipeline file")
+	}
 
-	output := executeCommand(cmd, args)
+	data, err := yaml.Marshal(&pipeline)
 
-	log.Debug("Output from diff:\n" + output)
+	log.Debugf("Pipeline to upload:\n%s", string(data))
 
-	return strings.Split(strings.TrimSpace(output), "\n")
+	err = ioutil.WriteFile(tmp.Name(), data, 0644)
+
+	if err != nil {
+		log.Debug(err)
+		return nil, errors.New("Could not write step to temporary file")
+	}
+
+	return tmp, nil
 }
