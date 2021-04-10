@@ -44,7 +44,11 @@ func diff(command string) []string {
 	split := strings.Split(command, " ")
 	cmd, args := split[0], split[1:]
 
-	output := executeCommand(cmd, args)
+	output, err := executeCommand(cmd, args)
+
+	if err != nil {
+		log.Fatalf("%s: %s", err, command)
+	}
 
 	log.Debug("Output from diff:\n" + output)
 
@@ -100,9 +104,7 @@ func generatePipeline(steps []Step) (*os.File, error) {
 
 	log.Debugf("Pipeline to upload:\n%s", string(data))
 
-	err = ioutil.WriteFile(tmp.Name(), data, 0644)
-
-	if err != nil {
+	if err = ioutil.WriteFile(tmp.Name(), data, 0644); err != nil {
 		log.Debug(err)
 		return nil, errors.New("Could not write step to temporary file")
 	}

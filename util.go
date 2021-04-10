@@ -2,13 +2,14 @@ package main
 
 import (
 	"bytes"
+	"errors"
 	"os"
 	"os/exec"
 
 	log "github.com/sirupsen/logrus"
 )
 
-func executeCommand(command string, args []string) string {
+func executeCommand(command string, args []string) (string, error) {
 	cmd := exec.Command(command, args...)
 
 	var out bytes.Buffer
@@ -17,17 +18,16 @@ func executeCommand(command string, args []string) string {
 	cmd.Stdout = &out
 	cmd.Stderr = &stderr
 
-	err := cmd.Run()
-
-	if err != nil {
+	if err := cmd.Run(); err != nil {
 		log.Debugf(
 			"\ncommand = '%s', \nargs = '%s', \nerror = '%s'",
 			command, args, stderr.String(),
 		)
-		log.Fatalf("'%s' command failed.", command)
+
+		return "", errors.New("command failed")
 	}
 
-	return out.String()
+	return out.String(), nil
 }
 
 func env(key, fallback string) string {

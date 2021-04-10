@@ -7,6 +7,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
+	"gopkg.in/yaml.v2"
 )
 
 func TestMain(m *testing.M) {
@@ -66,37 +67,34 @@ func TestPipelinesToTriggerGetsListOfPipelines(t *testing.T) {
 	assert.Equal(t, want, got)
 }
 
-// func testGeneratePipeline(t *testing.T) {
-// 	want := `
-// steps:
-//   - trigger: user-service
-//     build:
-//       commit: 5d93a0b58a42157201ae2ab0e7f8120ad4651489
-//       message: "chore: revert pipeline"
-//       branch: go-rewrite
-//   - command: echo hello-world
-//     agents:
-// 			queue: deploy
-//     artifact_paths:
-//   - command: cat some-file
-// 		agents:
-// 			queue: team
-//     artifact_paths:
-// 			- src/*
-// 			- coverage/**/*
-//   - wait
-// `
+func TestGeneratePipeline(t *testing.T) {
+	steps := []Step{
+		{
+			Trigger: "foo-service-pipeline",
+			Build:   Build{Message: "build message"},
+		},
+	}
 
-// 	steps := []Step{
-// 		{
-// 			Trigger: "foo-service-pipeline",
-// 		},
-// 	}
+	want := Pipeline{Steps: steps}
+	got := Pipeline{}
 
-// 	got := uploadPipeline(steps)
+	pipeline, err := generatePipeline(steps)
+	defer os.Remove(pipeline.Name())
 
-// 	assert.Equal(t, want, got)
-// }
+	if err != nil {
+		// Failed to close the temp pipeline file
+		assert.Equal(t, true, false)
+	}
+
+	file, _ := ioutil.ReadFile(pipeline.Name())
+
+	if err = yaml.Unmarshal(file, &got); err != nil {
+		// Failed to unmarshal temporary pipeline file
+		assert.Equal(t, true, false)
+	}
+
+	assert.Equal(t, want, got)
+}
 
 // func TestUploadPipeline(t *testing.T) {
 // 	want := "uploading pipelines"
