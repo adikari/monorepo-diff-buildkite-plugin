@@ -106,14 +106,14 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 		Watch: []WatchConfig{
 			{
 				Paths:  []string{"watch-path-1"},
-				Config: PipelineConfig{Trigger: "service-2"},
+				Config: Pipeline{Trigger: "service-2"},
 			},
 			{
 				Paths: []string{"watch-path-1", "watch-path-2"},
-				Config: PipelineConfig{
+				Config: Pipeline{
 					Trigger: "service-1",
 					Label:   "hello",
-					Build: BuildConfig{
+					Build: Build{
 						Message: "build message",
 						Branch:  "current branch",
 						Commit:  "commit-hash",
@@ -123,7 +123,7 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						},
 					},
 					Async:     true,
-					Agents:    AgentConfig{Queue: "queue-1"},
+					Agents:    Agent{Queue: "queue-1"},
 					Artifacts: []string{"artifiact-1"},
 					Env: map[string]string{
 						"foo": "bar",

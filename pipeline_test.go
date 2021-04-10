@@ -33,19 +33,19 @@ func TestPipelinesToTriggerGetsListOfPipelines(t *testing.T) {
 	watch := []WatchConfig{
 		{
 			Paths:  []string{"watch-path-1"},
-			Config: PipelineConfig{Trigger: "service-1"},
+			Config: Pipeline{Trigger: "service-1"},
 		},
 		{
 			Paths:  []string{"watch-path-2/", "watch-path-3/", "watch-path-4"},
-			Config: PipelineConfig{Trigger: "service-2"},
+			Config: Pipeline{Trigger: "service-2"},
 		},
 		{
 			Paths:  []string{"watch-path-5"},
-			Config: PipelineConfig{Trigger: "service-3"},
+			Config: Pipeline{Trigger: "service-3"},
 		},
 		{
 			Paths:  []string{"watch-path-2"},
-			Config: PipelineConfig{Trigger: "service-4"},
+			Config: Pipeline{Trigger: "service-4"},
 		},
 	}
 

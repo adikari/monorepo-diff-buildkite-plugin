@@ -8,13 +8,18 @@ import (
 )
 
 func uploadPipeline(plugin Plugin) error {
-	changedFiles := diff(plugin.Diff)
-	pipelinesToTrigger(changedFiles, plugin.Watch)
+	pipelinesToTrigger := pipelinesToTrigger(
+		diff(plugin.Diff),
+		plugin.Watch,
+	)
+
+	generatePipeline(pipelinesToTrigger)
+
 	return nil
 }
 
-func pipelinesToTrigger(files []string, watch []WatchConfig) []PipelineConfig {
-	pipelines := []PipelineConfig{}
+func pipelinesToTrigger(files []string, watch []WatchConfig) []Pipeline {
+	pipelines := []Pipeline{}
 
 	for _, w := range watch {
 		for _, p := range w.Paths {
@@ -30,8 +35,8 @@ func pipelinesToTrigger(files []string, watch []WatchConfig) []PipelineConfig {
 	return dedupPipelines(pipelines)
 }
 
-func dedupPipelines(pipelines []PipelineConfig) []PipelineConfig {
-	unique := []PipelineConfig{}
+func dedupPipelines(pipelines []Pipeline) []Pipeline {
+	unique := []Pipeline{}
 	for _, p := range pipelines {
 		duplicate := false
 		for _, t := range unique {

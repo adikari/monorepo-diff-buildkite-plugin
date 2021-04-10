@@ -10,32 +10,36 @@ import (
 
 const pluginName = "github.com/chronotc/monorepo-diff"
 
+// TODO: add validation
+// 1. Trigger or Command is required
+// 2. path or paths, only one is allowed
+
 // HookConfig Plugin hook configuration
 type HookConfig struct {
 	Command string
 }
 
-// AgentConfig Plugin agent configuration
-type AgentConfig struct {
+// Agent is Buildkite agent definition
+type Agent struct {
 	Queue string
 }
 
-// BuildConfig Plugin build configuration
-type BuildConfig struct {
+// Build is buildkite build definition
+type Build struct {
 	Message string
 	Branch  string
 	Commit  string
 	Env     map[string]string
 }
 
-// PipelineConfig Plugin trigger configuration
-type PipelineConfig struct {
+// Pipeline is buildkite pipeline definition
+type Pipeline struct {
 	Trigger   string
 	Label     string
-	Build     BuildConfig
+	Build     Build
 	Command   string
 	Async     bool
-	Agents    AgentConfig
+	Agents    Agent
 	Artifacts []string
 	Env       map[string]string
 }
@@ -44,7 +48,7 @@ type PipelineConfig struct {
 type WatchConfig struct {
 	RawPath interface{} `json:"path"`
 	Paths   []string
-	Config  PipelineConfig
+	Config  Pipeline
 }
 
 // Plugin buildkite monorepo diff plugin structure
