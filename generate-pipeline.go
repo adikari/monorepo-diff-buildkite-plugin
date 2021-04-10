@@ -2,8 +2,13 @@ package main
 
 import "github.com/davecgh/go-spew/spew"
 
-func generatePipeline(pipelines []Pipeline) Pipeline {
-	spew.Dump(pipelines)
+// Pipeline is Buildkite pipeline definition
+type Pipeline struct {
+	Steps []Step
+}
+
+func generatePipeline(steps []Step) Pipeline {
+	spew.Dump(steps)
 
 	return Pipeline{}
 }

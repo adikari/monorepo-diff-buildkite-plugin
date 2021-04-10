@@ -32,8 +32,8 @@ type Build struct {
 	Env     map[string]string
 }
 
-// Pipeline is buildkite pipeline definition
-type Pipeline struct {
+// Step is buildkite pipeline definition
+type Step struct {
 	Trigger   string
 	Label     string
 	Build     Build
@@ -48,7 +48,7 @@ type Pipeline struct {
 type WatchConfig struct {
 	RawPath interface{} `json:"path"`
 	Paths   []string
-	Config  Pipeline
+	Step    Step `json:"config"`
 }
 
 // Plugin buildkite monorepo diff plugin structure

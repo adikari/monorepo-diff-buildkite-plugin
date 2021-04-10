@@ -32,20 +32,20 @@ func TestPipelinesToTriggerGetsListOfPipelines(t *testing.T) {
 
 	watch := []WatchConfig{
 		{
-			Paths:  []string{"watch-path-1"},
-			Config: Pipeline{Trigger: "service-1"},
+			Paths: []string{"watch-path-1"},
+			Step:  Step{Trigger: "service-1"},
 		},
 		{
-			Paths:  []string{"watch-path-2/", "watch-path-3/", "watch-path-4"},
-			Config: Pipeline{Trigger: "service-2"},
+			Paths: []string{"watch-path-2/", "watch-path-3/", "watch-path-4"},
+			Step:  Step{Trigger: "service-2"},
 		},
 		{
-			Paths:  []string{"watch-path-5"},
-			Config: Pipeline{Trigger: "service-3"},
+			Paths: []string{"watch-path-5"},
+			Step:  Step{Trigger: "service-3"},
 		},
 		{
-			Paths:  []string{"watch-path-2"},
-			Config: Pipeline{Trigger: "service-4"},
+			Paths: []string{"watch-path-2"},
+			Step:  Step{Trigger: "service-4"},
 		},
 	}
 
@@ -56,7 +56,7 @@ func TestPipelinesToTriggerGetsListOfPipelines(t *testing.T) {
 		"watch-path-4/test/index_test.go",
 	}
 
-	pipelines := pipelinesToTrigger(changedFiles, watch)
+	pipelines := stepsToTrigger(changedFiles, watch)
 	var got []string
 
 	for _, v := range pipelines {

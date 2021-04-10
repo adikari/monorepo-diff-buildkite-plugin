@@ -8,36 +8,36 @@ import (
 )
 
 func uploadPipeline(plugin Plugin) error {
-	pipelinesToTrigger := pipelinesToTrigger(
+	steps := stepsToTrigger(
 		diff(plugin.Diff),
 		plugin.Watch,
 	)
 
-	generatePipeline(pipelinesToTrigger)
+	generatePipeline(steps)
 
 	return nil
 }
 
-func pipelinesToTrigger(files []string, watch []WatchConfig) []Pipeline {
-	pipelines := []Pipeline{}
+func stepsToTrigger(files []string, watch []WatchConfig) []Step {
+	steps := []Step{}
 
 	for _, w := range watch {
 		for _, p := range w.Paths {
 			for _, f := range files {
 				if strings.HasPrefix(f, p) {
-					pipelines = append(pipelines, w.Config)
+					steps = append(steps, w.Step)
 					break
 				}
 			}
 		}
 	}
 
-	return dedupPipelines(pipelines)
+	return dedupSteps(steps)
 }
 
-func dedupPipelines(pipelines []Pipeline) []Pipeline {
-	unique := []Pipeline{}
-	for _, p := range pipelines {
+func dedupSteps(steps []Step) []Step {
+	unique := []Step{}
+	for _, p := range steps {
 		duplicate := false
 		for _, t := range unique {
 			if reflect.DeepEqual(p, t) {

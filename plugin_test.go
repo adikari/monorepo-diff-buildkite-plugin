@@ -105,12 +105,12 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 		},
 		Watch: []WatchConfig{
 			{
-				Paths:  []string{"watch-path-1"},
-				Config: Pipeline{Trigger: "service-2"},
+				Paths: []string{"watch-path-1"},
+				Step:  Step{Trigger: "service-2"},
 			},
 			{
 				Paths: []string{"watch-path-1", "watch-path-2"},
-				Config: Pipeline{
+				Step: Step{
 					Trigger: "service-1",
 					Label:   "hello",
 					Build: Build{

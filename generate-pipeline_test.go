@@ -17,13 +17,13 @@ func testGeneratePipelineWithTrigger(t *testing.T) {
 		- wait
 	`
 
-	pipelines := []Pipeline{
+	steps := []Step{
 		{
 			Trigger: "foo-service-pipeline",
 		},
 	}
 
-	got := generatePipeline(pipelines)
+	got := generatePipeline(steps)
 
 	assert.Equal(t, want, got)
 }
