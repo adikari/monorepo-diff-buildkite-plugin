@@ -2,10 +2,10 @@ package main
 
 import (
 	"io/ioutil"
-	"log"
 	"os"
 	"testing"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/yaml.v2"
 )
@@ -28,6 +28,14 @@ func TestUploadPipelineCallsBuildkiteAgentCommand(t *testing.T) {
 
 	assert.Equal(t, "buildkite-agent", cmd)
 	assert.Equal(t, []string{"pipeline", "upload", "pipeline.txt"}, args)
+}
+
+func TestUploadPipelineCallsBuildkiteAgentCommandWithInterpolation(t *testing.T) {
+	plugin := Plugin{Diff: "echo ./foo-service", Interpolation: true}
+	cmd, args, _ := uploadPipeline(plugin, mockGeneratePipeline)
+
+	assert.Equal(t, "buildkite-agent", cmd)
+	assert.Equal(t, []string{"pipeline", "upload", "pipeline.txt", "--no-interpolation"}, args)
 }
 
 func TestDiff(t *testing.T) {
