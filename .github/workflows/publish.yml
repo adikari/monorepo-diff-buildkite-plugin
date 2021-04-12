@@ -1,0 +1,22 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+        # make quality
+        # make test
+        # upload coverage
+        # release binary
+        # update changelog
+        # update readme version numbers
+        # add contributors
