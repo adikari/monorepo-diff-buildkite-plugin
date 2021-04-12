@@ -1,11 +1,12 @@
 NAME=monorepo-diff-buildkite-plugin
-VERSION := $(shell git describe --tags --abbrev=0)
+RELEASE_VERSION?= "0.0.0"
 COMMIT=$(shell git rev-parse --short=7 HEAD)
 TIMESTAMP:=$(shell date -u '+%Y-%m-%dT%I:%M:%SZ')
 
 LDFLAGS += -X main.BuildTime=${TIMESTAMP}
 LDFLAGS += -X main.BuildSHA=${COMMIT}
-LDFLAGS += -X main.Version=${VERSION}
+LDFLAGS += -X main.Version=${RELEASE_VERSION}
+
 HAS_DOCKER=$(shell command -v docker;)
 
 .PHONY: all
@@ -13,7 +14,7 @@ all: quality test
 
 .PHONY: test
 test:
-	go test -race -coverprofile=coverage.out
+	go test -race -coverprofile=coverage.txt -covermode=atomic
 
 .PHONY: quality
 quality:

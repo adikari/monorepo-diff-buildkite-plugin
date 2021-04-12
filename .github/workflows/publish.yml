@@ -13,6 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+        # ${{ github.event.release.tag_name }}
         # make quality
         # make test
         # upload coverage
