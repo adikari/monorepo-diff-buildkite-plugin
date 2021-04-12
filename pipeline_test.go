@@ -24,18 +24,29 @@ func mockGeneratePipeline(steps []Step) (*os.File, error) {
 
 func TestUploadPipelineCallsBuildkiteAgentCommand(t *testing.T) {
 	plugin := Plugin{Diff: "echo ./foo-service"}
-	cmd, args, _ := uploadPipeline(plugin, mockGeneratePipeline)
+	cmd, args, err := uploadPipeline(plugin, mockGeneratePipeline)
 
 	assert.Equal(t, "buildkite-agent", cmd)
 	assert.Equal(t, []string{"pipeline", "upload", "pipeline.txt"}, args)
+	assert.Equal(t, err, nil)
 }
 
 func TestUploadPipelineCallsBuildkiteAgentCommandWithInterpolation(t *testing.T) {
 	plugin := Plugin{Diff: "echo ./foo-service", Interpolation: true}
-	cmd, args, _ := uploadPipeline(plugin, mockGeneratePipeline)
+	cmd, args, err := uploadPipeline(plugin, mockGeneratePipeline)
 
 	assert.Equal(t, "buildkite-agent", cmd)
 	assert.Equal(t, []string{"pipeline", "upload", "pipeline.txt", "--no-interpolation"}, args)
+	assert.Equal(t, err, nil)
+}
+
+func TestUploadPipelineCancelsIfThereIsNoDiffOutput(t *testing.T) {
+	plugin := Plugin{Diff: "echo"}
+	cmd, args, err := uploadPipeline(plugin, mockGeneratePipeline)
+
+	assert.Equal(t, "", cmd)
+	assert.Equal(t, []string{}, args)
+	assert.Equal(t, err, nil)
 }
 
 func TestDiff(t *testing.T) {
@@ -46,7 +57,11 @@ func TestDiff(t *testing.T) {
 		"README.md",
 	}
 
-	got := diff("cat ./tests/mocks/diff1")
+	got := diff(`echo services/foo/serverless.yml
+services/bar/config.yml
+
+ops/bar/config.yml
+README.md`)
 
 	assert.Equal(t, want, got)
 }

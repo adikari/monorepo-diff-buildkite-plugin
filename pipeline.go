@@ -27,6 +27,8 @@ func uploadPipeline(plugin Plugin, generatePipeline PipelineGenerator) (string, 
 		return "", []string{}, nil
 	}
 
+	log.Debug("Output from diff: \n" + strings.Join(diffOutput, "\n"))
+
 	steps := stepsToTrigger(diffOutput, plugin.Watch)
 
 	pipeline, err := generatePipeline(steps)
@@ -60,9 +62,11 @@ func diff(command string) []string {
 		log.Fatalf("%s: %s", err, command)
 	}
 
-	log.Debug("Output from diff:\n" + output)
+	f := func(c rune) bool {
+		return c == '\n'
+	}
 
-	return strings.Split(strings.TrimSpace(output), "\n")
+	return strings.FieldsFunc(strings.TrimSpace(output), f)
 }
 
 func stepsToTrigger(files []string, watch []WatchConfig) []Step {
