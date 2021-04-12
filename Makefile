@@ -14,7 +14,7 @@ all: quality test
 
 .PHONY: test
 test:
-	go test -race -coverprofile=coverage.txt -covermode=atomic
+	go test -race -coverprofile=coverage.out -covermode=atomic
 
 .PHONY: quality
 quality:
