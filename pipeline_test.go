@@ -5,14 +5,21 @@ import (
 	"os"
 	"testing"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/yaml.v2"
 )
 
-func TestMain(m *testing.M) {
-	log.SetOutput(ioutil.Discard)
-	os.Exit(m.Run())
+// func TestMain(m *testing.M) {
+// 	log.SetOutput(ioutil.Discard)
+// 	os.Exit(m.Run())
+// }
+
+func TestUploadPipelineCallsBuildkiteAgentCommand(t *testing.T) {
+	plugin := Plugin{Diff: "echo ./foo-service"}
+	p := PipelineUploader{generatePipeline: generatePipeline}
+	p.uploadPipeline(plugin)
+
+	// m.AssertCalled(t, mock.Anything)
 }
 
 func TestDiff(t *testing.T) {

@@ -16,10 +16,22 @@ type Pipeline struct {
 	Steps []Step
 }
 
-func uploadPipeline(plugin Plugin) error {
-	steps := stepsToTrigger(diff(plugin.Diff), plugin.Watch)
+// PipelineUploader generates pipeline
+type PipelineUploader struct {
+	generatePipeline func(steps []Step) (*os.File, error)
+}
 
-	pipeline, err := generatePipeline(steps)
+func (uploader *PipelineUploader) uploadPipeline(plugin Plugin) error {
+	diffOutput := diff(plugin.Diff)
+
+	if len(diffOutput) < 1 {
+		log.Info("No changes detected. Skipping pipeline upload.")
+		return nil
+	}
+
+	steps := stepsToTrigger(diffOutput, plugin.Watch)
+
+	pipeline, err := uploader.generatePipeline(steps)
 	defer os.Remove(pipeline.Name())
 
 	if err != nil {
@@ -33,6 +45,7 @@ func uploadPipeline(plugin Plugin) error {
 		args = append(args, "--no-interpolation")
 	}
 
+	log.Info(pipeline.Name())
 	executeCommand("buildkite-agent", args)
 
 	return nil
