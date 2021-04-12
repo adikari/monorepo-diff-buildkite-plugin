@@ -1,37 +1,10 @@
 #!/bin/bash
-set -eo pipefail
+set -euo pipefail
 
-basedir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
+version="2.0.0"
+repo="https://github.com/chronotc/monorepo-diff-buildkite-plugin"
+executable="monorepo-diff-buildkite-plugin"
 
-. "$basedir/lib/shared.bash"
-. "$basedir/lib/diff.bash"
-. "$basedir/lib/watch.bash"
-. "$basedir/lib/trigger.bash"
+curl -Lf -o buildpipe ${repo}/releases/download/v${version}/${executable} && chmod +x ${executable}
 
-echo "--- :one: monorepo-diff" ;
-
-pipeline_yml=();
-pipelines_to_trigger=();
-
-diff=$(run_diff)
-populate_pipelines_to_trigger "$diff"
-
-if [ "${#pipelines_to_trigger[@]}" -eq 0 ]; then
-  echo "No changes detected"
-else
-  pipeline_yml+=("steps:")
-  generate_pipeline_yml
-  output=$(printf '%s\n' "${pipeline_yml[@]}")
-
-  if [[ -n ${DEBUG:-} ]] ; then
-    echo >&2 "$output"
-  fi
-
-  NO_INTERPOLATION=""
-  if [ "${BUILDKITE_PLUGIN_MONOREPO_DIFF_INTERPOLATION-}" = "false" ]; then
-    NO_INTERPOLATION="--no-interpolation"
-  fi
-  echo "output $output"
-
-  echo "$output" | buildkite-agent pipeline upload ${NO_INTERPOLATION}
-fi
+./${executable}
