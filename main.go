@@ -29,6 +29,5 @@ func main() {
 
 	setupLogger(plugin.LogLevel)
 
-	uploader := PipelineUploader{generatePipeline: generatePipeline}
-	uploader.uploadPipeline(plugin)
+	uploadPipeline(plugin, generatePipeline)
 }

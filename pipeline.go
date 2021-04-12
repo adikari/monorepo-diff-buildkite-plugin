@@ -16,12 +16,10 @@ type Pipeline struct {
 	Steps []Step
 }
 
-// PipelineUploader generates pipeline
-type PipelineUploader struct {
-	generatePipeline func(steps []Step) (*os.File, error)
-}
+// PipelineGenerator generates pipeline file
+type PipelineGenerator func(steps []Step) (*os.File, error)
 
-func (uploader *PipelineUploader) uploadPipeline(plugin Plugin) error {
+func uploadPipeline(plugin Plugin, generatePipeline PipelineGenerator) error {
 	diffOutput := diff(plugin.Diff)
 
 	if len(diffOutput) < 1 {
@@ -31,7 +29,7 @@ func (uploader *PipelineUploader) uploadPipeline(plugin Plugin) error {
 
 	steps := stepsToTrigger(diffOutput, plugin.Watch)
 
-	pipeline, err := uploader.generatePipeline(steps)
+	pipeline, err := generatePipeline(steps)
 	defer os.Remove(pipeline.Name())
 
 	if err != nil {

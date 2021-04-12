@@ -14,10 +14,16 @@ import (
 // 	os.Exit(m.Run())
 // }
 
+func mockGeneratePipeline(steps []Step) (*os.File, error) {
+	mockFile, _ := os.Create("pipeline.txt")
+	defer mockFile.Close()
+
+	return mockFile, nil
+}
+
 func TestUploadPipelineCallsBuildkiteAgentCommand(t *testing.T) {
 	plugin := Plugin{Diff: "echo ./foo-service"}
-	p := PipelineUploader{generatePipeline: generatePipeline}
-	p.uploadPipeline(plugin)
+	uploadPipeline(plugin, mockGeneratePipeline)
 
 	// m.AssertCalled(t, mock.Anything)
 }
