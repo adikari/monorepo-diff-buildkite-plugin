@@ -13,10 +13,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-        # ${{ github.event.release.tag_name }}
-        # make quality
-        # make test
-        # upload coverage
+      - name: Check quality
+        run: make quality
+
+      - name: Run tests
+        run: make test
+
+      - name: Upload coverage to Codecov
+        run: bash <(curl -s https://codecov.io/bash)
+
+        # set RELEASE_VERSION  ${{ github.event.release.tag_name }}
         # release binary
         # update changelog
         # update readme version numbers
