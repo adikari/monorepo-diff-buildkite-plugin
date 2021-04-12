@@ -18,6 +18,7 @@ type Plugin struct {
 	Interpolation bool
 	Hooks         []HookConfig
 	Watch         []WatchConfig
+	Env           map[string]string
 }
 
 // HookConfig Plugin hook configuration
@@ -81,7 +82,26 @@ func (s *Plugin) UnmarshalJSON(data []byte) error {
 				s.Watch[i].Paths = append(s.Watch[i].Paths, v.(string))
 			}
 		}
+
 		s.Watch[i].RawPath = nil
+
+		for k, e := range s.Env {
+			if s.Watch[i].Step.Env == nil {
+				s.Watch[i].Step.Env = map[string]string{}
+			}
+
+			s.Watch[i].Step.Env[k] = e
+
+			if s.Watch[i].Step.Build.Message == "" {
+				continue
+			}
+
+			if s.Watch[i].Step.Build.Env == nil {
+				s.Watch[i].Step.Build.Env = map[string]string{}
+			}
+
+			s.Watch[i].Step.Build.Env[k] = e
+		}
 	}
 
 	return nil

@@ -11,6 +11,8 @@ configuration:
       type: string
     interpolation:
       type: boolean
+    env:
+      type: array
     watch:
       type: array
       properties:

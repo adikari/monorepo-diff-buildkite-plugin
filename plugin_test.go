@@ -54,6 +54,10 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 				{ "command": "some-hook-command" },
 				{ "command": "another-hook-command" }
 			],
+			"env":{
+				"env1": "env-1",
+				"env2": "env-2"
+			},
 			"watch": [
 				{
 					"path": "watch-path-1",
@@ -103,10 +107,20 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 			{Command: "some-hook-command"},
 			{Command: "another-hook-command"},
 		},
+		Env: map[string]string{
+			"env1": "env-1",
+			"env2": "env-2",
+		},
 		Watch: []WatchConfig{
 			{
 				Paths: []string{"watch-path-1"},
-				Step:  Step{Trigger: "service-2"},
+				Step: Step{
+					Trigger: "service-2",
+					Env: map[string]string{
+						"env1": "env-1",
+						"env2": "env-2",
+					},
+				},
 			},
 			{
 				Paths: []string{"watch-path-1", "watch-path-2"},
@@ -118,15 +132,19 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						Branch:  "current branch",
 						Commit:  "commit-hash",
 						Env: map[string]string{
-							"foo": "bar",
-							"bar": "foo",
+							"foo":  "bar",
+							"bar":  "foo",
+							"env1": "env-1",
+							"env2": "env-2",
 						},
 					},
 					Async:     true,
 					Agents:    Agent{Queue: "queue-1"},
 					Artifacts: []string{"artifiact-1"},
 					Env: map[string]string{
-						"foo": "bar",
+						"foo":  "bar",
+						"env1": "env-1",
+						"env2": "env-2",
 					},
 				},
 			},
