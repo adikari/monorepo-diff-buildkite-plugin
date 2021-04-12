@@ -10,10 +10,6 @@ import (
 
 const pluginName = "github.com/chronotc/monorepo-diff"
 
-// TODO: add validation
-// 1. Trigger or Command is required
-// 2. path or paths, only one is allowed
-
 // Plugin buildkite monorepo diff plugin structure
 type Plugin struct {
 	Diff          string
