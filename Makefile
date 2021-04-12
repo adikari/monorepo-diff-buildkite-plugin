@@ -6,6 +6,7 @@ TIMESTAMP:=$(shell date -u '+%Y-%m-%dT%I:%M:%SZ')
 LDFLAGS += -X main.BuildTime=${TIMESTAMP}
 LDFLAGS += -X main.BuildSHA=${COMMIT}
 LDFLAGS += -X main.Version=${VERSION}
+HAS_DOCKER=$(shell command -v docker;)
 
 .PHONY: all
 all: quality test
@@ -19,6 +20,9 @@ quality:
 	go vet
 	go fmt
 	go mod tidy
+ifneq (${HAS_DOCKER},)
+	docker-compose run --rm lint
+endif
 
 .PHONY: clean
 clean:
