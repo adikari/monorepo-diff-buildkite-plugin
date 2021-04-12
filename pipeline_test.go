@@ -2,6 +2,7 @@ package main
 
 import (
 	"io/ioutil"
+	"log"
 	"os"
 	"testing"
 
@@ -9,10 +10,10 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// func TestMain(m *testing.M) {
-// 	log.SetOutput(ioutil.Discard)
-// 	os.Exit(m.Run())
-// }
+func TestMain(m *testing.M) {
+	log.SetOutput(ioutil.Discard)
+	os.Exit(m.Run())
+}
 
 func mockGeneratePipeline(steps []Step) (*os.File, error) {
 	mockFile, _ := os.Create("pipeline.txt")
@@ -23,9 +24,10 @@ func mockGeneratePipeline(steps []Step) (*os.File, error) {
 
 func TestUploadPipelineCallsBuildkiteAgentCommand(t *testing.T) {
 	plugin := Plugin{Diff: "echo ./foo-service"}
-	uploadPipeline(plugin, mockGeneratePipeline)
+	cmd, args, _ := uploadPipeline(plugin, mockGeneratePipeline)
 
-	// m.AssertCalled(t, mock.Anything)
+	assert.Equal(t, "buildkite-agent", cmd)
+	assert.Equal(t, []string{"pipeline", "upload", "pipeline.txt"}, args)
 }
 
 func TestDiff(t *testing.T) {
@@ -108,12 +110,3 @@ func TestGeneratePipeline(t *testing.T) {
 
 	assert.Equal(t, want, got)
 }
-
-// func TestUploadPipeline(t *testing.T) {
-// 	want := "uploading pipelines"
-// 	got := uploadPipeline()
-
-// 	if want != got {
-// 		t.Errorf(`uploadPipeline(), got %q, want "%v"`, got, want)
-// 	}
-// }

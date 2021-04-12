@@ -19,12 +19,12 @@ type Pipeline struct {
 // PipelineGenerator generates pipeline file
 type PipelineGenerator func(steps []Step) (*os.File, error)
 
-func uploadPipeline(plugin Plugin, generatePipeline PipelineGenerator) error {
+func uploadPipeline(plugin Plugin, generatePipeline PipelineGenerator) (string, []string, error) {
 	diffOutput := diff(plugin.Diff)
 
 	if len(diffOutput) < 1 {
 		log.Info("No changes detected. Skipping pipeline upload.")
-		return nil
+		return "", []string{}, nil
 	}
 
 	steps := stepsToTrigger(diffOutput, plugin.Watch)
@@ -33,20 +33,19 @@ func uploadPipeline(plugin Plugin, generatePipeline PipelineGenerator) error {
 	defer os.Remove(pipeline.Name())
 
 	if err != nil {
-		return err
+		return "", []string{}, err
 	}
 
-	// TODO: remove dry run
-	args := []string{"pipeline", "upload", pipeline.Name(), "--dry-run"}
+	cmd := "buildkite-agent"
+	args := []string{"pipeline", "upload", pipeline.Name()}
 
 	if plugin.Interpolation {
 		args = append(args, "--no-interpolation")
 	}
 
-	log.Info(pipeline.Name())
 	executeCommand("buildkite-agent", args)
 
-	return nil
+	return cmd, args, nil
 }
 
 func diff(command string) []string {
