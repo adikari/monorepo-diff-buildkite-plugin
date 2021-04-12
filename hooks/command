@@ -1,9 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
-version="2.0.0"
+version="${BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_VERSION:-2.0.0}"
 repo="https://github.com/chronotc/monorepo-diff-buildkite-plugin"
-executable="monorepo-diff-buildkite-plugin"
+executable="monorepo-diff-buildkite-plugin-linux"
+
+echo "using plugin version: ${version}"
 
 curl -Lf -o buildpipe ${repo}/releases/download/v${version}/${executable} && chmod +x ${executable}
 
