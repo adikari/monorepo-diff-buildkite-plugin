@@ -1,12 +1,14 @@
 [![Build status](https://badge.buildkite.com/719d0b895285367c9c57a09e07f1e853148d2509f0667e0ae8.svg?branch=master)](https://buildkite.com/kuda/monorepo-diff-buildkite-plugin)
 [![codecov](https://codecov.io/gh/chronotc/monorepo-diff-buildkite-plugin/branch/master/graph/badge.svg?token=DQ3B4FIYD2)](https://codecov.io/gh/chronotc/monorepo-diff-buildkite-plugin)
-# monorepo-diff-buildkite-plugin 
+# monorepo-diff-buildkite-plugin
 
 This plugin will assist you in triggering pipelines by watching folders in your `monorepo`.
 
 Check out this post to learn [**How to set up Continuous Integration for monorepo using Buildkite**](https://adikari.medium.com/set-up-continuous-integration-for-monorepo-using-buildkite-61539bb0ed76).
 
-## Example
+## Using the plugin
+
+Replace the `<version>` in following examples with `v2.0.0`. If the version number is not provided then the most recent version of the plugin will be used. Do not use version number as `master` or any branch names.
 
 ### Simple
 
@@ -14,7 +16,7 @@ Check out this post to learn [**How to set up Continuous Integration for monorep
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - chronotc/monorepo-diff#v1.3.2:
+      - chronotc/monorepo-diff#<version>:
           diff: "git diff --name-only HEAD~1"
           watch:
             - path: "bar-service/"
@@ -31,9 +33,11 @@ steps:
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - chronotc/monorepo-diff#v1.3.2:
+      - chronotc/monorepo-diff#<version>:
           diff: "git diff --name-only $(head -n 1 last_successful_build)"
           interpolation: false
+          env:
+            env1: env-1 # this will be appended to all env configuration
           watch:
             - path:
                 - "ops/terraform/"
@@ -107,11 +111,15 @@ LATEST_BUILT_TAG=$(git describe --tags --match foo-service-* --abbrev=0)
 git diff --name-only "$LATEST_TAG"
 ```
 
-### `interpolation` (optional)
+## `interpolation` (optional)
 
 This controls the pipeline interpolation on upload, and defaults to `true`.
 If set to `false` it adds `--no-interpolation` to the `buildkite pipeline upload`,
 to avoid trying to interpolate the commit message, which can cause failures.
+
+## `env` (optional)
+
+The object values provided in this configuration will be appended to `env` property of all steps or commands.
 
 ## `watch`
 
@@ -219,24 +227,13 @@ steps:
                 trigger: "deploy-foo-service"
 ```
 
+## How to Contribute
+
+Please read [contributing guide](https://github.com/chronotc/monorepo-diff-buildkite-plugin/blob/master/CONTRIBUTING.md).
+
+## Contributors
+
 ## References
 
 https://stackoverflow.com/questions/1527234/finding-a-branch-point-with-git
 
-## Contribute
-
-### To run tests
-
-Ensure that all tests are in the `./tests`
-
-`docker-compose run --rm tests`
-
-### To run lint
-
-`docker-compose run --rm lint`
-
-### To run e2e tests
-1. Install [buildkite cli](https://github.com/buildkite/cli)
-2. Install [buildkite agent](https://buildkite.com/docs/agent/v3/installation)
-
-`bk local run`
