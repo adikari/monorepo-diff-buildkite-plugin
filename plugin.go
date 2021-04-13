@@ -18,6 +18,7 @@ type Plugin struct {
 	Interpolation bool
 	Hooks         []HookConfig
 	Watch         []WatchConfig
+	RawEnv        interface{} `json:"env"`
 	Env           map[string]string
 }
 
@@ -41,6 +42,7 @@ type Step struct {
 	Command   string            `yaml:"command,omitempty"`
 	Agents    Agent             `yaml:"agents,omitempty"`
 	Artifacts []string          `yaml:"artifacts,omitempty"`
+	RawEnv    interface{}       `json:"env"`
 	Env       map[string]string `yaml:"env,omitempty"`
 	Async     bool
 }
@@ -55,56 +57,8 @@ type Build struct {
 	Message string            `yaml:"message,omitempty"`
 	Branch  string            `yaml:"branch,omitempty"`
 	Commit  string            `yaml:"commit,omitempty"`
+	RawEnv  interface{}       `json:"env"`
 	Env     map[string]string `yaml:"env,omitempty"`
-}
-
-// UnmarshalJSON set defaults properties
-func (s *Plugin) UnmarshalJSON(data []byte) error {
-	type plain Plugin
-
-	def := &plain{
-		Diff:          "git diff --name-only HEAD~1",
-		Wait:          false,
-		LogLevel:      "info",
-		Interpolation: false,
-	}
-
-	_ = json.Unmarshal(data, def)
-
-	*s = Plugin(*def)
-
-	for i, p := range s.Watch {
-		switch p.RawPath.(type) {
-		case string:
-			s.Watch[i].Paths = []string{s.Watch[i].RawPath.(string)}
-		case []interface{}:
-			for _, v := range s.Watch[i].RawPath.([]interface{}) {
-				s.Watch[i].Paths = append(s.Watch[i].Paths, v.(string))
-			}
-		}
-
-		s.Watch[i].RawPath = nil
-
-		for k, e := range s.Env {
-			if s.Watch[i].Step.Env == nil {
-				s.Watch[i].Step.Env = map[string]string{}
-			}
-
-			s.Watch[i].Step.Env[k] = e
-
-			if s.Watch[i].Step.Build.Message == "" {
-				continue
-			}
-
-			if s.Watch[i].Step.Build.Env == nil {
-				s.Watch[i].Step.Build.Env = map[string]string{}
-			}
-
-			s.Watch[i].Step.Build.Env[k] = e
-		}
-	}
-
-	return nil
 }
 
 func initializePlugin(data string) (Plugin, error) {
@@ -126,4 +80,89 @@ func initializePlugin(data string) (Plugin, error) {
 	}
 
 	return Plugin{}, errors.New("Could not initialize plugin")
+}
+
+// UnmarshalJSON set defaults properties
+func (plugin *Plugin) UnmarshalJSON(data []byte) error {
+	type plain Plugin
+
+	def := &plain{
+		Diff:          "git diff --name-only HEAD~1",
+		Wait:          false,
+		LogLevel:      "info",
+		Interpolation: false,
+	}
+
+	_ = json.Unmarshal(data, def)
+
+	*plugin = Plugin(*def)
+
+	plugin.Env = parseEnv(plugin.RawEnv)
+
+	plugin.RawEnv = nil
+
+	for i, p := range plugin.Watch {
+		switch p.RawPath.(type) {
+		case string:
+			plugin.Watch[i].Paths = []string{plugin.Watch[i].RawPath.(string)}
+		case []interface{}:
+			for _, v := range plugin.Watch[i].RawPath.([]interface{}) {
+				plugin.Watch[i].Paths = append(plugin.Watch[i].Paths, v.(string))
+			}
+		}
+
+		appendEnv(&plugin.Watch[i], plugin.Env)
+
+		plugin.Watch[i].RawPath = nil
+		plugin.Watch[i].Step.RawEnv = nil
+		plugin.Watch[i].Step.Build.RawEnv = nil
+	}
+
+	return nil
+}
+
+func appendEnv(watch *WatchConfig, env map[string]string) {
+	watch.Step.Env = parseEnv(watch.Step.RawEnv)
+	watch.Step.Build.Env = parseEnv(watch.Step.Build.RawEnv)
+
+	for key, value := range env {
+		if watch.Step.Env == nil {
+			watch.Step.Env = make(map[string]string)
+		}
+
+		if watch.Step.Build.Env == nil {
+			watch.Step.Build.Env = make(map[string]string)
+		}
+
+		watch.Step.Env[key] = value
+
+		if watch.Step.Build.Message == "" {
+			watch.Step.Build.Env = nil
+		} else {
+			watch.Step.Build.Env[key] = value
+		}
+	}
+}
+
+func parseEnv(raw interface{}) map[string]string {
+	if raw == nil {
+		return nil
+	}
+
+	env := make(map[string]string)
+	for _, v := range raw.([]interface{}) {
+		split := strings.Split(v.(string), "=")
+		key, value := split[0], split[1:]
+
+		// only key exists. set value from env
+		if len(key) > 0 && len(value) == 0 {
+
+		}
+
+		if len(value) > 0 {
+			env[key] = value[0]
+		}
+	}
+
+	return env
 }

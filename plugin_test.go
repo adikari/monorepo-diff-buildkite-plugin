@@ -54,15 +54,22 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 				{ "command": "some-hook-command" },
 				{ "command": "another-hook-command" }
 			],
-			"env":{
-				"env1": "env-1",
-				"env2": "env-2"
-			},
+			"env": [
+				"env1=env-1",
+				"env2=env-2",
+				"env3"
+			],
 			"watch": [
 				{
 					"path": "watch-path-1",
 					"config": {
 						"trigger": "service-2"
+					}
+				},
+				{
+					"path": "watch-path-1",
+					"config": {
+						"command": "echo hello-world"
 					}
 				},
 				{
@@ -77,19 +84,19 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 							"message": "build message",
 							"branch": "current branch",
 							"commit": "commit-hash",
-							"env": {
-								"foo": "bar",
-								"bar": "foo"
-							}
+							"env": [
+								"foo=bar",
+								"bar=foo"
+							]
 						},
 						"async": true,
 						"agents": {
 							"queue": "queue-1"
 						},
 						"artifacts": [ "artifiact-1" ],
-						"env": {
-							"foo": "bar"
-						}
+						"env": [
+							"foo=bar"
+						]
 					}
 				}
 			]
@@ -116,6 +123,16 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 				Paths: []string{"watch-path-1"},
 				Step: Step{
 					Trigger: "service-2",
+					Env: map[string]string{
+						"env1": "env-1",
+						"env2": "env-2",
+					},
+				},
+			},
+			{
+				Paths: []string{"watch-path-1"},
+				Step: Step{
+					Command: "echo hello-world",
 					Env: map[string]string{
 						"env1": "env-1",
 						"env2": "env-2",
