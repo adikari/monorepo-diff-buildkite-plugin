@@ -8,7 +8,7 @@ Check out this post to learn [**How to set up Continuous Integration for monorep
 
 ## Using the plugin
 
-Replace the `<version>` in following examples with `v2.0.0`. If the version number is not provided then the most recent version of the plugin will be used. Do not use version number as `master` or any branch names.
+If the version number is not provided then the most recent version of the plugin will be used. Do not use version number as `master` or any branch names.
 
 ### Simple
 
@@ -16,7 +16,7 @@ Replace the `<version>` in following examples with `v2.0.0`. If the version numb
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - chronotc/monorepo-diff#<version>:
+      - chronotc/monorepo-diff#1.3.2:
           diff: "git diff --name-only HEAD~1"
           watch:
             - path: "bar-service/"
@@ -33,7 +33,7 @@ steps:
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - chronotc/monorepo-diff#<version>:
+      - chronotc/monorepo-diff#1.3.2:
           diff: "git diff --name-only $(head -n 1 last_successful_build)"
           interpolation: false
           env:
