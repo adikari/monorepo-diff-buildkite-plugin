@@ -56,8 +56,7 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 			],
 			"env": [
 				"env1=env-1",
-				"env2=env-2",
-				"env3"
+				"env2=env-2"
 			],
 			"watch": [
 				{
@@ -105,6 +104,8 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 
 	got, _ := initializePlugin(param)
 
+	var raw []interface{}
+
 	expected := Plugin{
 		Diff:          "cat ./hello.txt",
 		Wait:          true,
@@ -114,13 +115,15 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 			{Command: "some-hook-command"},
 			{Command: "another-hook-command"},
 		},
+		RawEnv: append(raw, "env1=env-1", "env2=env-2"),
 		Env: map[string]string{
 			"env1": "env-1",
 			"env2": "env-2",
 		},
 		Watch: []WatchConfig{
 			{
-				Paths: []string{"watch-path-1"},
+				RawPath: "watch-path-1",
+				Paths:   []string{"watch-path-1"},
 				Step: Step{
 					Trigger: "service-2",
 					Env: map[string]string{
@@ -130,7 +133,8 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 				},
 			},
 			{
-				Paths: []string{"watch-path-1"},
+				RawPath: "watch-path-1",
+				Paths:   []string{"watch-path-1"},
 				Step: Step{
 					Command: "echo hello-world",
 					Env: map[string]string{
@@ -140,7 +144,8 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 				},
 			},
 			{
-				Paths: []string{"watch-path-1", "watch-path-2"},
+				RawPath: append(raw, "watch-path-1", "watch-path-2"),
+				Paths:   []string{"watch-path-1", "watch-path-2"},
 				Step: Step{
 					Trigger: "service-1",
 					Label:   "hello",
@@ -148,6 +153,7 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						Message: "build message",
 						Branch:  "current branch",
 						Commit:  "commit-hash",
+						RawEnv:  append(raw, "foo=bar", "bar=foo"),
 						Env: map[string]string{
 							"foo":  "bar",
 							"bar":  "foo",
@@ -158,6 +164,7 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 					Async:     true,
 					Agents:    Agent{Queue: "queue-1"},
 					Artifacts: []string{"artifiact-1"},
+					RawEnv:    append(raw, "foo=bar"),
 					Env: map[string]string{
 						"foo":  "bar",
 						"env1": "env-1",

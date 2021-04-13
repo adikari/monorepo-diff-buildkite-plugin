@@ -99,8 +99,8 @@ func (plugin *Plugin) UnmarshalJSON(data []byte) error {
 
 	plugin.Env = parseEnv(plugin.RawEnv)
 
-	plugin.RawEnv = nil
-
+	// path can be string or an array of strings
+	// handle both cases and create an array of paths
 	for i, p := range plugin.Watch {
 		switch p.RawPath.(type) {
 		case string:
@@ -112,15 +112,12 @@ func (plugin *Plugin) UnmarshalJSON(data []byte) error {
 		}
 
 		appendEnv(&plugin.Watch[i], plugin.Env)
-
-		plugin.Watch[i].RawPath = nil
-		plugin.Watch[i].Step.RawEnv = nil
-		plugin.Watch[i].Step.Build.RawEnv = nil
 	}
 
 	return nil
 }
 
+// appends top level env to Step.Env and Step.Build.Env
 func appendEnv(watch *WatchConfig, env map[string]string) {
 	watch.Step.Env = parseEnv(watch.Step.RawEnv)
 	watch.Step.Build.Env = parseEnv(watch.Step.Build.RawEnv)
@@ -144,25 +141,26 @@ func appendEnv(watch *WatchConfig, env map[string]string) {
 	}
 }
 
+// parse env in format from env=env-value to map[env] = env-value
 func parseEnv(raw interface{}) map[string]string {
 	if raw == nil {
 		return nil
 	}
 
-	env := make(map[string]string)
+	result := make(map[string]string)
 	for _, v := range raw.([]interface{}) {
 		split := strings.Split(v.(string), "=")
 		key, value := split[0], split[1:]
 
 		// only key exists. set value from env
 		if len(key) > 0 && len(value) == 0 {
-
+			// result[key] = env(key, "")
 		}
 
 		if len(value) > 0 {
-			env[key] = value[0]
+			result[key] = value[0]
 		}
 	}
 
-	return env
+	return result
 }
