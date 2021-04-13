@@ -150,7 +150,7 @@ func parseEnv(raw interface{}) map[string]string {
 	result := make(map[string]string)
 	for _, v := range raw.([]interface{}) {
 		split := strings.Split(v.(string), "=")
-		key, value := split[0], split[1:]
+		key, value := strings.TrimSpace(split[0]), split[1:]
 
 		// only key exists. set value from env
 		if len(key) > 0 && len(value) == 0 {
@@ -158,7 +158,7 @@ func parseEnv(raw interface{}) map[string]string {
 		}
 
 		if len(value) > 0 {
-			result[key] = value[0]
+			result[key] = strings.TrimSpace(value[0])
 		}
 	}
 

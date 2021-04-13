@@ -84,8 +84,8 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 							"branch": "current branch",
 							"commit": "commit-hash",
 							"env": [
-								"foo=bar",
-								"bar=foo"
+								"foo =bar",
+								"bar= foo"
 							]
 						},
 						"async": true,
@@ -94,7 +94,7 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						},
 						"artifacts": [ "artifiact-1" ],
 						"env": [
-							"foo=bar"
+							"foo = bar"
 						]
 					}
 				}
@@ -153,7 +153,7 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						Message: "build message",
 						Branch:  "current branch",
 						Commit:  "commit-hash",
-						RawEnv:  append(raw, "foo=bar", "bar=foo"),
+						RawEnv:  append(raw, "foo =bar", "bar= foo"),
 						Env: map[string]string{
 							"foo":  "bar",
 							"bar":  "foo",
@@ -164,7 +164,7 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 					Async:     true,
 					Agents:    Agent{Queue: "queue-1"},
 					Artifacts: []string{"artifiact-1"},
-					RawEnv:    append(raw, "foo=bar"),
+					RawEnv:    append(raw, "foo = bar"),
 					Env: map[string]string{
 						"foo":  "bar",
 						"env1": "env-1",
