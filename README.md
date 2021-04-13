@@ -16,7 +16,7 @@ If the version number is not provided then the most recent version of the plugin
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - chronotc/monorepo-diff#1.3.2:
+      - chronotc/monorepo-diff#v2.0.0:
           diff: "git diff --name-only HEAD~1"
           watch:
             - path: "bar-service/"
@@ -33,11 +33,11 @@ steps:
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - chronotc/monorepo-diff#1.3.2:
+      - chronotc/monorepo-diff#v2.0.0:
           diff: "git diff --name-only $(head -n 1 last_successful_build)"
           interpolation: false
           env:
-            env1: env-1 # this will be appended to all env configuration
+            - env1=env-1 # this will be appended to all env configuration
           watch:
             - path:
                 - "ops/terraform/"
@@ -178,20 +178,25 @@ Currently supports a list of `commands` you wish to execute after the `watched` 
 hooks:
   - command: upload unit tests reports
   - command: echo success
-
 ```
 
 #### Command
 
 ```yaml
-- path: app/cms/
-  config:
-    command: "netlify --production deploy"
-    label: ":netlify: Deploy to production"
-    agents:
-      queue: "deploy"
-    env:
-      FOO: bar
+steps:
+  - label: "Triggering pipelines"
+    plugins:
+      - chronotc/monorepo-diff:
+          diff: "git diff --name-only HEAD~1"
+          watch:
+            - path: app/cms/
+              config:
+                command: "netlify --production deploy"
+                label: ":netlify: Deploy to production"
+                agents:
+                  queue: "deploy"
+                env:
+                  - FOO=bar
 ```
 
 There is currently limited support for command configuration. Only the `command` property can be provided at this point in time.
