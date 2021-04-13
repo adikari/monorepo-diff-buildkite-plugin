@@ -121,6 +121,23 @@ to avoid trying to interpolate the commit message, which can cause failures.
 
 The object values provided in this configuration will be appended to `env` property of all steps or commands.
 
+## `log_level` (optional)
+
+Add `log_level` property to set the log level. Supported log levels are `debug` and `info`. Defaults to `info`.
+
+```yaml
+steps:
+  - label: "Triggering pipelines"
+    plugins:
+      - chronotc/monorepo-diff#v2.0.0:
+          diff: "git diff --name-only HEAD~1"
+          log_level: "debug" # defaults to "info"
+          watch:
+            - path: "foo-service/"
+              config:
+                trigger: "deploy-foo-service"
+```
+
 ## `watch`
 
 Declare a list of
@@ -186,7 +203,7 @@ hooks:
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - chronotc/monorepo-diff:
+      - chronotc/monorepo-diff#v2.0.0:
           diff: "git diff --name-only HEAD~1"
           watch:
             - path: app/cms/
@@ -213,23 +230,6 @@ Using commands, it is also possible to use this to upload other pipeline definit
 - path: backend/
   config:
     command: "buildkite-agent pipeline upload ./backend/.buildkite/pipeline.yaml"
-```
-
-### `Logging`
-
-Add `log_level` property to set the log level. Supported log levels are `debug` and `info`. Defaults to `info`.
-
-```yaml
-steps:
-  - label: "Triggering pipelines"
-    plugins:
-      - chronotc/monorepo-diff:
-          diff: "git diff --name-only HEAD~1"
-          log_level: "debug" # defaults to "info"
-          watch:
-            - path: "foo-service/"
-              config:
-                trigger: "deploy-foo-service"
 ```
 
 ## How to Contribute
