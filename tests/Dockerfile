@@ -1,16 +1,15 @@
-FROM golang:1.16
+FROM golang:1.16.3 as go
 
-WORKDIR /go/src/github.com/chronotc/monorepo-diff-buildkite-plugin/
+WORKDIR /plugin
 
 COPY . .
 
-RUN make clean
-RUN make build-linux
+RUN make clean build-linux
 
 FROM buildkite/plugin-tester
 
 COPY . .
 
-COPY --from=builder /go/src/github.com/jwplayer/buildpipe-buildkite-plugin/buildpipe-linux buildpipe
-
-CMD ["bats", "tests/"]
+COPY --from=go \
+  /plugin/monorepo-diff-buildkite-plugin-linux \
+  monorepo-diff-buildkite-plugin-linux
