@@ -1,7 +1,16 @@
 ---
 version: '3'
 services:
-  lint:
+  plugin_test:
+    image: buildkite/plugin-tester:latest
+    # command: make clean && make build-linux
+    volumes:
+      - .:/plugin
+    links:
+      - go
+  go:
+    image: golang:1.16.3
+  plugin_lint:
     image: buildkite/plugin-linter:latest
     command: ['--id', 'chronotc/monorepo-diff']
     volumes:

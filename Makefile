@@ -22,7 +22,7 @@ quality:
 	go fmt
 	go mod tidy
 ifneq (${HAS_DOCKER},)
-	docker-compose run --rm lint
+	docker-compose run --rm plugin_lint
 endif
 
 .PHONY: clean
