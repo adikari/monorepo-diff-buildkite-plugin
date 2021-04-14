@@ -42,9 +42,9 @@ type Step struct {
 	Command   string            `yaml:"command,omitempty"`
 	Agents    Agent             `yaml:"agents,omitempty"`
 	Artifacts []string          `yaml:"artifacts,omitempty"`
-	RawEnv    interface{}       `json:"env"`
+	RawEnv    interface{}       `json:"env" yaml:",omitempty"`
 	Env       map[string]string `yaml:"env,omitempty"`
-	Async     bool
+	Async     bool              `yaml:"async,omitempty"`
 }
 
 // Agent is Buildkite agent definition
@@ -53,11 +53,12 @@ type Agent struct {
 }
 
 // Build is buildkite build definition
+// TODO: set build from buildkite env variables
 type Build struct {
 	Message string            `yaml:"message,omitempty"`
 	Branch  string            `yaml:"branch,omitempty"`
 	Commit  string            `yaml:"commit,omitempty"`
-	RawEnv  interface{}       `json:"env"`
+	RawEnv  interface{}       `json:"env" yaml:",omitempty"`
 	Env     map[string]string `yaml:"env,omitempty"`
 }
 
@@ -98,6 +99,7 @@ func (plugin *Plugin) UnmarshalJSON(data []byte) error {
 	*plugin = Plugin(*def)
 
 	plugin.Env = parseEnv(plugin.RawEnv)
+	plugin.RawEnv = nil
 
 	// path can be string or an array of strings
 	// handle both cases and create an array of paths
@@ -112,6 +114,7 @@ func (plugin *Plugin) UnmarshalJSON(data []byte) error {
 		}
 
 		appendEnv(&plugin.Watch[i], plugin.Env)
+		p.RawPath = nil
 	}
 
 	return nil
@@ -139,6 +142,10 @@ func appendEnv(watch *WatchConfig, env map[string]string) {
 			watch.Step.Build.Env[key] = value
 		}
 	}
+
+	watch.Step.RawEnv = nil
+	watch.Step.Build.RawEnv = nil
+	watch.RawPath = nil
 }
 
 // parse env in format from env=env-value to map[env] = env-value
