@@ -7,7 +7,6 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
-	"gopkg.in/yaml.v2"
 )
 
 func TestMain(m *testing.M) {
@@ -118,23 +117,21 @@ func TestGeneratePipeline(t *testing.T) {
 		},
 	}
 
-	want := Pipeline{Steps: steps}
-	got := Pipeline{}
+	want :=
+		`steps:
+- trigger: foo-service-pipeline
+  build:
+    message: build message
+- wait`
 
 	pipeline, err := generatePipeline(steps, true)
 	defer os.Remove(pipeline.Name())
 
 	if err != nil {
-		// Failed to close the temp pipeline file
-		assert.Equal(t, true, false)
+		assert.Equal(t, true, false, err.Error())
 	}
 
-	file, _ := ioutil.ReadFile(pipeline.Name())
+	got, _ := ioutil.ReadFile(pipeline.Name())
 
-	if err = yaml.Unmarshal(file, &got); err != nil {
-		// Failed to unmarshal temporary pipeline file
-		assert.Equal(t, true, false)
-	}
-
-	assert.Equal(t, want, got)
+	assert.Equal(t, want, string(got))
 }
