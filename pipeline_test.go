@@ -20,7 +20,7 @@ func TestMain(m *testing.M) {
 	os.Exit(run)
 }
 
-func mockGeneratePipeline(steps []Step) (*os.File, error) {
+func mockGeneratePipeline(steps []Step, watch bool) (*os.File, error) {
 	mockFile, _ := os.Create("pipeline.txt")
 	defer mockFile.Close()
 
@@ -121,7 +121,7 @@ func TestGeneratePipeline(t *testing.T) {
 	want := Pipeline{Steps: steps}
 	got := Pipeline{}
 
-	pipeline, err := generatePipeline(steps)
+	pipeline, err := generatePipeline(steps, true)
 	defer os.Remove(pipeline.Name())
 
 	if err != nil {

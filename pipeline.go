@@ -17,7 +17,7 @@ type Pipeline struct {
 }
 
 // PipelineGenerator generates pipeline file
-type PipelineGenerator func(steps []Step) (*os.File, error)
+type PipelineGenerator func(steps []Step, watch bool) (*os.File, error)
 
 func uploadPipeline(plugin Plugin, generatePipeline PipelineGenerator) (string, []string, error) {
 	diffOutput := diff(plugin.Diff)
@@ -31,7 +31,7 @@ func uploadPipeline(plugin Plugin, generatePipeline PipelineGenerator) (string, 
 
 	steps := stepsToTrigger(diffOutput, plugin.Watch)
 
-	pipeline, err := generatePipeline(steps)
+	pipeline, err := generatePipeline(steps, plugin.Wait)
 	defer os.Remove(pipeline.Name())
 
 	if err != nil {
@@ -105,7 +105,7 @@ func dedupSteps(steps []Step) []Step {
 	return unique
 }
 
-func generatePipeline(steps []Step) (*os.File, error) {
+func generatePipeline(steps []Step, wait bool) (*os.File, error) {
 	tmp, err := ioutil.TempFile(os.TempDir(), "bmrd-")
 	pipeline := Pipeline{Steps: steps}
 
@@ -115,6 +115,10 @@ func generatePipeline(steps []Step) (*os.File, error) {
 	}
 
 	data, err := yaml.Marshal(&pipeline)
+
+	if wait == true {
+		data = []byte(string(data) + "- wait")
+	}
 
 	log.Debugf("\n" + string(data))
 
