@@ -28,7 +28,7 @@ Run `make test` to run all tests and generate coverage reports before submitting
 
 To write the `bats` tests for plugin,
 1. Modify the tests
-2. Run `docker-compose build plugin_test && docker-compose run plugin_test`
+2. Run `docker-compose build plugin_test && docker-compose run --rm plugin_test`
 
 ## Formatting
 

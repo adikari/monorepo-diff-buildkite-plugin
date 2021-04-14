@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Rewrite plugin in go [@adikari](https://github.com/adikari)
 
+### Changed
+- Build information is not automatically added. Need to specify.
+
 ## [[1.3.2]](https://github.com/chronotc/monorepo-diff-buildkite-plugin/releases/tag/1.3.2) - 2021-03-10
 
 ### Added
