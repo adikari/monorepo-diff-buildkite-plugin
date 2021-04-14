@@ -7,6 +7,11 @@ executable="monorepo-diff-buildkite-plugin-linux"
 
 echo "using plugin version: ${version}"
 
-curl -Lf -o buildpipe ${repo}/releases/download/v${version}/${executable} && chmod +x ${executable}
+test_mode="${BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_TEST_MODE:-false}"
+
+if [[ "$test_mode" == "false" ]]; then
+  curl -Lf -o buildpipe ${repo}/releases/download/v${version}/${executable} \
+    && chmod +x ${executable}
+fi
 
 ./${executable}
