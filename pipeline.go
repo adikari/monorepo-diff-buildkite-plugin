@@ -116,7 +116,7 @@ func generatePipeline(steps []Step) (*os.File, error) {
 
 	data, err := yaml.Marshal(&pipeline)
 
-	log.Debugf("Pipeline to upload:\n%s", string(data))
+	log.Debugf("\n" + string(data))
 
 	if err = ioutil.WriteFile(tmp.Name(), data, 0644); err != nil {
 		log.Debug(err)

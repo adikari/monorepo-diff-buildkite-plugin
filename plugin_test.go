@@ -62,7 +62,10 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 				{
 					"path": "watch-path-1",
 					"config": {
-						"trigger": "service-2"
+						"trigger": "service-2",
+						"build": {
+							"message": "some message"
+						}
 					}
 				},
 				{
@@ -126,6 +129,15 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						"env1": "env-1",
 						"env2": "env-2",
 					},
+					Build: Build{
+						Message: "some message",
+						Branch:  "go-rewrite",
+						Commit:  "123",
+						Env: map[string]string{
+							"env1": "env-1",
+							"env2": "env-2",
+						},
+					},
 				},
 			},
 			{
@@ -135,6 +147,15 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 					Env: map[string]string{
 						"env1": "env-1",
 						"env2": "env-2",
+					},
+					Build: Build{
+						Message: "fix: temp file not correctly deleted",
+						Branch:  "go-rewrite",
+						Commit:  "123",
+						Env: map[string]string{
+							"env1": "env-1",
+							"env2": "env-2",
+						},
 					},
 				},
 			},

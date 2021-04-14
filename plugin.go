@@ -113,11 +113,27 @@ func (plugin *Plugin) UnmarshalJSON(data []byte) error {
 			}
 		}
 
+		setBuild(&plugin.Watch[i].Step.Build)
 		appendEnv(&plugin.Watch[i], plugin.Env)
+
 		p.RawPath = nil
 	}
 
 	return nil
+}
+
+func setBuild(build *Build) {
+	if build.Message == "" {
+		build.Message = env("BUILDKITE_MESSAGE", "")
+	}
+
+	if build.Branch == "" {
+		build.Branch = env("BUILDKITE_BRANCH", "")
+	}
+
+	if build.Commit == "" {
+		build.Commit = env("BUILDKITE_COMMIT", "")
+	}
 }
 
 // appends top level env to Step.Env and Step.Build.Env
@@ -135,12 +151,7 @@ func appendEnv(watch *WatchConfig, env map[string]string) {
 		}
 
 		watch.Step.Env[key] = value
-
-		if watch.Step.Build.Message == "" {
-			watch.Step.Build.Env = nil
-		} else {
-			watch.Step.Build.Env[key] = value
-		}
+		watch.Step.Build.Env[key] = value
 	}
 
 	watch.Step.RawEnv = nil

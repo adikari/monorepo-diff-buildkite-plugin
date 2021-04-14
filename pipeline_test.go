@@ -12,7 +12,12 @@ import (
 
 func TestMain(m *testing.M) {
 	log.SetOutput(ioutil.Discard)
-	os.Exit(m.Run())
+	os.Setenv("BUILDKITE_COMMIT", "123")
+	os.Setenv("BUILDKITE_MESSAGE", "fix: temp file not correctly deleted")
+	os.Setenv("BUILDKITE_BRANCH", "go-rewrite")
+
+	run := m.Run()
+	os.Exit(run)
 }
 
 func mockGeneratePipeline(steps []Step) (*os.File, error) {
