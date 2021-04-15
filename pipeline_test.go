@@ -10,10 +10,16 @@ import (
 )
 
 func TestMain(m *testing.M) {
+	// disable logs in test
 	log.SetOutput(ioutil.Discard)
+	os.Stdout, _ = os.Open(os.DevNull)
+
+	// set some env variables for using in tests
 	os.Setenv("BUILDKITE_COMMIT", "123")
 	os.Setenv("BUILDKITE_MESSAGE", "fix: temp file not correctly deleted")
 	os.Setenv("BUILDKITE_BRANCH", "go-rewrite")
+	os.Setenv("env3", "env-3")
+	os.Setenv("env4", "env-4")
 
 	run := m.Run()
 	os.Exit(run)

@@ -16,7 +16,7 @@ type Plugin struct {
 	Wait          bool
 	LogLevel      string `json:"log_level"`
 	Interpolation bool
-	Hooks         []HookConfig
+	Hooks         []HookConfig // TODO: add hooks to pipeline
 	Watch         []WatchConfig
 	RawEnv        interface{} `json:"env"`
 	Env           map[string]string
@@ -53,7 +53,6 @@ type Agent struct {
 }
 
 // Build is buildkite build definition
-// TODO: set build from buildkite env variables
 type Build struct {
 	Message string            `yaml:"message,omitempty"`
 	Branch  string            `yaml:"branch,omitempty"`
@@ -113,7 +112,10 @@ func (plugin *Plugin) UnmarshalJSON(data []byte) error {
 			}
 		}
 
-		setBuild(&plugin.Watch[i].Step.Build)
+		if plugin.Watch[i].Step.Trigger != "" {
+			setBuild(&plugin.Watch[i].Step.Build)
+		}
+
 		appendEnv(&plugin.Watch[i], plugin.Env)
 
 		p.RawPath = nil
@@ -146,11 +148,16 @@ func appendEnv(watch *WatchConfig, env map[string]string) {
 			watch.Step.Env = make(map[string]string)
 		}
 
+		watch.Step.Env[key] = value
+
+		if watch.Step.Trigger == "" {
+			continue
+		}
+
 		if watch.Step.Build.Env == nil {
 			watch.Step.Build.Env = make(map[string]string)
 		}
 
-		watch.Step.Env[key] = value
 		watch.Step.Build.Env[key] = value
 	}
 
@@ -172,7 +179,7 @@ func parseEnv(raw interface{}) map[string]string {
 
 		// only key exists. set value from env
 		if len(key) > 0 && len(value) == 0 {
-			// result[key] = env(key, "")
+			result[key] = env(key, "")
 		}
 
 		if len(value) > 0 {

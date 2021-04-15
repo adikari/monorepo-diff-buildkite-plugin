@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"reflect"
@@ -120,7 +121,7 @@ func generatePipeline(steps []Step, wait bool) (*os.File, error) {
 		data = []byte(string(data) + "- wait")
 	}
 
-	log.Debugf("\n" + string(data))
+	fmt.Print(string(data))
 
 	if err = ioutil.WriteFile(tmp.Name(), data, 0644); err != nil {
 		log.Debug(err)

@@ -56,7 +56,8 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 			],
 			"env": [
 				"env1=env-1",
-				"env2=env-2"
+				"env2=env-2",
+				"env3"
 			],
 			"watch": [
 				{
@@ -97,7 +98,8 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						},
 						"artifacts": [ "artifiact-1" ],
 						"env": [
-							"foo = bar"
+							"foo = bar",
+							"env4"
 						]
 					}
 				}
@@ -119,6 +121,7 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 		Env: map[string]string{
 			"env1": "env-1",
 			"env2": "env-2",
+			"env3": "env-3",
 		},
 		Watch: []WatchConfig{
 			{
@@ -128,6 +131,7 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 					Env: map[string]string{
 						"env1": "env-1",
 						"env2": "env-2",
+						"env3": "env-3",
 					},
 					Build: Build{
 						Message: "some message",
@@ -136,6 +140,7 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						Env: map[string]string{
 							"env1": "env-1",
 							"env2": "env-2",
+							"env3": "env-3",
 						},
 					},
 				},
@@ -147,15 +152,7 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 					Env: map[string]string{
 						"env1": "env-1",
 						"env2": "env-2",
-					},
-					Build: Build{
-						Message: "fix: temp file not correctly deleted",
-						Branch:  "go-rewrite",
-						Commit:  "123",
-						Env: map[string]string{
-							"env1": "env-1",
-							"env2": "env-2",
-						},
+						"env3": "env-3",
 					},
 				},
 			},
@@ -173,6 +170,7 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 							"bar":  "foo",
 							"env1": "env-1",
 							"env2": "env-2",
+							"env3": "env-3",
 						},
 					},
 					Async:     true,
@@ -182,6 +180,8 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						"foo":  "bar",
 						"env1": "env-1",
 						"env2": "env-2",
+						"env3": "env-3",
+						"env4": "env-4",
 					},
 				},
 			},
