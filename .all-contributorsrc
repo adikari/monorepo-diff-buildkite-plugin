@@ -93,6 +93,16 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "harrietgrace",
+      "name": "Harriet Lawrence",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2074469?v=4",
+      "profile": "https://github.com/harrietgrace",
+      "contributions": [
+        "doc",
+        "example"
+      ]
     }
   ],
   "contributorsPerLine": 7,
