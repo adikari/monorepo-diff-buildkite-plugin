@@ -10,7 +10,7 @@ echo "using plugin version: ${version}"
 test_mode="${BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_TEST_MODE:-false}"
 
 if [[ "$test_mode" == "false" ]]; then
-  curl -Lf -o buildpipe ${repo}/releases/download/v${version}/${executable} \
+  curl -Lf -o ${executable} ${repo}/releases/download/v${version}/${executable} \
     && chmod +x ${executable}
 fi
 

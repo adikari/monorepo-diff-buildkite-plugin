@@ -2,11 +2,11 @@ steps:
   - label: ":lint-roller: Lint"
     plugins:
       - docker-compose#v3.3.0:
-          run: lint
+          run: plugin_lint
   - label: ":test_tube: Tests"
     plugins:
       - docker-compose#v3.3.0:
-          run: tests
+          run: plugin_tests
   - label: ":bomb: Triggering"
     env:
       DEBUG: true
