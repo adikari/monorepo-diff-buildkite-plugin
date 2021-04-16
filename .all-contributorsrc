@@ -55,6 +55,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "worxli",
+      "name": "Lukas Bischofberger",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2504856?v=4",
+      "profile": "http://worx.li",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
