@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.3]
+
+### Fixed
+- Get the appropriate version of binary based on what is specified in plugin configuration
+
 ## [2.0.2]
 
 [#49](https://github.com/chronotc/monorepo-diff-buildkite-plugin/pull/49) from [@adikari](https://github.com/adikari)
