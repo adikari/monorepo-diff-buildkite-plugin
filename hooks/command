@@ -1,7 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-version=$(echo $BUILDKITE_PLUGINS | sed -e 's/.*monorepo-diff-buildkite-plugin#//' -e 's/\".*//')
+plugin=${BUILDKITE_PLUGINS:-""}
+version=$(echo $plugin | sed -e 's/.*monorepo-diff-buildkite-plugin#//' -e 's/\".*//')
 repo="https://github.com/chronotc/monorepo-diff-buildkite-plugin"
 executable="monorepo-diff-buildkite-plugin-linux"
 test_mode="${BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_TEST_MODE:-false}"
