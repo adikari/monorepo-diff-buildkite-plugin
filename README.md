@@ -39,6 +39,8 @@ steps:
           interpolation: false
           env:
             - env1=env-1 # this will be appended to all env configuration
+          hooks:
+            - command: "echo $(git rev-parse HEAD) > last_successful_build"
           watch:
             - path:
                 - "ops/terraform/"
@@ -67,8 +69,6 @@ steps:
                     - AWS_REGION
 
           wait: true
-          hooks:
-            - command: "echo $(git rev-parse HEAD) > last_successful_build"
 ```
 
 ## Configuration

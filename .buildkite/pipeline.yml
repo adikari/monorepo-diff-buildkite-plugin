@@ -11,9 +11,6 @@ steps:
     plugins:
       - chronotc/monorepo-diff#${BUILDKITE_COMMIT}:
           diff: "cat ./e2e/one-match-one-miss"
-          hooks:
-            - command: echo "command hook 1"
-            - command: echo "command hook 2"
           watch:
             - path: "foo-service/"
               config:
@@ -21,27 +18,30 @@ steps:
             - path: "hello-service/"
               config:
                 trigger: "this-pipeline-does-not-exists"
+          hooks:
+            - command: echo "command hook 1"
+            - command: echo "command hook 2"
           wait: true
-  # - label: ":bomb: Triggering 2"
-  #   plugins:
-  #     - chronotc/monorepo-diff#${BUILDKITE_COMMIT}:
-  #         diff: "cat ./e2e/multiple-paths"
-  #         watch:
-  #           - path: "user-service/"
-  #             config:
-  #               trigger: "user-service"
-  #           - path:
-  #               - "user-service/infrastructure/"
-  #               - "product-service/infrastructure/"
-  #             config:
-  #               trigger: "validate-infrastructure"
-  #           - path:
-  #               - "do-not-trigger/"
-  #             config:
-  #               trigger: "this-pipeline-does-not-exists"
-  #         wait: true
-  #         hooks:
-  #           - command: echo "command hook 1"
+  - label: ":bomb: Triggering 2"
+    plugins:
+      - chronotc/monorepo-diff#${BUILDKITE_COMMIT}:
+          diff: "cat ./e2e/multiple-paths"
+          watch:
+            - path: "user-service/"
+              config:
+                trigger: "user-service"
+            - path:
+                - "user-service/infrastructure/"
+                - "product-service/infrastructure/"
+              config:
+                trigger: "validate-infrastructure"
+            - path:
+                - "do-not-trigger/"
+              config:
+                trigger: "this-pipeline-does-not-exists"
+          hooks:
+            - command: echo "command hook 1"
+          wait: true
   - label: ":bomb: Triggering 3"
     plugins:
       - chronotc/monorepo-diff#${BUILDKITE_COMMIT}:
