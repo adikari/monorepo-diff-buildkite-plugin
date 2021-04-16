@@ -241,4 +241,3 @@ Please read [contributing guide](https://github.com/chronotc/monorepo-diff-build
 ## References
 
 https://stackoverflow.com/questions/1527234/finding-a-branch-point-with-git
-
