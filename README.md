@@ -1,6 +1,6 @@
 [![e2e status](https://badge.buildkite.com/719d0b895285367c9c57a09e07f1e853148d2509f0667e0ae8.svg?branch=master)](https://buildkite.com/kuda/monorepo-diff-buildkite-plugin)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![codecov](https://codecov.io/gh/chronotc/monorepo-diff-buildkite-plugin/branch/master/graph/badge.svg?token=DQ3B4FIYD2)](https://codecov.io/gh/chronotc/monorepo-diff-buildkite-plugin)
 [![Publish](https://github.com/chronotc/monorepo-diff-buildkite-plugin/actions/workflows/publish.yml/badge.svg)](https://github.com/chronotc/monorepo-diff-buildkite-plugin/actions/workflows/publish.yml)
@@ -248,6 +248,7 @@ Please read [contributing guide](https://github.com/chronotc/monorepo-diff-build
 <table>
   <tr>
     <td align="center"><a href="http://www.subash.com.au"><img src="https://avatars.githubusercontent.com/u/1757714?v=4?s=100" width="100px;" alt=""/><br /><sub><b>subash adhikari</b></sub></a><br /><a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/commits?author=adikari" title="Code">💻</a> <a href="#example-adikari" title="Examples">💡</a> <a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/commits?author=adikari" title="Documentation">📖</a> <a href="#maintenance-adikari" title="Maintenance">🚧</a> <a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/pulls?q=is%3Apr+reviewed-by%3Aadikari" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/commits?author=adikari" title="Tests">⚠️</a> <a href="#infra-adikari" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    <td align="center"><a href="https://github.com/chronotc"><img src="https://avatars.githubusercontent.com/u/7519144?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Silla Tan</b></sub></a><br /><a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/commits?author=chronotc" title="Code">💻</a> <a href="#example-chronotc" title="Examples">💡</a> <a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/commits?author=chronotc" title="Documentation">📖</a> <a href="#maintenance-chronotc" title="Maintenance">🚧</a> <a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/pulls?q=is%3Apr+reviewed-by%3Achronotc" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/commits?author=chronotc" title="Tests">⚠️</a> <a href="#infra-chronotc" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
   </tr>
 </table>
 
