@@ -23,8 +23,8 @@ jobs:
 
       - name: Build the binary
         uses: skx/github-action-build@master
-        with:
-          builder: make build-linux RELEASE_VERSION=${{ github.event.release.tag_name }}
+        env:
+          RELEASE_VERSION: ${{ github.event.release.tag_name }}
 
       - name: Upload the binary
         uses: skx/github-action-publish-binaries@master

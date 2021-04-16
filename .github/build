@@ -1,0 +1,3 @@
+#!/bin/bash
+
+make build-linux RELEASE_VERSION="${RELEASE_VERSION}"
