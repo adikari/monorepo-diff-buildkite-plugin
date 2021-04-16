@@ -6,10 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.2]
+
+[#49](https://github.com/chronotc/monorepo-diff-buildkite-plugin/pull/49) from [@adikari](https://github.com/adikari)
+
+### Added
+- Download the latest version of binary if plugin version is not specified
+- Log plugin binary version
+
 ## [2.0.1]
 
 ### Fixed
-- Incorrect binary path to download and docker service name [commit](https://github.com/chronotc/monorepo-diff-buildkite-plugin/commit/a48753476822596c181d0f66cffb0d21fdc10214)from [@adikari](https://github.com/adikari)
+- Incorrect binary path to download and docker service name [commit](https://github.com/chronotc/monorepo-diff-buildkite-plugin/commit/a48753476822596c181d0f66cffb0d21fdc10214) from [@adikari](https://github.com/adikari)
 
 ## [2.0.0]
 
