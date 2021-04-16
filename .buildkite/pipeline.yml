@@ -9,7 +9,7 @@ steps:
           run: plugin_test
   - label: ":bomb: Triggering 1"
     plugins:
-      - chronotc/monorepo-diff#v2.0.3:
+      - chronotc/monorepo-diff#v2.0.2:
           diff: "cat ./e2e/one-match-one-miss"
           watch:
             - path: "foo-service/"
