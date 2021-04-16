@@ -16,7 +16,7 @@ type Plugin struct {
 	Wait          bool
 	LogLevel      string `json:"log_level"`
 	Interpolation bool
-	Hooks         []HookConfig // TODO: add hooks to pipeline
+	Hooks         []HookConfig
 	Watch         []WatchConfig
 	RawEnv        interface{} `json:"env"`
 	Env           map[string]string
