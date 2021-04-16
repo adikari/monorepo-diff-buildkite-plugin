@@ -1,7 +1,7 @@
 [![e2e status](https://badge.buildkite.com/719d0b895285367c9c57a09e07f1e853148d2509f0667e0ae8.svg?branch=master)](https://buildkite.com/kuda/monorepo-diff-buildkite-plugin)
 [![codecov](https://codecov.io/gh/chronotc/monorepo-diff-buildkite-plugin/branch/master/graph/badge.svg?token=DQ3B4FIYD2)](https://codecov.io/gh/chronotc/monorepo-diff-buildkite-plugin)
 [![Publish](https://github.com/chronotc/monorepo-diff-buildkite-plugin/actions/workflows/publish.yml/badge.svg)](https://github.com/chronotc/monorepo-diff-buildkite-plugin/actions/workflows/publish.yml)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 # monorepo-diff-buildkite-plugin
 
@@ -253,6 +253,9 @@ Please read [contributing guide](https://github.com/chronotc/monorepo-diff-build
     <td align="center"><a href="http://worx.li"><img src="https://avatars.githubusercontent.com/u/2504856?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Lukas Bischofberger</b></sub></a><br /><a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/commits?author=worxli" title="Code">💻</a> <a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/commits?author=worxli" title="Tests">⚠️</a></td>
     <td align="center"><a href="http://blog.englund.nu/"><img src="https://avatars.githubusercontent.com/u/32618?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Martin Englund</b></sub></a><br /><a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/commits?author=pmenglund" title="Code">💻</a> <a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/commits?author=pmenglund" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://github.com/jacekszubert"><img src="https://avatars.githubusercontent.com/u/17125006?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jacek Szubert</b></sub></a><br /><a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/commits?author=jacekszubert" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="http://ronaldmiranda.com.br"><img src="https://avatars.githubusercontent.com/u/14340100?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ronald Carvalho</b></sub></a><br /><a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/issues?q=author%3Aronaldmiranda" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 
