@@ -1,22 +1,19 @@
 #!/bin/bash
 set -euo pipefail
 
-version="${BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_VERSION:-""}"
+version=$(echo $BUILDKITE_PLUGINS | sed -e 's/.*monorepo-diff-buildkite-plugin#//' -e 's/\".*//')
 repo="https://github.com/chronotc/monorepo-diff-buildkite-plugin"
 executable="monorepo-diff-buildkite-plugin-linux"
 test_mode="${BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_TEST_MODE:-false}"
 
-echo "version $version"
-printenv
-
 if [ -z ${version} ]; then
   url=${repo}/releases/latest/download/${executable}
 else
-  url=${repo}/releases/download/v${version}/${executable}
+  url=${repo}/releases/download/${version}/${executable}
 fi
 
 if [[ "$test_mode" == "false" ]]; then
-  echo downloading binary from: ${url}
+  echo ${url}
   curl -Lf -o ${executable} $url && chmod +x ${executable}
 fi
 
