@@ -11,6 +11,9 @@ steps:
     plugins:
       - chronotc/monorepo-diff#${BUILDKITE_COMMIT}:
           diff: "cat ./e2e/one-match-one-miss"
+          hooks:
+            - command: echo "foo"
+            - command: echo "bar"
           watch:
             - path: "foo-service/"
               config:
@@ -37,6 +40,8 @@ steps:
               config:
                 trigger: "this-pipeline-does-not-exists"
           wait: true
+          hooks:
+            - command: echo "foo"
   - label: ":bomb: Triggering"
     plugins:
       - chronotc/monorepo-diff#${BUILDKITE_COMMIT}:
