@@ -45,6 +45,16 @@
         "test",
         "ideas"
       ]
+    },
+    {
+      "login": "jullianoacqio",
+      "name": "Julliano Gonçalves",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35783178?v=4",
+      "profile": "http://www.acqio.com.br",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
