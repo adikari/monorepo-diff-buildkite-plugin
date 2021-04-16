@@ -1,0 +1,30 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "adikari",
+      "name": "subash adhikari",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1757714?v=4",
+      "profile": "http://www.subash.com.au",
+      "contributions": [
+        "code",
+        "example",
+        "doc",
+        "maintenance",
+        "review",
+        "test",
+        "infra"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "monorepo-diff-buildkite-plugin",
+  "projectOwner": "chronotc",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
