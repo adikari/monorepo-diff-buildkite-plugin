@@ -2,8 +2,6 @@
 
 load '/usr/local/lib/bats/load.bash'
 
-# https://buildkite.com/kuda/monorepo-diff-buildkite-plugin/builds/110#2b88547e-eb5a-4f99-a83b-affdbcddb303
-
 setup() {
   export BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_TEST_MODE="true"
 

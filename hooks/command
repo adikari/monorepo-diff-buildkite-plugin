@@ -1,17 +1,20 @@
 #!/bin/bash
 set -euo pipefail
 
-version="${BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_VERSION:-2.0.1}"
+version="${BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_VERSION:-""}"
 repo="https://github.com/chronotc/monorepo-diff-buildkite-plugin"
 executable="monorepo-diff-buildkite-plugin-linux"
-
-echo "using plugin version: ${version}"
-
 test_mode="${BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_TEST_MODE:-false}"
 
+if [ -z ${version} ]; then
+  url=${repo}/releases/latest/download/${executable}
+else
+  url=${repo}/releases/download/v${version}/${executable}
+fi
+
 if [[ "$test_mode" == "false" ]]; then
-  curl -Lf -o ${executable} ${repo}/releases/download/v${version}/${executable} \
-    && chmod +x ${executable}
+  echo downloading binary from: ${url}
+  curl -Lf -o ${executable} $url && chmod +x ${executable}
 fi
 
 ./${executable}
