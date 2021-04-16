@@ -2,17 +2,18 @@ steps:
   - label: ":lint-roller: Lint"
     plugins:
       - docker-compose#v3.3.0:
-          run: plugin_lint
+          run: lint
   - label: ":test_tube: Tests"
     plugins:
       - docker-compose#v3.3.0:
-          run: plugin_test
+          run: tests
   - label: ":bomb: Triggering"
     plugins:
       - chronotc/monorepo-diff#${BUILDKITE_COMMIT}:
           diff: "cat ./e2e/one-match-one-miss"
-          env:
-            DEBUG: true
+          hooks:
+            - command: echo "command hook 1"
+            - command: echo "command hook 2"
           watch:
             - path: "foo-service/"
               config:
@@ -39,6 +40,8 @@ steps:
               config:
                 trigger: "this-pipeline-does-not-exists"
           wait: true
+          hooks:
+            - command: echo "command hook 1"
   - label: ":bomb: Triggering"
     plugins:
       - chronotc/monorepo-diff#${BUILDKITE_COMMIT}:
