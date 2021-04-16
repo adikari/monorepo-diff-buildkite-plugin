@@ -12,7 +12,6 @@ import (
 func TestMain(m *testing.M) {
 	// disable logs in test
 	log.SetOutput(ioutil.Discard)
-	os.Stdout, _ = os.Open(os.DevNull)
 
 	// set some env variables for using in tests
 	os.Setenv("BUILDKITE_COMMIT", "123")
@@ -20,12 +19,14 @@ func TestMain(m *testing.M) {
 	os.Setenv("BUILDKITE_BRANCH", "go-rewrite")
 	os.Setenv("env3", "env-3")
 	os.Setenv("env4", "env-4")
+	os.Setenv("TEST_MODE", "true")
 
 	run := m.Run()
+
 	os.Exit(run)
 }
 
-func mockGeneratePipeline(steps []Step, watch bool) (*os.File, error) {
+func mockGeneratePipeline(steps []Step, plugin Plugin) (*os.File, error) {
 	mockFile, _ := os.Create("pipeline.txt")
 	defer mockFile.Close()
 
@@ -128,9 +129,19 @@ func TestGeneratePipeline(t *testing.T) {
 - trigger: foo-service-pipeline
   build:
     message: build message
-- wait`
+- wait
+- command: echo "hello world"
+- command: cat ./file.txt`
 
-	pipeline, err := generatePipeline(steps, true)
+	plugin := Plugin{
+		Wait: true,
+		Hooks: []HookConfig{
+			{Command: "echo \"hello world\""},
+			{Command: "cat ./file.txt"},
+		},
+	}
+
+	pipeline, err := generatePipeline(steps, plugin)
 	defer os.Remove(pipeline.Name())
 
 	if err != nil {

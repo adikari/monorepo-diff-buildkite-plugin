@@ -18,7 +18,7 @@ type Pipeline struct {
 }
 
 // PipelineGenerator generates pipeline file
-type PipelineGenerator func(steps []Step, watch bool) (*os.File, error)
+type PipelineGenerator func(steps []Step, plugin Plugin) (*os.File, error)
 
 func uploadPipeline(plugin Plugin, generatePipeline PipelineGenerator) (string, []string, error) {
 	diffOutput := diff(plugin.Diff)
@@ -32,7 +32,7 @@ func uploadPipeline(plugin Plugin, generatePipeline PipelineGenerator) (string, 
 
 	steps := stepsToTrigger(diffOutput, plugin.Watch)
 
-	pipeline, err := generatePipeline(steps, plugin.Wait)
+	pipeline, err := generatePipeline(steps, plugin)
 	defer os.Remove(pipeline.Name())
 
 	if err != nil {
@@ -106,7 +106,7 @@ func dedupSteps(steps []Step) []Step {
 	return unique
 }
 
-func generatePipeline(steps []Step, wait bool) (*os.File, error) {
+func generatePipeline(steps []Step, plugin Plugin) (*os.File, error) {
 	tmp, err := ioutil.TempFile(os.TempDir(), "bmrd-")
 	pipeline := Pipeline{Steps: steps}
 
@@ -117,11 +117,18 @@ func generatePipeline(steps []Step, wait bool) (*os.File, error) {
 
 	data, err := yaml.Marshal(&pipeline)
 
-	if wait == true {
-		data = []byte(string(data) + "- wait")
+	if plugin.Wait == true {
+		data = append(data, "- wait"...)
 	}
 
-	fmt.Print(string(data))
+	for _, cmd := range plugin.Hooks {
+		data = append(data, "\n- command: "+cmd.Command...)
+	}
+
+	// disable logging in context of go tests
+	if env("TEST_MODE", "") != "true" {
+		fmt.Printf("Generated Pipeline:\n%s\n", string(data))
+	}
 
 	if err = ioutil.WriteFile(tmp.Name(), data, 0644); err != nil {
 		log.Debug(err)

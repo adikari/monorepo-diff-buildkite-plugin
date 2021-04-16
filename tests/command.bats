@@ -101,7 +101,7 @@ EOM
       "log_level": "debug",
       "wait": true,
       "hooks": [
-        { "command": "echo hello world" },
+        { "command": "echo \"hello world\"" },
         { "command": "cat ./foo-file.txt" }
       ],
       "watch": [
@@ -137,7 +137,7 @@ EOM
             "non-existant-service"
           ],
           "config": {
-            "command": "echo hello-world"
+            "command": "echo \"hello-world\""
           }
         }
       ]
@@ -172,9 +172,10 @@ steps:
   - coverage/**/*
   - tests/*
   async: true
-- command: echo hello-world
+- command: echo "hello-world"
 - wait
-- hooks
+- command: echo "hello world"
+- command: cat ./foo-file.txt
 EOM
 }
 
