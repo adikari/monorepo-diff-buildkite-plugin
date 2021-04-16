@@ -1,9 +1,8 @@
 name: Publish
 
 on:
-  push:
-    branches:
-      - master
+  release:
+    types: [created]
 
 jobs:
   publish:
@@ -22,13 +21,14 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
 
-      - name: Build binary
-        run: make build-linux
-
-      - uses: "marvinpinto/action-automatic-releases@latest"
+      - name: Build the binary
+        uses: skx/github-action-build@master
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
-          prerelease: true
-          title: "Pre Release"
-          files: monorepo-diff-buildkite-plugin-linux
+          builder: make build-linux RELEASE_VERSION=${{ github.event.release.tag_name }}
+
+      - name: Upload the binary
+        uses: skx/github-action-publish-binaries@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: monorepo-diff-buildkite-plugin-linux
