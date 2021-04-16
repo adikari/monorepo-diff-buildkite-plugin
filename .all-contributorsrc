@@ -65,6 +65,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "pmenglund",
+      "name": "Martin Englund",
+      "avatar_url": "https://avatars.githubusercontent.com/u/32618?v=4",
+      "profile": "http://blog.englund.nu/",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
