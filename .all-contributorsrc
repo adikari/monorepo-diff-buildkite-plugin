@@ -34,6 +34,17 @@
         "test",
         "infra"
       ]
+    },
+    {
+      "login": "elliott-davis",
+      "name": "Elliott Davis",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1130349?v=4",
+      "profile": "http://excellent.io",
+      "contributions": [
+        "code",
+        "test",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
