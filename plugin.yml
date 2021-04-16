@@ -7,8 +7,12 @@ configuration:
   properties:
     diff:
       type: string
+    log_level:
+      type: string
     interpolation:
       type: boolean
+    env:
+      type: array
     watch:
       type: array
       properties:

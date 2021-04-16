@@ -1,11 +1,11 @@
 ---
 version: '3'
 services:
-  tests:
-    image: buildkite/plugin-tester:latest
-    volumes:
-      - .:/plugin
-  lint:
+  plugin_test:
+    build:
+      context: .
+      dockerfile: ./tests/Dockerfile
+  plugin_lint:
     image: buildkite/plugin-linter:latest
     command: ['--id', 'chronotc/monorepo-diff']
     volumes:
