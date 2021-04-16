@@ -20,10 +20,15 @@ jobs:
         run: make test
 
       - name: Upload coverage to Codecov
-        run: bash <(curl -s https://codecov.io/bash)
+        uses: codecov/codecov-action@v1
 
-        # set RELEASE_VERSION  ${{ github.event.release.tag_name }}
-        # release binary
-        # update changelog
-        # update readme version numbers
-        # add contributors
+      - name: Build binary
+        run: make build-linux
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Pre Release"
+          files: monorepo-diff-buildkite-plugin-linux
