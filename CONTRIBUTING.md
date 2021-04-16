@@ -38,7 +38,9 @@ All code must be formatted with `gofmt` (with the latest Go version) and pass `g
 
 One of the maintainers will create a release after merging the pull request.
 - Ensure documentation is updated appropriately.
-- Update documentation to the new version number.
+- Update [README.md]( https://github.com/chronotc/monorepo-diff-buildkite-plugin/blob/master/README.md ) and [hooks/command]( https://github.com/chronotc/monorepo-diff-buildkite-plugin/blob/master/hooks/command ) to the new version number.
 - Update [ changelog ]( https://github.com/chronotc/monorepo-diff-buildkite-plugin/blob/master/CHANGELOG.md ) using guidelines from [Keep a Changelog](https://keepachangelog.com/).
-- Generate a new binary by running `make build-linux`.
-- Create a new Release in Github and attach the generated binary.
+- Merge changes to master. This will trigger "Publish" Github Action.
+- New release called "Pre Relase" is automatically generated.
+- Update the pre-release to have appropriate version number. Ensure the release doc is updated.
+- Change the realease from `pre-release` and update the release.
