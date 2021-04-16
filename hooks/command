@@ -5,8 +5,6 @@ version="${BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_VERSION:-2.0.1}"
 repo="https://github.com/chronotc/monorepo-diff-buildkite-plugin"
 executable="monorepo-diff-buildkite-plugin-linux"
 
-echo "using plugin version: ${version}"
-
 test_mode="${BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_TEST_MODE:-false}"
 
 if [[ "$test_mode" == "false" ]]; then

@@ -18,8 +18,11 @@ func setupLogger(logLevel string) {
 	log.SetLevel(ll)
 }
 
+// Version of plugin
+var Version string
+
 func main() {
-	log.Info("--- :one: monorepo-diff")
+	log.Infof("--- :one: monorepo-diff %s", Version)
 
 	plugin, err := initializePlugin(env("BUILDKITE_PLUGINS", ""))
 
