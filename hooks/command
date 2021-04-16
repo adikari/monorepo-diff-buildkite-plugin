@@ -15,7 +15,7 @@ fi
 
 if [[ "$test_mode" == "false" ]]; then
   echo ${url}
-  # curl -Lf -o ${executable} $url && chmod +x ${executable}
+  curl -Lf -o ${executable} $url && chmod +x ${executable}
 fi
 
-# ./${executable}
+./${executable}
