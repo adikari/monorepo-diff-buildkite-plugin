@@ -68,7 +68,7 @@ func initializePlugin(data string) (Plugin, error) {
 
 	if err != nil {
 		log.Debug(err)
-		return Plugin{}, errors.New("Failed to parse plugin configuration")
+		return Plugin{}, errors.New("failed to parse plugin configuration")
 	}
 
 	for _, p := range plugins {
@@ -79,7 +79,7 @@ func initializePlugin(data string) (Plugin, error) {
 		}
 	}
 
-	return Plugin{}, errors.New("Could not initialize plugin")
+	return Plugin{}, errors.New("could not initialize plugin")
 }
 
 // UnmarshalJSON set defaults properties
@@ -100,8 +100,8 @@ func (plugin *Plugin) UnmarshalJSON(data []byte) error {
 	plugin.Env = parseEnv(plugin.RawEnv)
 	plugin.RawEnv = nil
 
-	// path can be string or an array of strings
-	// handle both cases and create an array of paths
+	// Path can be string or an array of strings,
+	// handle both cases and create an array of paths.
 	for i, p := range plugin.Watch {
 		switch p.RawPath.(type) {
 		case string:

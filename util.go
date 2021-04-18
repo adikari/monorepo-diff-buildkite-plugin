@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	"errors"
+	"fmt"
 	"os"
 	"os/exec"
 
@@ -24,7 +24,7 @@ func executeCommand(command string, args []string) (string, error) {
 			command, args, stderr.String(),
 		)
 
-		return "", errors.New("command failed")
+		return "", fmt.Errorf("command `%s` failed: %v", command, err)
 	}
 
 	return out.String(), nil
