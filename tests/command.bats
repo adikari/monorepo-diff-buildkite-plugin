@@ -137,6 +137,12 @@ EOM
           "config": {
             "command": "echo \"hello-world\""
           }
+        },
+        {
+          "path": "**/*.md",
+          "config": {
+            "trigger": "markdown-pipeline"
+          }
         }
       ]
     }

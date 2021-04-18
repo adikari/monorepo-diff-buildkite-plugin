@@ -162,6 +162,8 @@ If the `path` specified here in the appears in the `diff` output, a `trigger` st
 
 A list of paths can be provided to trigger the desired pipeline. Changes in any of the paths will initiate the pipeline provided in trigger.
 
+A `path` can also be a glob pattern. For example specify `path: "**/*.md"` to match all markdown files.
+
 ### `config`
 
 Configuration supports 2 different step types.
