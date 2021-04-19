@@ -63,7 +63,9 @@
       "profile": "http://worx.li",
       "contributions": [
         "code",
-        "test"
+        "test",
+        "doc",
+        "example"
       ]
     },
     {
