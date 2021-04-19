@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -21,7 +20,11 @@ type Pipeline struct {
 type PipelineGenerator func(steps []Step, plugin Plugin) (*os.File, error)
 
 func uploadPipeline(plugin Plugin, generatePipeline PipelineGenerator) (string, []string, error) {
-	diffOutput := diff(plugin.Diff)
+	diffOutput, err := diff(plugin.Diff)
+	if err != nil {
+		log.Fatal(err)
+		return "", []string{}, err
+	}
 
 	if len(diffOutput) < 1 {
 		log.Info("No changes detected. Skipping pipeline upload.")
@@ -36,6 +39,7 @@ func uploadPipeline(plugin Plugin, generatePipeline PipelineGenerator) (string, 
 	defer os.Remove(pipeline.Name())
 
 	if err != nil {
+		log.Error(err)
 		return "", []string{}, err
 	}
 
@@ -51,23 +55,22 @@ func uploadPipeline(plugin Plugin, generatePipeline PipelineGenerator) (string, 
 	return cmd, args, nil
 }
 
-func diff(command string) []string {
+func diff(command string) ([]string, error) {
 	log.Infof("Running diff command: %s", command)
 
 	split := strings.Split(command, " ")
 	cmd, args := split[0], split[1:]
 
 	output, err := executeCommand(cmd, args)
-
 	if err != nil {
-		log.Fatalf("%s: %s", err, command)
+		return nil, fmt.Errorf("diff command failed: %v", err)
 	}
 
 	f := func(c rune) bool {
 		return c == '\n'
 	}
 
-	return strings.FieldsFunc(strings.TrimSpace(output), f)
+	return strings.FieldsFunc(strings.TrimSpace(output), f), nil
 }
 
 func stepsToTrigger(files []string, watch []WatchConfig) []Step {
@@ -111,13 +114,15 @@ func generatePipeline(steps []Step, plugin Plugin) (*os.File, error) {
 	pipeline := Pipeline{Steps: steps}
 
 	if err != nil {
-		log.Debug(err)
-		return nil, errors.New("Could not create temporary pipeline file")
+		return nil, fmt.Errorf("could not create temporary pipeline file: %v", err)
 	}
 
 	data, err := yaml.Marshal(&pipeline)
+	if err != nil {
+		return nil, fmt.Errorf("could not serialize the pipeline: %v", err)
+	}
 
-	if plugin.Wait == true {
+	if plugin.Wait {
 		data = append(data, "- wait"...)
 	}
 
@@ -125,14 +130,13 @@ func generatePipeline(steps []Step, plugin Plugin) (*os.File, error) {
 		data = append(data, "\n- command: "+cmd.Command...)
 	}
 
-	// disable logging in context of go tests
+	// Disable logging in context of go tests.
 	if env("TEST_MODE", "") != "true" {
 		fmt.Printf("Generated Pipeline:\n%s\n", string(data))
 	}
 
 	if err = ioutil.WriteFile(tmp.Name(), data, 0644); err != nil {
-		log.Debug(err)
-		return nil, errors.New("Could not write step to temporary file")
+		return nil, fmt.Errorf("could not write step to temporary file: %v", err)
 	}
 
 	return tmp, nil

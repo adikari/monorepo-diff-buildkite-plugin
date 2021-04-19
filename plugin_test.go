@@ -9,13 +9,13 @@ import (
 func TestPluginWithEmptyParameter(t *testing.T) {
 	_, err := initializePlugin("[]")
 
-	assert.EqualError(t, err, "Could not initialize plugin")
+	assert.EqualError(t, err, "could not initialize plugin")
 }
 
 func TestPluginWithInvalidParameter(t *testing.T) {
 	_, err := initializePlugin("invalid")
 
-	assert.EqualError(t, err, "Failed to parse plugin configuration")
+	assert.EqualError(t, err, "failed to parse plugin configuration")
 }
 
 func TestPluginShouldHaveDefaultValues(t *testing.T) {

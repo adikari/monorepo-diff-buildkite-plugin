@@ -40,6 +40,6 @@ One of the maintainers will create a release after merging the pull request.
 - Ensure documentation is updated appropriately.
 - Update [README.md]( https://github.com/chronotc/monorepo-diff-buildkite-plugin/blob/master/README.md ) and [hooks/command]( https://github.com/chronotc/monorepo-diff-buildkite-plugin/blob/master/hooks/command ) to the new version number.
 - Update [ changelog ]( https://github.com/chronotc/monorepo-diff-buildkite-plugin/blob/master/CHANGELOG.md ) using guidelines from [Keep a Changelog](https://keepachangelog.com/).
-- Merge changes to master. 
+- Merge changes to master.
 - Create a new release. The version number must follow the format of `v<major>.<minor>.<patch>`. Eg. `v2.0.1`
 - Github actions automatically builds and attachs the binary to the release.

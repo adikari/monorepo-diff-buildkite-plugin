@@ -13,7 +13,7 @@ setup() {
   run $PWD/hooks/command
 
   assert_failure
-  assert_output --partial "Failed to parse plugin configuration"
+  assert_output --partial "failed to parse plugin configuration"
 }
 
 @test "Pipeline is generated without wait property" {

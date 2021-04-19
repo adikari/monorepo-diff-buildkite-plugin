@@ -68,12 +68,13 @@ func TestDiff(t *testing.T) {
 		"README.md",
 	}
 
-	got := diff(`echo services/foo/serverless.yml
+	got, err := diff(`echo services/foo/serverless.yml
 services/bar/config.yml
 
 ops/bar/config.yml
 README.md`)
 
+	assert.NoError(t, err)
 	assert.Equal(t, want, got)
 }
 
