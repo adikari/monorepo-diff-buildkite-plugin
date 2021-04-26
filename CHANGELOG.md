@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.4]
+
+### Added
+- Glob support in path configuration. [#62](https://github.com/chronotc/monorepo-diff-buildkite-plugin/pull/62) from [@worxli](https://github.com/worxli)
+
 ## [2.0.3]
 
 ### Fixed
