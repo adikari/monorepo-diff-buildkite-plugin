@@ -107,7 +107,8 @@ func TestPipelinesToTriggerGetsListOfPipelines(t *testing.T) {
 		"watch-path-4/test/index_test.go",
 	}
 
-	pipelines := stepsToTrigger(changedFiles, watch)
+	pipelines, err := stepsToTrigger(changedFiles, watch)
+	assert.NoError(t, err)
 	var got []string
 
 	for _, v := range pipelines {
@@ -115,6 +116,127 @@ func TestPipelinesToTriggerGetsListOfPipelines(t *testing.T) {
 	}
 
 	assert.Equal(t, want, got)
+}
+
+func TestPipelinesStepsToTrigger(t *testing.T) {
+
+	testCases := map[string]struct {
+		ChangedFiles []string
+		WatchConfigs []WatchConfig
+		Expected     []Step
+	}{
+		"service-1": {
+			ChangedFiles: []string{
+				"watch-path-1/text.txt",
+				"watch-path-2/.gitignore",
+			},
+			WatchConfigs: []WatchConfig{{
+				Paths: []string{"watch-path-1"},
+				Step:  Step{Trigger: "service-1"},
+			}},
+			Expected: []Step{
+				{Trigger: "service-1"},
+			},
+		},
+		"service-1-2": {
+			ChangedFiles: []string{
+				"watch-path-1/text.txt",
+				"watch-path-2/.gitignore",
+			},
+			WatchConfigs: []WatchConfig{
+				{
+					Paths: []string{"watch-path-1"},
+					Step:  Step{Trigger: "service-1"},
+				},
+				{
+					Paths: []string{"watch-path-2"},
+					Step:  Step{Trigger: "service-2"},
+				},
+			},
+			Expected: []Step{
+				{Trigger: "service-1"},
+				{Trigger: "service-2"},
+			},
+		},
+		"extension wildcard": {
+			ChangedFiles: []string{
+				"text.txt",
+				".gitignore",
+			},
+			WatchConfigs: []WatchConfig{
+				{
+					Paths: []string{"*.txt"},
+					Step:  Step{Trigger: "txt"},
+				},
+			},
+			Expected: []Step{
+				{Trigger: "txt"},
+			},
+		},
+		"extension wildcard in subdir": {
+			ChangedFiles: []string{
+				"docs/text.txt",
+			},
+			WatchConfigs: []WatchConfig{
+				{
+					Paths: []string{"docs/*.txt"},
+					Step:  Step{Trigger: "txt"},
+				},
+			},
+			Expected: []Step{
+				{Trigger: "txt"},
+			},
+		},
+		"directory wildcard": {
+			ChangedFiles: []string{
+				"docs/text.txt",
+			},
+			WatchConfigs: []WatchConfig{
+				{
+					Paths: []string{"**/text.txt"},
+					Step:  Step{Trigger: "txt"},
+				},
+			},
+			Expected: []Step{
+				{Trigger: "txt"},
+			},
+		},
+		"directory and extension wildcard": {
+			ChangedFiles: []string{
+				"package/other.txt",
+			},
+			WatchConfigs: []WatchConfig{
+				{
+					Paths: []string{"*/*.txt"},
+					Step:  Step{Trigger: "txt"},
+				},
+			},
+			Expected: []Step{
+				{Trigger: "txt"},
+			},
+		},
+		"double directory and extension wildcard": {
+			ChangedFiles: []string{
+				"package/docs/other.txt",
+			},
+			WatchConfigs: []WatchConfig{
+				{
+					Paths: []string{"**/*.txt"},
+					Step:  Step{Trigger: "txt"},
+				},
+			},
+			Expected: []Step{
+				{Trigger: "txt"},
+			},
+		},
+	}
+	for name, tc := range testCases {
+		t.Run(name, func(t *testing.T) {
+			steps, err := stepsToTrigger(tc.ChangedFiles, tc.WatchConfigs)
+			assert.NoError(t, err)
+			assert.Equal(t, tc.Expected, steps)
+		})
+	}
 }
 
 func TestGeneratePipeline(t *testing.T) {

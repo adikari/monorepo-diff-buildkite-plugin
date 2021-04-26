@@ -7,6 +7,7 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/bmatcuk/doublestar/v2"
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 )
@@ -33,7 +34,10 @@ func uploadPipeline(plugin Plugin, generatePipeline PipelineGenerator) (string, 
 
 	log.Debug("Output from diff: \n" + strings.Join(diffOutput, "\n"))
 
-	steps := stepsToTrigger(diffOutput, plugin.Watch)
+	steps, err := stepsToTrigger(diffOutput, plugin.Watch)
+	if err != nil {
+		return "", []string{}, err
+	}
 
 	pipeline, err := generatePipeline(steps, plugin)
 	defer os.Remove(pipeline.Name())
@@ -73,13 +77,17 @@ func diff(command string) ([]string, error) {
 	return strings.FieldsFunc(strings.TrimSpace(output), f), nil
 }
 
-func stepsToTrigger(files []string, watch []WatchConfig) []Step {
+func stepsToTrigger(files []string, watch []WatchConfig) ([]Step, error) {
 	steps := []Step{}
 
 	for _, w := range watch {
 		for _, p := range w.Paths {
 			for _, f := range files {
-				if strings.HasPrefix(f, p) {
+				match, err := matchPath(p, f)
+				if err != nil {
+					return nil, err
+				}
+				if match {
 					steps = append(steps, w.Step)
 					break
 				}
@@ -87,7 +95,27 @@ func stepsToTrigger(files []string, watch []WatchConfig) []Step {
 		}
 	}
 
-	return dedupSteps(steps)
+	return dedupSteps(steps), nil
+}
+
+// matchPath checks if the file f matches the path p.
+func matchPath(p string, f string) (bool, error) {
+	// If the path contains a glob, the `doublestar.Match`
+	// method is used to determine the match,
+	// otherwise `strings.HasPrefix` is used.
+	if strings.Contains(p, "*") {
+		match, err := doublestar.Match(p, f)
+		if err != nil {
+			return false, fmt.Errorf("path matching failed: %v", err)
+		}
+		if match {
+			return true, nil
+		}
+	}
+	if strings.HasPrefix(f, p) {
+		return true, nil
+	}
+	return false, nil
 }
 
 func dedupSteps(steps []Step) []Step {
