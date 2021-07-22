@@ -2,7 +2,9 @@
 [![codecov](https://codecov.io/gh/chronotc/monorepo-diff-buildkite-plugin/branch/master/graph/badge.svg?token=DQ3B4FIYD2)](https://codecov.io/gh/chronotc/monorepo-diff-buildkite-plugin)
 [![Publish](https://github.com/chronotc/monorepo-diff-buildkite-plugin/actions/workflows/publish.yml/badge.svg)](https://github.com/chronotc/monorepo-diff-buildkite-plugin/actions/workflows/publish.yml)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
+
 # monorepo-diff-buildkite-plugin
 
 This plugin will assist you in triggering pipelines by watching folders in your `monorepo`.
@@ -52,8 +54,8 @@ steps:
                 label: "Upload pipeline"
                 retry:
                   automatic:
-                  - limit: 2
-                    exit_status: -1
+                    - limit: 2
+                      exit_status: -1
                 agents:
                   queue: performance
                 artifacts:
@@ -82,6 +84,7 @@ Depending on your use case, you may want to determine the point where the branch
 https://stackoverflow.com/questions/1527234/finding-a-branch-point-with-git and perform a diff against the branch point.
 
 #### Sample output:
+
 ```
 README.md
 lib/trigger.bash
@@ -191,6 +194,12 @@ By default, it will pass the following values to the `build` attributes unless a
 Default: `true`
 
 By setting `wait` to `true`, the build will wait until the triggered pipeline builds are successful before proceeding
+
+### `download` (optional)
+
+Default: `true`
+
+By setting `download` to `false`, the plugin assumes that the binary is present in `/usr/bin`.
 
 ### `hooks` (optional)
 

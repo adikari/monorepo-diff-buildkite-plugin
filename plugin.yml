@@ -57,5 +57,7 @@ configuration:
       properties:
         command:
           type: string
+    download:
+      type: boolean
   required:
     - watch

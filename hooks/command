@@ -6,16 +6,22 @@ version=$(echo $plugin | sed -e 's/.*monorepo-diff-buildkite-plugin//' -e 's/\".
 repo="https://github.com/chronotc/monorepo-diff-buildkite-plugin"
 executable="monorepo-diff-buildkite-plugin-linux"
 test_mode="${BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_TEST_MODE:-false}"
+download_executable="${BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_DOWNLOAD:-true}"
 
-if [ -z ${version} ]; then
-  url=${repo}/releases/latest/download/${executable}
+
+if [[ "$download_executable" == "true" ]]; then
+  if [ -z ${version} ]; then
+    url=${repo}/releases/latest/download/${executable}
+  else
+    url=${repo}/releases/download/${version:1}/${executable}
+  fi
+
+  if [[ "$test_mode" == "false" ]]; then
+    echo ${url}
+    curl -Lf -o ${executable} $url && chmod +x ${executable}
+  fi
+
+  ./${executable}
 else
-  url=${repo}/releases/download/${version:1}/${executable}
+  /usr/bin/${executable}
 fi
-
-if [[ "$test_mode" == "false" ]]; then
-  echo ${url}
-  curl -Lf -o ${executable} $url && chmod +x ${executable}
-fi
-
-./${executable}
