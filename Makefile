@@ -1,5 +1,6 @@
 NAME=monorepo-diff-buildkite-plugin
 RELEASE_VERSION?= "0.0.0"
+ARCH?= "amd64"
 COMMIT=$(shell git rev-parse --short=7 HEAD)
 TIMESTAMP:=$(shell date -u '+%Y-%m-%dT%I:%M:%SZ')
 
@@ -35,4 +36,4 @@ clean:
 
 .PHONY: build
 build-%: clean
-	GOOS=$* GOARCH=amd64 CGO_ENABLED=0 go build -ldflags '${LDFLAGS}' -o ${PWD}/${NAME}-$*
+	GOOS=$* GOARCH=${ARCH} CGO_ENABLED=0 go build -ldflags '${LDFLAGS}' -o ${PWD}/${NAME}-$*-${ARCH}

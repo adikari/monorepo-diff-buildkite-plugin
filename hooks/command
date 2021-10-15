@@ -1,10 +1,16 @@
 #!/bin/bash
 set -euo pipefail
 
+if [[ "$(arch)" == "aarch64" ]]; then
+  arch="arm64"
+else
+  arch="amd64"
+fi
+
 plugin=${BUILDKITE_PLUGINS:-""}
 version=$(echo $plugin | sed -e 's/.*monorepo-diff-buildkite-plugin//' -e 's/\".*//')
 repo="https://github.com/chronotc/monorepo-diff-buildkite-plugin"
-executable="monorepo-diff-buildkite-plugin-linux"
+executable="monorepo-diff-buildkite-plugin-linux-${arch}"
 test_mode="${BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_TEST_MODE:-false}"
 
 if [ -z ${version} ]; then
