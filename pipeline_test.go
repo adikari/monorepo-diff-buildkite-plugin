@@ -34,7 +34,7 @@ func mockGeneratePipeline(steps []Step, plugin Plugin) (*os.File, error) {
 }
 
 func TestUploadPipelineCallsBuildkiteAgentCommand(t *testing.T) {
-	plugin := Plugin{Diff: "echo ./foo-service"}
+	plugin := Plugin{Diff: "echo ./foo-service", Interpolation: true}
 	cmd, args, err := uploadPipeline(plugin, mockGeneratePipeline)
 
 	assert.Equal(t, "buildkite-agent", cmd)
@@ -43,7 +43,7 @@ func TestUploadPipelineCallsBuildkiteAgentCommand(t *testing.T) {
 }
 
 func TestUploadPipelineCallsBuildkiteAgentCommandWithInterpolation(t *testing.T) {
-	plugin := Plugin{Diff: "echo ./foo-service", Interpolation: true}
+	plugin := Plugin{Diff: "echo ./foo-service", Interpolation: false}
 	cmd, args, err := uploadPipeline(plugin, mockGeneratePipeline)
 
 	assert.Equal(t, "buildkite-agent", cmd)

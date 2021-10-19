@@ -90,7 +90,7 @@ func (plugin *Plugin) UnmarshalJSON(data []byte) error {
 		Diff:          "git diff --name-only HEAD~1",
 		Wait:          false,
 		LogLevel:      "info",
-		Interpolation: false,
+		Interpolation: true,
 	}
 
 	_ = json.Unmarshal(data, def)
