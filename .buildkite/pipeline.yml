@@ -7,7 +7,7 @@ steps:
     plugins:
       - docker-compose#v3.3.0:
           run: plugin_test
-  - label: ":bomb: Triggering 1"
+  - label: ":bomb: Triggering Plugin Version (2.0.3)"
     plugins:
       - chronotc/monorepo-diff#v2.0.3:
           diff: "cat ./e2e/one-match-one-miss"
@@ -22,9 +22,9 @@ steps:
             - command: echo "command hook 1"
             - command: echo "command hook 2"
           wait: true
-  - label: ":bomb: Triggering 2"
+  - label: ":bomb: Triggering Plugin Version (2.0.4)"
     plugins:
-      - chronotc/monorepo-diff#v2.0.2:
+      - chronotc/monorepo-diff#v2.0.4:
           diff: "cat ./e2e/multiple-paths"
           watch:
             - path: "user-service/"
@@ -42,7 +42,7 @@ steps:
           hooks:
             - command: echo "command hook 1"
           wait: true
-  - label: ":bomb: Triggering 3"
+  - label: ":bomb: Triggering Plugin Version (latest)"
     plugins:
       - chronotc/monorepo-diff:
           diff: "cat ./e2e/commands-or-triggers"
