@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.1.0]
+## [2.0.5]
 
 ### Added
 - Support for linux-arm64 platform. [#73](https://github.com/chronotc/monorepo-diff-buildkite-plugin/pull/73) from [@runlevel5](https://github.com/runlevel5)
