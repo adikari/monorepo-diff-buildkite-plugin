@@ -258,7 +258,8 @@ Please read [contributing guide](https://github.com/chronotc/monorepo-diff-build
   </tr>
   <tr>
     <td align="center"><a href="http://ronaldmiranda.com.br"><img src="https://avatars.githubusercontent.com/u/14340100?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ronald Carvalho</b></sub></a><br /><a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/issues?q=author%3Aronaldmiranda" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="https://github.com/harrietgrace"><img src="https://avatars.githubusercontent.com/u/2074469?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Harriet Lawrence</b></sub></a><br /><a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/commits?author=harrietgrace" title="Documentation">📖</a> <a href="#example-harrietgrace" title="Examples">💡</a></td>
+    <td align="center"><a href="https://github.com/harrietgrace"><img src="https://avatars.githubusercontent.com/u/2074469?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Harriet Lawrence</b></sub></a><br /><a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/commits?author=harrietgrace" title="Documentation">📖</a> <a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/commits?author=harrietgrace" title="Examples">💡</a></td>
+        <td align="center"><a href="https://github.com/runlevel5"><img src="https://avatars.githubusercontent.com/u/135605?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Trung Lê</b></sub></a><br /><a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/commits?author=runlevel5" title="Code">💻</a> <a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/commits?author=runlevel5" title="Examples">💡</a><a href="https://github.com/chronotc/monorepo-diff-buildkite-plugin/commits?author=runlevel5" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
