@@ -38,6 +38,20 @@ jobs:
           ARCH: "arm64"
           OS: "linux"
 
+      - name: Build the binary (darwin-amd64)
+        uses: skx/github-action-build@master
+        env:
+          RELEASE_VERSION: ${{ github.event.release.tag_name }}
+          ARCH: "amd64"
+          OS: "darwin"
+
+      - name: Build the binary (darwin-arm64)
+        uses: skx/github-action-build@master
+        env:
+          RELEASE_VERSION: ${{ github.event.release.tag_name }}
+          ARCH: "arm64"
+          OS: "darwin"
+
       - name: Upload the binaries
         uses: skx/github-action-publish-binaries@master
         env:
