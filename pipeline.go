@@ -50,7 +50,7 @@ func uploadPipeline(plugin Plugin, generatePipeline PipelineGenerator) (string, 
 	cmd := "buildkite-agent"
 	args := []string{"pipeline", "upload", pipeline.Name()}
 
-	if plugin.Interpolation {
+	if !plugin.Interpolation {
 		args = append(args, "--no-interpolation")
 	}
 
