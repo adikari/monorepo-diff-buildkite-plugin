@@ -12,4 +12,4 @@ COPY . .
 
 COPY --from=go \
   /plugin/monorepo-diff-buildkite-plugin-linux-amd64 \
-  monorepo-diff-buildkite-plugin-linux
+  monorepo-diff-buildkite-plugin-linux-amd64
