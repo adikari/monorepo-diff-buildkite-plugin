@@ -6,11 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.10]
+
+### Added
+- Support for darwin-amd64 and darwin-arm64 platforms. [#74](https://github.com/chronotc/monorepo-diff-buildkite-plugin/pull/74) from [@runlevel5](https://github.com/runlevel5)
+
 ## [2.0.5]
 
 ### Added
 - Support for linux-arm64 platform. [#73](https://github.com/chronotc/monorepo-diff-buildkite-plugin/pull/73) from [@runlevel5](https://github.com/runlevel5)
-- Support for darwin-amd64 and darwin-arm64 platforms. [#74](https://github.com/chronotc/monorepo-diff-buildkite-plugin/pull/74) from [@runlevel5](https://github.com/runlevel5)
 - Upgrade go version to 1.7.2 [#74](https://github.com/chronotc/monorepo-diff-buildkite-plugin/pull/74) from [@runlevel5](https://github.com/runlevel5)
 
 ## [2.0.4]
