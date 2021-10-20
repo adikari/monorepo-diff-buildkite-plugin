@@ -1,4 +1,4 @@
 #!/bin/bash
 
 unset GOROOT
-make build-linux ARCH=${ARCH} RELEASE_VERSION="${RELEASE_VERSION}"
+make build-${OS} ARCH=${ARCH} RELEASE_VERSION="${RELEASE_VERSION}"

@@ -24,17 +24,19 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
 
-      - name: Build the binary (amd64)
+      - name: Build the binary (linux-amd64)
         uses: skx/github-action-build@master
         env:
           RELEASE_VERSION: ${{ github.event.release.tag_name }}
           ARCH: "amd64"
+          OS: "linux"
 
-      - name: Build the binary (arm64)
+      - name: Build the binary (linux-arm64)
         uses: skx/github-action-build@master
         env:
           RELEASE_VERSION: ${{ github.event.release.tag_name }}
           ARCH: "arm64"
+          OS: "linux"
 
       - name: Upload the binaries
         uses: skx/github-action-publish-binaries@master
