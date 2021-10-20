@@ -30,10 +30,10 @@ ifneq (${HAS_DOCKER},)
 endif
 
 .PHONY: clean
-clean:
+clean-%:
 	rm -f coverage.out
-	rm -rf ${NAME}*
+	rm -rf ${NAME}-$*-${ARCH}
 
 .PHONY: build
-build-%: clean
+build-%: clean-%
 	GOOS=$* GOARCH=${ARCH} CGO_ENABLED=0 go build -ldflags '${LDFLAGS}' -o ${PWD}/${NAME}-$*-${ARCH}
