@@ -2,3 +2,6 @@
 
 make build-linux ARCH=amd64 RELEASE_VERSION="${RELEASE_VERSION}"
 make build-linux ARCH=arm64 RELEASE_VERSION="${RELEASE_VERSION}"
+
+make build-darwin ARCH=amd64 RELEASE_VERSION="${RELEASE_VERSION}"
+make build-darwin ARCH=arm64 RELEASE_VERSION="${RELEASE_VERSION}"
