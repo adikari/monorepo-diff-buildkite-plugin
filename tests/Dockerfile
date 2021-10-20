@@ -1,4 +1,4 @@
-FROM golang:1.16.3 as go
+FROM golang:1.17.2 as go
 
 WORKDIR /plugin
 
