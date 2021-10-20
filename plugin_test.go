@@ -29,7 +29,7 @@ func TestPluginShouldHaveDefaultValues(t *testing.T) {
 		Diff:          "git diff --name-only HEAD~1",
 		Wait:          false,
 		LogLevel:      "info",
-		Interpolation: false,
+		Interpolation: true,
 	}
 
 	assert.Equal(t, expected, got)
