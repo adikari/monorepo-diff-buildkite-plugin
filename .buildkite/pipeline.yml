@@ -21,7 +21,6 @@ steps:
           hooks:
             - command: echo "command hook 1"
             - command: echo "command hook 2"
-          wait: true
   - label: ":bomb: Triggering Plugin Version (2.0.4)"
     plugins:
       - chronotc/monorepo-diff#v2.0.4:
@@ -41,6 +40,16 @@ steps:
                 trigger: "this-pipeline-does-not-exists"
           hooks:
             - command: echo "command hook 1"
+  - label: ":bomb: Triggering Plugin Version (2.0.5)"
+    plugins:
+      - chronotc/monorepo-diff#v2.0.5:
+          diff: "cat ./e2e/multiple-paths"
+          watch:
+            - path:
+                - "user-service/infrastructure/"
+                - "product-service/infrastructure/"
+              config:
+                command: "echo i-am-running"
           wait: true
   - label: ":bomb: Triggering Plugin Version (latest)"
     plugins:
@@ -67,4 +76,3 @@ steps:
                 - "do-not-run-command/"
               config:
                 command: "echo this-does-not-run"
-          wait: true
