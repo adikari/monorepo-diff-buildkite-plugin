@@ -1,7 +1,7 @@
 [![e2e status](https://badge.buildkite.com/719d0b895285367c9c57a09e07f1e853148d2509f0667e0ae8.svg?branch=master)](https://buildkite.com/kuda/monorepo-diff-buildkite-plugin)
 [![codecov](https://codecov.io/gh/chronotc/monorepo-diff-buildkite-plugin/branch/master/graph/badge.svg?token=DQ3B4FIYD2)](https://codecov.io/gh/chronotc/monorepo-diff-buildkite-plugin)
 [![Publish](https://github.com/chronotc/monorepo-diff-buildkite-plugin/actions/workflows/publish.yml/badge.svg)](https://github.com/chronotc/monorepo-diff-buildkite-plugin/actions/workflows/publish.yml)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 # monorepo-diff-buildkite-plugin
 
