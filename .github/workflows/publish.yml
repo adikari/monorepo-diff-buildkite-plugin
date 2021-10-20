@@ -24,14 +24,21 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
 
-      - name: Build the binary
+      - name: Build the binary (amd64)
         uses: skx/github-action-build@master
         env:
           RELEASE_VERSION: ${{ github.event.release.tag_name }}
+          ARCH: "amd64"
 
-      - name: Upload the binary
+      - name: Build the binary (arm64)
+        uses: skx/github-action-build@master
+        env:
+          RELEASE_VERSION: ${{ github.event.release.tag_name }}
+          ARCH: "arm64"
+
+      - name: Upload the binaries
         uses: skx/github-action-publish-binaries@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: monorepo-diff-buildkite-plugin-linux-*
+          args: monorepo-diff-buildkite-plugin-*-*
