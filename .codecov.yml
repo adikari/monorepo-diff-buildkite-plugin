@@ -2,6 +2,6 @@ coverage:
   status:
     project:
       default:
-        target: "79.5%"
+        target: "78%"
     patch:
       enabled: false
