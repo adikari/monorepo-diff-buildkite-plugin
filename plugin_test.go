@@ -72,7 +72,10 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 				{
 					"path": "watch-path-1",
 					"config": {
-						"command": "echo hello-world"
+						"command": "echo hello-world",
+						"env": [
+							"env4", "hi= bye"
+						]
 					}
 				},
 				{
@@ -96,11 +99,7 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						"agents": {
 							"queue": "queue-1"
 						},
-						"artifacts": [ "artifiact-1" ],
-						"env": [
-							"foo = bar",
-							"env4"
-						]
+						"artifacts": [ "artifiact-1" ]
 					}
 				}
 			]
@@ -128,11 +127,6 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 				Paths: []string{"watch-path-1"},
 				Step: Step{
 					Trigger: "service-2",
-					Env: map[string]string{
-						"env1": "env-1",
-						"env2": "env-2",
-						"env3": "env-3",
-					},
 					Build: Build{
 						Message: "some message",
 						Branch:  "go-rewrite",
@@ -153,6 +147,8 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						"env1": "env-1",
 						"env2": "env-2",
 						"env3": "env-3",
+						"env4": "env-4",
+						"hi":   "bye",
 					},
 				},
 			},
@@ -176,13 +172,6 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 					Async:     true,
 					Agents:    Agent{Queue: "queue-1"},
 					Artifacts: []string{"artifiact-1"},
-					Env: map[string]string{
-						"foo":  "bar",
-						"env1": "env-1",
-						"env2": "env-2",
-						"env3": "env-3",
-						"env4": "env-4",
-					},
 				},
 			},
 		},
