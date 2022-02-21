@@ -139,6 +139,46 @@ EOM
           }
         },
         {
+          "path": [
+            "foo-service"
+          ],
+          "config": {
+            "concurrency": 5,
+            "concurrency_group": "abc",
+            "depends_on": [
+              "bar-service-pipeline",
+              "baz-service-pipeline"
+            ],
+            "soft_fail": [
+              {
+                "exit_status": 1,
+              },
+              {
+                "exit_status": 255,
+              }
+            ]
+            "plugins": [
+              {
+                "docker-login#v2.1.0": {
+                  "username": "bob",
+                  "password": "hunter12"
+                }
+              },
+              {
+                "docker#v3.8.0": {
+                  "image": "alpine:latest",
+                  "workdir": "/",
+                  "environment": [
+                    "GREETING=hello",
+                    "FAREWELL=ciao"
+                  ],
+                  "command": ["echo", "\"$MESSAGE\"", "\"$FAREWELL\""]
+                }
+              }
+            ]
+          }
+        },
+        {
           "path": "**/*.md",
           "config": {
             "trigger": "markdown-pipeline"
@@ -177,9 +217,30 @@ steps:
   - tests/*
   async: true
 - command: echo "hello-world"
+- concurrency: 5
+  concurrency_group: abc
+  soft_fail:
+  - exit_status: 1
+  - exit_status: 255
+  depends_on:
+  - bar-service-pipeline
+  - baz-service-pipeline
+  plugins:
+  - docker-login#v2.1.0:
+      password: hunter12
+      username: bob
+  - docker#v3.8.0:
+      command:
+      - echo
+      - '"\$MESSAGE"'
+      - '"\$FAREWELL"'
+      environment:
+      - GREETING=hello
+      - FAREWELL=ciao
+      image: alpine:latest
+      workdir: /
 - wait
 - command: echo "hello world"
 - command: cat ./foo-file.txt
 EOM
 }
-

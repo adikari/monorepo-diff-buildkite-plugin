@@ -50,6 +50,12 @@ configuration:
               type: array
             env:
               type: array
+            plugins:
+              type: array
+              items:
+                type: object
+                additionalProperties:
+                  type: object
     wait:
       type: boolean
     hooks:

@@ -60,6 +60,10 @@ steps:
                   - "logs/*"
                 env:
                   - FOO=bar
+                plugins:
+                  - docker#v3.3.0:
+                      image: node
+                      workdir: /app
             - path: "foo-service/"
               config:
                 trigger: "deploy-foo-service"

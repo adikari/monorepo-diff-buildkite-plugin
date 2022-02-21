@@ -245,6 +245,29 @@ func TestGeneratePipeline(t *testing.T) {
 			Trigger: "foo-service-pipeline",
 			Build:   Build{Message: "build message"},
 		},
+		{
+			Command:          "echo bye-bye",
+			Concurrency:      5,
+			ConcurrencyGroup: "primary",
+			SoftFail: []ExitStatus{{
+				ExitStatus: 1,
+			}, {
+				ExitStatus: 255,
+			}},
+			Plugins: []map[string]interface{}{{
+				"docker#v3.3.0": map[string]interface{}{
+					"image":   "alpine:latest",
+					"workdir": "/",
+					"environment": []interface{}{
+						"MESSAGE=ciao",
+					},
+					"command": []interface{}{
+						"echo",
+						`"$$MESSAGE"`,
+					},
+				},
+			}},
+		},
 	}
 
 	want :=
@@ -252,6 +275,21 @@ func TestGeneratePipeline(t *testing.T) {
 - trigger: foo-service-pipeline
   build:
     message: build message
+- command: echo bye-bye
+  concurrency: 5
+  concurrency_group: primary
+  plugins:
+  - docker#v3.3.0:
+      command:
+      - echo
+      - '"$$MESSAGE"'
+      environment:
+      - MESSAGE=ciao
+      image: alpine:latest
+      workdir: /
+  soft_fail:
+  - exit_status: 1
+  - exit_status: 255
 - wait
 - command: echo "hello world"
 - command: cat ./file.txt`
