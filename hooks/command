@@ -1,9 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
-if [[ "$(arch)" == "aarch64" ]]; then
+arch="$(arch)"
+arm=("arm armhf aarch64 aarch64_be armv6l armv7l armv8l arm64e") # arm64
+amd=("x86 x86pc i386 i686 i686-64 x64 x86_64 x86_64h athlon")    # amd64
+if [[ "${arm[*]}" =~ ${arch} ]]; then
   arch="arm64"
-else
+elif [[ "${amd[*]}" =~ ${arch} ]]; then
   arch="amd64"
 fi
 
