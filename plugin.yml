@@ -46,6 +46,8 @@ configuration:
               properties:
                 queue:
                   type: string
+              additionalProperties:
+                type: string
             artifacts:
               type: array
             env:
