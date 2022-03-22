@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.3]
+
+### Fixed
+- Log pipeline generation and upload errors. [#86](https://github.com/chronotc/monorepo-diff-buildkite-plugin/pull/86) from [@xzyfer](https://github.com/xzyfer)
+## [2.1.2]
+
+### Fixed
+- Prevent incorrect interpolation of env on trigger steps. [#80](https://github.com/chronotc/monorepo-diff-buildkite-plugin/pull/80) from [@chronotc](https://github.com/chronotc)
+
 ## [2.1.1]
 
 ### Added
