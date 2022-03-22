@@ -39,7 +39,7 @@ func TestUploadPipelineCallsBuildkiteAgentCommand(t *testing.T) {
 
 	assert.Equal(t, "buildkite-agent", cmd)
 	assert.Equal(t, []string{"pipeline", "upload", "pipeline.txt"}, args)
-	assert.Equal(t, err, nil)
+	assert.Equal(t, err.Error(), "command `buildkite-agent` failed: exec: \"buildkite-agent\": executable file not found in $PATH")
 }
 
 func TestUploadPipelineCallsBuildkiteAgentCommandWithInterpolation(t *testing.T) {
@@ -48,7 +48,7 @@ func TestUploadPipelineCallsBuildkiteAgentCommandWithInterpolation(t *testing.T)
 
 	assert.Equal(t, "buildkite-agent", cmd)
 	assert.Equal(t, []string{"pipeline", "upload", "pipeline.txt", "--no-interpolation"}, args)
-	assert.Equal(t, err, nil)
+	assert.Equal(t, err.Error(), "command `buildkite-agent` failed: exec: \"buildkite-agent\": executable file not found in $PATH")
 }
 
 func TestUploadPipelineCancelsIfThereIsNoDiffOutput(t *testing.T) {

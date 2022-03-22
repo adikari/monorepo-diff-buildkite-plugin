@@ -54,9 +54,9 @@ func uploadPipeline(plugin Plugin, generatePipeline PipelineGenerator) (string, 
 		args = append(args, "--no-interpolation")
 	}
 
-	executeCommand("buildkite-agent", args)
+	_, err = executeCommand("buildkite-agent", args)
 
-	return cmd, args, nil
+	return cmd, args, err
 }
 
 func diff(command string) ([]string, error) {
