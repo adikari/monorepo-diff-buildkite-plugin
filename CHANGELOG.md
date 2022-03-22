@@ -6,10 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.4]
+
+### Fixed
+- Fix failing MacOS builds. [#87](https://github.com/chronotc/monorepo-diff-buildkite-plugin/pull/87) from [@xzyfer](https://github.com/xzyfer)
+
 ## [2.1.3]
 
 ### Fixed
 - Log pipeline generation and upload errors. [#86](https://github.com/chronotc/monorepo-diff-buildkite-plugin/pull/86) from [@xzyfer](https://github.com/xzyfer)
+
 ## [2.1.2]
 
 ### Fixed
