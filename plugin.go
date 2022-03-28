@@ -29,9 +29,11 @@ type HookConfig struct {
 
 // WatchConfig Plugin watch configuration
 type WatchConfig struct {
-	RawPath interface{} `json:"path"`
-	Paths   []string
-	Step    Step `json:"config"`
+	RawPath     interface{} `json:"path"`
+	Paths       []string
+	Step        Step        `json:"config"`
+	RawSkipPath interface{} `json:"skip_path"`
+	SkipPaths   []string
 }
 
 // Step is buildkite pipeline definition
@@ -100,8 +102,8 @@ func (plugin *Plugin) UnmarshalJSON(data []byte) error {
 	plugin.Env = parseEnv(plugin.RawEnv)
 	plugin.RawEnv = nil
 
-	// Path can be string or an array of strings,
-	// handle both cases and create an array of paths.
+	// Path and SkipPath can be string or an array of strings,
+	// handle both cases and create an array of paths on both.
 	for i, p := range plugin.Watch {
 		switch p.RawPath.(type) {
 		case string:
@@ -112,6 +114,15 @@ func (plugin *Plugin) UnmarshalJSON(data []byte) error {
 			}
 		}
 
+		switch p.RawSkipPath.(type) {
+		case string:
+			plugin.Watch[i].SkipPaths = []string{plugin.Watch[i].RawSkipPath.(string)}
+		case []interface{}:
+			for _, v := range plugin.Watch[i].RawSkipPath.([]interface{}) {
+				plugin.Watch[i].SkipPaths = append(plugin.Watch[i].SkipPaths, v.(string))
+			}
+		}
+
 		if plugin.Watch[i].Step.Trigger != "" {
 			setBuild(&plugin.Watch[i].Step.Build)
 		}
@@ -119,6 +130,7 @@ func (plugin *Plugin) UnmarshalJSON(data []byte) error {
 		appendEnv(&plugin.Watch[i], plugin.Env)
 
 		p.RawPath = nil
+		p.RawSkipPath = nil
 	}
 
 	return nil
@@ -165,6 +177,7 @@ func appendEnv(watch *WatchConfig, env map[string]string) {
 	watch.Step.RawEnv = nil
 	watch.Step.Build.RawEnv = nil
 	watch.RawPath = nil
+	watch.RawSkipPath = nil
 }
 
 // parse env in format from env=env-value to map[env] = env-value

@@ -229,7 +229,93 @@ func TestPipelinesStepsToTrigger(t *testing.T) {
 				{Trigger: "txt"},
 			},
 		},
+		"skips service-2": {
+			ChangedFiles: []string{
+				"watch-path/text.txt",
+			},
+			WatchConfigs: []WatchConfig{
+				{
+					Paths: []string{"watch-path"},
+					Step:  Step{Trigger: "service-1"},
+				},
+				{
+					Paths:     []string{"watch-path"},
+					SkipPaths: []string{"watch-path/text.txt"},
+					Step:      Step{Trigger: "service-2"},
+				}},
+			Expected: []Step{
+				{Trigger: "service-1"},
+			},
+		},
+		"skips extension wildcard": {
+			ChangedFiles: []string{
+				"text.secret.txt",
+			},
+			WatchConfigs: []WatchConfig{
+				{
+					Paths: []string{"*.txt"},
+					Step:  Step{Trigger: "service-1"},
+				},
+				{
+					Paths:     []string{"*.txt"},
+					SkipPaths: []string{"*.secret.txt"},
+					Step:      Step{Trigger: "service-2"},
+				}},
+			Expected: []Step{
+				{Trigger: "service-1"},
+			},
+		},
+		"skips extension wildcard in subdir": {
+			ChangedFiles: []string{
+				"docs/text.secret.txt",
+			},
+			WatchConfigs: []WatchConfig{
+				{
+					Paths: []string{"**/*.txt"},
+					Step:  Step{Trigger: "service-1"},
+				},
+				{
+					Paths:     []string{"**/*.txt"},
+					SkipPaths: []string{"docs/*.txt"},
+					Step:      Step{Trigger: "service-2"},
+				}},
+			Expected: []Step{
+				{Trigger: "service-1"},
+			},
+		},
+		"step is included even when one of the files is skipped": {
+			ChangedFiles: []string{
+				"docs/text.secret.txt",
+				"docs/text.txt",
+			},
+			WatchConfigs: []WatchConfig{
+				{
+					Paths: []string{"**/*.txt"},
+					Step:  Step{Trigger: "service-1"},
+				},
+				{
+					Paths:     []string{"**/*.txt"},
+					SkipPaths: []string{"docs/*.secret.txt"},
+					Step:      Step{Trigger: "service-2"},
+				}},
+			Expected: []Step{
+				{Trigger: "service-1"},
+				{Trigger: "service-2"},
+			},
+		},
+		"fails if not path is included": {
+			ChangedFiles: []string{
+				"docs/text.txt",
+			},
+			WatchConfigs: []WatchConfig{
+				{
+					SkipPaths: []string{"docs/*.secret.txt"},
+					Step:      Step{Trigger: "service-1"},
+				}},
+			Expected: []Step{},
+		},
 	}
+
 	for name, tc := range testCases {
 		t.Run(name, func(t *testing.T) {
 			steps, err := stepsToTrigger(tc.ChangedFiles, tc.WatchConfigs)
