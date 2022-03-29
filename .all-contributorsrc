@@ -105,6 +105,21 @@
         "doc",
         "example"
       ]
+    },
+    {
+      "login": "xzyfer",
+      "name": "Michael Mifsud",
+      "avatar_url": "https://avatars.githubusercontent.com/u/579928?v=4",
+      "profile": "https://github.com/xzyfer",
+      "contributions": [
+        "code",
+        "example",
+        "doc",
+        "maintenance",
+        "review",
+        "test",
+        "infra"
+      ]
     }
   ],
   "contributorsPerLine": 7,
