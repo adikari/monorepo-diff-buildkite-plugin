@@ -101,6 +101,16 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						},
 						"artifacts": [ "artifiact-1" ]
 					}
+				},
+				{
+					"path": "watch-path-1",
+					"config": {
+						"group": "my group",
+						"command": "echo hello-group",
+						"env": [
+							"env4", "hi= bye"
+						]
+					}
 				}
 			]
 		}
@@ -172,6 +182,20 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 					Async:     true,
 					Agents:    Agent{Queue: "queue-1"},
 					Artifacts: []string{"artifiact-1"},
+				},
+			},
+			{
+				Paths: []string{"watch-path-1"},
+				Step: Step{
+					Group:   "my group",
+					Command: "echo hello-group",
+					Env: map[string]string{
+						"env1": "env-1",
+						"env2": "env-2",
+						"env3": "env-3",
+						"env4": "env-4",
+						"hi":   "bye",
+					},
 				},
 			},
 		},

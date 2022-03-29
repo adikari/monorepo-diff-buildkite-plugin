@@ -7,9 +7,9 @@ steps:
     plugins:
       - docker-compose#v3.3.0:
           run: plugin_test
-  - label: ":bomb: Triggering Plugin Version (2.0.3)"
+  - label: ":bomb: Triggers"
     plugins:
-      - chronotc/monorepo-diff#v2.0.3:
+      - chronotc/monorepo-diff:
           diff: "cat ./e2e/one-match-one-miss"
           watch:
             - path: "foo-service/"
@@ -21,9 +21,20 @@ steps:
           hooks:
             - command: echo "command hook 1"
             - command: echo "command hook 2"
-  - label: ":bomb: Triggering Plugin Version (2.0.4)"
+  - label: ":bomb: Testing groups"
     plugins:
-      - chronotc/monorepo-diff#v2.0.4:
+      - chronotc/monorepo-diff:
+          diff: "cat ./e2e/multiple-paths"
+          watch:
+            - path:
+                - "user-service/infrastructure/"
+                - "product-service/infrastructure/"
+              config:
+                group: "my group"
+                command: "echo i-am-running-in-a-group"
+  - label: ":bomb: Testing hooks"
+    plugins:
+      - chronotc/monorepo-diff:
           diff: "cat ./e2e/multiple-paths"
           watch:
             - path: "user-service/"
@@ -40,9 +51,9 @@ steps:
                 trigger: "this-pipeline-does-not-exists"
           hooks:
             - command: echo "command hook 1"
-  - label: ":bomb: Triggering Plugin Version (2.0.5)"
+  - label: ":bomb: Testing wait"
     plugins:
-      - chronotc/monorepo-diff#v2.0.5:
+      - chronotc/monorepo-diff:
           diff: "cat ./e2e/multiple-paths"
           watch:
             - path:
@@ -51,7 +62,7 @@ steps:
               config:
                 command: "echo i-am-running"
           wait: true
-  - label: ":bomb: Triggering Plugin Version (latest)"
+  - label: ":bomb: Testing triggers and commands"
     plugins:
       - chronotc/monorepo-diff:
           diff: "cat ./e2e/commands-or-triggers"
@@ -75,4 +86,9 @@ steps:
             - path:
                 - "do-not-run-command/"
               config:
+                command: "echo this-does-not-run"
+            - path:
+                - "global/"
+              config:
+                group: "this is a group"
                 command: "echo this-does-not-run"
