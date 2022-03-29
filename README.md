@@ -213,6 +213,7 @@ steps:
           watch:
             - path: app/cms/
               config:
+                group: ":rocket: deployment"
                 command: "netlify --production deploy"
                 label: ":netlify: Deploy to production"
                 agents:

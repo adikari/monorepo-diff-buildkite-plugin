@@ -34,8 +34,14 @@ type WatchConfig struct {
 	Step    Step `json:"config"`
 }
 
+type Group struct {
+	Label string `yaml:"group"`
+	Steps []Step `yaml:"steps"`
+}
+
 // Step is buildkite pipeline definition
 type Step struct {
+	Group     string            `yaml:"group,omitempty"`
 	Trigger   string            `yaml:"trigger,omitempty"`
 	Label     string            `yaml:"label,omitempty"`
 	Build     Build             `yaml:"build,omitempty"`
@@ -59,6 +65,17 @@ type Build struct {
 	Commit  string            `yaml:"commit,omitempty"`
 	RawEnv  interface{}       `json:"env" yaml:",omitempty"`
 	Env     map[string]string `yaml:"env,omitempty"`
+}
+
+func (s Step) MarshalYAML() (interface{}, error) {
+	if s.Group == "" {
+		type Alias Step
+		return (Alias)(s), nil
+	}
+
+	label := s.Group
+	s.Group = ""
+	return Group{Label: label, Steps: []Step{s}}, nil
 }
 
 func initializePlugin(data string) (Plugin, error) {

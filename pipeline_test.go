@@ -245,6 +245,11 @@ func TestGeneratePipeline(t *testing.T) {
 			Trigger: "foo-service-pipeline",
 			Build:   Build{Message: "build message"},
 		},
+		{
+			Group:   "my group",
+			Trigger: "foo-service-pipeline",
+			Build:   Build{Message: "build message"},
+		},
 	}
 
 	want :=
@@ -252,6 +257,11 @@ func TestGeneratePipeline(t *testing.T) {
 - trigger: foo-service-pipeline
   build:
     message: build message
+- group: my group
+  steps:
+  - trigger: foo-service-pipeline
+    build:
+      message: build message
 - wait
 - command: echo "hello world"
 - command: cat ./file.txt`

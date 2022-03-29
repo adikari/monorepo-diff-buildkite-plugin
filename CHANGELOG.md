@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0]
+
+### Added
+- Added support for [Group Steps](https://buildkite.com/docs/pipelines/group-step). [#89](https://github.com/chronotc/monorepo-diff-buildkite-plugin/pull/89) from [@xzyfer](https://github.com/xzyfer)
+
 ## [2.1.4]
 
 ### Fixed

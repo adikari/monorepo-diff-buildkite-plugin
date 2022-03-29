@@ -135,7 +135,8 @@ EOM
             "non-existant-service"
           ],
           "config": {
-            "command": "echo \"hello-world\""
+            "group": "my group",
+            "command": "echo \"hello group\""
           }
         },
         {
@@ -176,10 +177,11 @@ steps:
   - coverage/**/*
   - tests/*
   async: true
-- command: echo "hello-world"
+- group: my group
+  steps:
+  - command: echo "hello group"
 - wait
 - command: echo "hello world"
 - command: cat ./foo-file.txt
 EOM
 }
-
