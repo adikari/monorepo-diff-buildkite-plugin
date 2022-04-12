@@ -13,6 +13,11 @@ fi
 plugin=${BUILDKITE_PLUGINS:-""}
 version=$(echo $plugin | sed -e 's/.*monorepo-diff-buildkite-plugin//' -e 's/\".*//')
 kernel=$(uname -s | awk '{print tolower($0)}')
+allowed=("linux darwin")
+if ! [[ "${allowed[*]}" =~ ${kernel} ]]; then
+  exit 1
+fi
+
 repo="https://github.com/chronotc/monorepo-diff-buildkite-plugin"
 executable="monorepo-diff-buildkite-plugin-${kernel}-${arch}"
 test_mode="${BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_TEST_MODE:-false}"
