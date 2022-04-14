@@ -97,7 +97,8 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						},
 						"async": true,
 						"agents": {
-							"queue": "queue-1"
+							"queue": "queue-1",
+							"custom_tag": "custom_value"
 						},
 						"artifacts": [ "artifiact-1" ]
 					}
@@ -180,7 +181,7 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						},
 					},
 					Async:     true,
-					Agents:    Agent{Queue: "queue-1"},
+					Agents:    map[string]string{"queue": "queue-1", "custom_tag": "custom_value"},
 					Artifacts: []string{"artifiact-1"},
 				},
 			},

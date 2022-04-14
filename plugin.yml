@@ -43,9 +43,6 @@ configuration:
                   type: array
             agents:
               type: object
-              properties:
-                queue:
-                  type: string
             artifacts:
               type: array
             env:

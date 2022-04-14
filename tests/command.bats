@@ -115,7 +115,8 @@ EOM
             },
             "async": true,
             "agents": {
-              "queue": "foo-service-queue"
+              "queue": "foo-service-queue",
+              "custom_tag": "custom_value"
             },
             "artifacts": [
               "coverage/**/*",
@@ -173,6 +174,7 @@ steps:
     commit: commit-hash
   agents:
     queue: foo-service-queue
+    custom_tag: custom_value
   artifacts:
   - coverage/**/*
   - tests/*

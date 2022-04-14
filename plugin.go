@@ -46,16 +46,11 @@ type Step struct {
 	Label     string            `yaml:"label,omitempty"`
 	Build     Build             `yaml:"build,omitempty"`
 	Command   string            `yaml:"command,omitempty"`
-	Agents    Agent             `yaml:"agents,omitempty"`
+	Agents    map[string]string `yaml:"agents,omitempty"`
 	Artifacts []string          `yaml:"artifacts,omitempty"`
 	RawEnv    interface{}       `json:"env" yaml:",omitempty"`
 	Env       map[string]string `yaml:"env,omitempty"`
 	Async     bool              `yaml:"async,omitempty"`
-}
-
-// Agent is Buildkite agent definition
-type Agent struct {
-	Queue string `yaml:"queue,omitempty"`
 }
 
 // Build is buildkite build definition
