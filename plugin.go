@@ -79,18 +79,23 @@ func (s Step) MarshalYAML() (interface{}, error) {
 }
 
 func initializePlugin(data string) (Plugin, error) {
-	var plugins []map[string]Plugin
+	var pluginConfigs []map[string]json.RawMessage
 
-	err := json.Unmarshal([]byte(data), &plugins)
-
-	if err != nil {
+	if err := json.Unmarshal([]byte(data), &pluginConfigs); err != nil {
 		log.Debug(err)
 		return Plugin{}, errors.New("failed to parse plugin configuration")
 	}
 
-	for _, p := range plugins {
-		for key, plugin := range p {
+	for _, p := range pluginConfigs {
+		for key, pluginConfig := range p {
 			if strings.HasPrefix(key, pluginName) {
+				var plugin Plugin
+
+				if err := json.Unmarshal(pluginConfig, &plugin); err != nil {
+					log.Debug(err)
+					return Plugin{}, errors.New("failed to parse plugin configuration")
+				}
+
 				return plugin, nil
 			}
 		}
