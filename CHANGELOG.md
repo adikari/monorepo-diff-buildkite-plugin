@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.1]
+
+### Fixed
+- Detection of arm64 arch. [#84](https://github.com/chronotc/monorepo-diff-buildkite-plugin/pull/84) from [@LColman-SEEK](https://github.com/LColman-SEEK)
+- Panic when adjectent plugins used the same YAML fields. [#92](https://github.com/chronotc/monorepo-diff-buildkite-plugin/pull/92) from [@isaacsu](https://github.com/isaacsu)
+
 ## [2.2.0]
 
 ### Added
