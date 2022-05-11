@@ -79,18 +79,23 @@ func (s Step) MarshalYAML() (interface{}, error) {
 }
 
 func initializePlugin(data string) (Plugin, error) {
-	var plugins []map[string]Plugin
+	var pluginConfigs []map[string]json.RawMessage
 
-	err := json.Unmarshal([]byte(data), &plugins)
-
-	if err != nil {
+	if err := json.Unmarshal([]byte(data), &pluginConfigs); err != nil {
 		log.Debug(err)
 		return Plugin{}, errors.New("failed to parse plugin configuration")
 	}
 
-	for _, p := range plugins {
-		for key, plugin := range p {
+	for _, p := range pluginConfigs {
+		for key, pluginConfig := range p {
 			if strings.HasPrefix(key, pluginName) {
+				var plugin Plugin
+
+				if err := json.Unmarshal(pluginConfig, &plugin); err != nil {
+					log.Debug(err)
+					return Plugin{}, errors.New("failed to parse plugin configuration")
+				}
+
 				return plugin, nil
 			}
 		}
@@ -114,7 +119,12 @@ func (plugin *Plugin) UnmarshalJSON(data []byte) error {
 
 	*plugin = Plugin(*def)
 
-	plugin.Env = parseEnv(plugin.RawEnv)
+	parseResult, err := parseEnv(plugin.RawEnv)
+	if err != nil {
+		return errors.New("failed to parse plugin configuration")
+	}
+
+	plugin.Env = parseResult
 	plugin.RawEnv = nil
 
 	// Path can be string or an array of strings,
@@ -157,8 +167,8 @@ func setBuild(build *Build) {
 
 // appends top level env to Step.Env and Step.Build.Env
 func appendEnv(watch *WatchConfig, env map[string]string) {
-	watch.Step.Env = parseEnv(watch.Step.RawEnv)
-	watch.Step.Build.Env = parseEnv(watch.Step.Build.RawEnv)
+	watch.Step.Env, _ = parseEnv(watch.Step.RawEnv)
+	watch.Step.Build.Env, _ = parseEnv(watch.Step.Build.RawEnv)
 
 	for key, value := range env {
 		if watch.Step.Command != "" {
@@ -185,9 +195,13 @@ func appendEnv(watch *WatchConfig, env map[string]string) {
 }
 
 // parse env in format from env=env-value to map[env] = env-value
-func parseEnv(raw interface{}) map[string]string {
+func parseEnv(raw interface{}) (map[string]string, error) {
 	if raw == nil {
-		return nil
+		return nil, nil
+	}
+
+	if _, ok := raw.([]interface{}); ok != true {
+		return nil, errors.New("failed to parse plugin configuration")
 	}
 
 	result := make(map[string]string)
@@ -205,5 +219,5 @@ func parseEnv(raw interface{}) map[string]string {
 		}
 	}
 
-	return result
+	return result, nil
 }

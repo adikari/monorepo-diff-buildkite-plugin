@@ -203,3 +203,65 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 
 	assert.Equal(t, expected, got)
 }
+
+func TestPluginShouldOnlyFullyUnmarshallItselfAndNotOtherPlugins(t *testing.T) {
+	param := `[
+		{
+			"github.com/example/example-plugin#commit": {
+				"env": {
+					"EXAMPLE_TOKEN": {
+						"json-key": ".TOKEN",
+						"secret-id": "global/example/token"
+					}
+				}
+			}
+		},
+		{
+			"github.com/chronotc/monorepo-diff-buildkite-plugin#commit": {
+				"watch": [
+					{
+						"env": [
+							"EXAMPLE_TOKEN"
+						],
+						"path": [
+							".buildkite/**/*"
+						],
+						"config": {
+							"label": "Example label",
+							"command": "echo hello world\\n"
+						}
+					}
+				]
+			}
+		}
+	]
+	`
+	_, err := initializePlugin(param)
+	assert.NoError(t, err)
+}
+
+func TestPluginShouldErrorIfPluginConfigIsInvalid(t *testing.T) {
+	param := `[
+		{
+			"github.com/chronotc/monorepo-diff-buildkite-plugin#commit": {
+				"env": {
+					"anInvalidKey": "An Invalid Value"
+				},
+				"watch": [
+					{
+						"path": [
+							".buildkite/**/*"
+						],
+						"config": {
+							"label": "Example label",
+							"command": "echo hello world\\n"
+						}
+					}
+				]
+			}
+		}
+	]
+	`
+	_, err := initializePlugin(param)
+	assert.Error(t, err)
+}
