@@ -1,16 +1,29 @@
 #!/bin/bash
 set -euo pipefail
 
-if [[ "$(arch)" == "aarch64" ]]; then
+arch="$(arch)"
+arm=("arm armhf aarch64 aarch64_be armv6l armv7l armv8l arm64e") # arm64
+amd=("x86 x86pc i386 i686 i686-64 x64 x86_64 x86_64h athlon")    # amd64
+if [[ "${arm[*]}" =~ ${arch} ]]; then
   arch="arm64"
-else
+elif [[ "${amd[*]}" =~ ${arch} ]]; then
   arch="amd64"
+elif [[ "${arch}" != "ppc64le" ]]; then
+  echo -e "ERROR: unsupported architecture \"${arch}\"" >&2
+  exit 2
 fi
 
 plugin=${BUILDKITE_PLUGINS:-""}
 version=$(echo $plugin | sed -e 's/.*monorepo-diff-buildkite-plugin//' -e 's/\".*//')
+kernel=$(uname -s | awk '{print tolower($0)}')
+allowed=("linux darwin")
+if ! [[ "${allowed[*]}" =~ ${kernel} ]]; then
+  echo -e "ERROR: unsupported kernel \"${kernel}\"" >&2
+  exit 3
+fi
+
 repo="https://github.com/chronotc/monorepo-diff-buildkite-plugin"
-executable="monorepo-diff-buildkite-plugin-linux-${arch}"
+executable="monorepo-diff-buildkite-plugin-${kernel}-${arch}"
 test_mode="${BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_TEST_MODE:-false}"
 
 if [ -z ${version} ]; then
