@@ -239,3 +239,29 @@ func TestPluginShouldOnlyFullyUnmarshallItselfAndNotOtherPlugins(t *testing.T) {
 	_, err := initializePlugin(param)
 	assert.NoError(t, err)
 }
+
+func TestPluginShouldErrorIfPluginConfigIsInvalid(t *testing.T) {
+	param := `[
+		{
+			"github.com/chronotc/monorepo-diff-buildkite-plugin#commit": {
+				"env": {
+					"anInvalidKey": "An Invalid Value"
+				},
+				"watch": [
+					{
+						"path": [
+							".buildkite/**/*"
+						],
+						"config": {
+							"label": "Example label",
+							"command": "echo hello world\\n"
+						}
+					}
+				]
+			}
+		}
+	]
+	`
+	_, err := initializePlugin(param)
+	assert.Error(t, err)
+}
