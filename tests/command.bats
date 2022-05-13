@@ -140,6 +140,26 @@ EOM
           }
         },
         {
+          "path": [
+            "bat-service/",
+            "non-existant-service"
+          ],
+          "config": {
+            "command": "echo \"i can fail\" && exit -1",
+            "soft_fail": true
+          }
+        },
+        {
+          "path": [
+            "bat-service/",
+            "non-existant-service"
+          ],
+          "config": {
+            "command": "echo \"i can fail\" && exit 1",
+            "soft_fail": [{ "exit_status": 1 }, { "exit_status": "255" }]
+          }
+        },
+        {
           "path": "**/*.md",
           "config": {
             "trigger": "markdown-pipeline"
@@ -180,6 +200,12 @@ steps:
 - group: my group
   steps:
   - command: echo "hello group"
+- command: echo "i can fail" && exit -1
+  soft_fail: true
+- command: echo "i can fail" && exit 1
+  soft_fail:
+  - exit_status: 1
+  - exit_status: "255"
 - wait
 - command: echo "hello world"
 - command: cat ./foo-file.txt

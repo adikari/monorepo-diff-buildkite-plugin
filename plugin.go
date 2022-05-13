@@ -51,6 +51,7 @@ type Step struct {
 	RawEnv    interface{}       `json:"env" yaml:",omitempty"`
 	Env       map[string]string `yaml:"env,omitempty"`
 	Async     bool              `yaml:"async,omitempty"`
+	SoftFail  interface{}       `json:"soft_fail" yaml:"soft_fail,omitempty"`
 }
 
 // Agent is Buildkite agent definition
