@@ -167,8 +167,12 @@ func (s *Step) UnmarshalJSON(data []byte) error {
 	switch s.SoftFail.(type) {
 	case bool:
 		s.SoftFail = s.SoftFail.(bool)
-	case map[string]interface{}:
-		s.SoftFail = SoftFail{ExitStatus: s.SoftFail.(map[string]interface{})["exit_status"]}
+	case []interface{}:
+		var result []SoftFail
+		for _, v := range s.SoftFail.([]interface{}) {
+			result = append(result, SoftFail{ExitStatus: v.(map[string]interface{})["exit_status"]})
+		}
+		s.SoftFail = result
 	}
 	return nil
 }
