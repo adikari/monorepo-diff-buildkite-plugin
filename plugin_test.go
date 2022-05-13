@@ -167,7 +167,7 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						"env4": "env-4",
 						"hi":   "bye",
 					},
-					SoftFail: []SoftFail{{ExitStatus: "*"}},
+					SoftFail: []interface{}{map[string]interface{}{"exit_status": "*"}},
 				},
 			},
 			{
@@ -190,8 +190,8 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 					Async:     true,
 					Agents:    Agent{Queue: "queue-1"},
 					Artifacts: []string{"artifiact-1"},
-					SoftFail: []SoftFail{{
-						ExitStatus: float64(127),
+					SoftFail: []interface{}{map[string]interface{}{
+						"exit_status": float64(127),
 					}},
 				},
 			},
