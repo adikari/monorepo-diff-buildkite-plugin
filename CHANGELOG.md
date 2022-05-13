@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0]
+
+### Added
+- Added support for `soft_failure` step attribute. [#93](https://github.com/chronotc/monorepo-diff-buildkite-plugin/pull/93) from [@isaacsu](https://github.com/isaacsu)
+
 ## [2.2.1]
 
 ### Fixed
