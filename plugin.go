@@ -158,11 +158,11 @@ func (plugin *Plugin) UnmarshalJSON(data []byte) error {
 
 func (s *Step) UnmarshalJSON(data []byte) error {
 	type plain Step
-	def := &plain{}
+	init := &plain{}
 
-	_ = json.Unmarshal(data, def)
+	_ = json.Unmarshal(data, init)
 
-	*s = Step(*def)
+	*s = Step(*init)
 
 	switch s.SoftFail.(type) {
 	case bool:
