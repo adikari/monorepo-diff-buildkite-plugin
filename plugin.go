@@ -40,7 +40,7 @@ type Group struct {
 }
 
 type SoftFail struct {
-	ExitStatus interface{} `json:"exit_status" yaml:"exit_status"`
+	ExitStatus interface{} `yaml:"exit_status"`
 }
 
 // Step is buildkite pipeline definition
@@ -55,8 +55,7 @@ type Step struct {
 	RawEnv    interface{}       `json:"env" yaml:",omitempty"`
 	Env       map[string]string `yaml:"env,omitempty"`
 	Async     bool              `yaml:"async,omitempty"`
-	SoftFail  SoftFail          `json:"soft_fail" yaml:"soft_fail,omitempty"`
-	// SoftFail interface{} `json:"soft_fail" yaml:"soft_fail,omitempty"`
+	SoftFail  interface{}       `json:"soft_fail" yaml:"soft_fail,omitempty"`
 }
 
 // Agent is Buildkite agent definition
@@ -72,9 +71,6 @@ type Build struct {
 	RawEnv  interface{}       `json:"env" yaml:",omitempty"`
 	Env     map[string]string `yaml:"env,omitempty"`
 }
-
-// go type assertions
-// do assertion on s.SoftFail if it is boolean or SoftFail struct
 
 func (s Step) MarshalYAML() (interface{}, error) {
 	if s.Group == "" {
@@ -157,6 +153,23 @@ func (plugin *Plugin) UnmarshalJSON(data []byte) error {
 		p.RawPath = nil
 	}
 
+	return nil
+}
+
+func (s *Step) UnmarshalJSON(data []byte) error {
+	type plain Step
+	def := &plain{}
+
+	_ = json.Unmarshal(data, def)
+
+	*s = Step(*def)
+
+	switch s.SoftFail.(type) {
+	case bool:
+		s.SoftFail = s.SoftFail.(bool)
+	case map[string]interface{}:
+		s.SoftFail = SoftFail{ExitStatus: s.SoftFail.(map[string]interface{})["exit_status"]}
+	}
 	return nil
 }
 
