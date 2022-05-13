@@ -75,7 +75,10 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						"command": "echo hello-world",
 						"env": [
 							"env4", "hi= bye"
-						]
+						],
+						"soft_fail": {
+							"exit_status": "*"
+						}
 					}
 				},
 				{
@@ -109,7 +112,10 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						"command": "echo hello-group",
 						"env": [
 							"env4", "hi= bye"
-						]
+						],
+						"soft_fail": {
+							"exit_status": 1
+						}
 					}
 				}
 			]
@@ -160,6 +166,7 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						"env4": "env-4",
 						"hi":   "bye",
 					},
+					SoftFail: SoftFail{ExitStatus: "*"},
 				},
 			},
 			{
@@ -196,6 +203,7 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						"env4": "env-4",
 						"hi":   "bye",
 					},
+					SoftFail: SoftFail{ExitStatus: float64(1)},
 				},
 			},
 		},

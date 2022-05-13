@@ -39,6 +39,10 @@ type Group struct {
 	Steps []Step `yaml:"steps"`
 }
 
+type SoftFail struct {
+	ExitStatus interface{} `json:"exit_status" yaml:"exit_status"`
+}
+
 // Step is buildkite pipeline definition
 type Step struct {
 	Group     string            `yaml:"group,omitempty"`
@@ -51,6 +55,8 @@ type Step struct {
 	RawEnv    interface{}       `json:"env" yaml:",omitempty"`
 	Env       map[string]string `yaml:"env,omitempty"`
 	Async     bool              `yaml:"async,omitempty"`
+	SoftFail  SoftFail          `json:"soft_fail" yaml:"soft_fail,omitempty"`
+	// SoftFail interface{} `json:"soft_fail" yaml:"soft_fail,omitempty"`
 }
 
 // Agent is Buildkite agent definition
@@ -66,6 +72,9 @@ type Build struct {
 	RawEnv  interface{}       `json:"env" yaml:",omitempty"`
 	Env     map[string]string `yaml:"env,omitempty"`
 }
+
+// go type assertions
+// do assertion on s.SoftFail if it is boolean or SoftFail struct
 
 func (s Step) MarshalYAML() (interface{}, error) {
 	if s.Group == "" {
