@@ -84,10 +84,25 @@ func stepsToTrigger(files []string, watch []WatchConfig) ([]Step, error) {
 		for _, p := range w.Paths {
 			for _, f := range files {
 				match, err := matchPath(p, f)
+
+				skip := false
+				for _, sp := range w.SkipPaths {
+					skipMatch, errSkip := matchPath(sp, f)
+
+					if errSkip != nil {
+						return nil, errSkip
+					}
+
+					if skipMatch {
+						skip = true
+					}
+				}
+
 				if err != nil {
 					return nil, err
 				}
-				if match {
+
+				if match && !skip {
 					steps = append(steps, w.Step)
 					break
 				}

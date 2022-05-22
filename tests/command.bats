@@ -164,6 +164,13 @@ EOM
           "config": {
             "trigger": "markdown-pipeline"
           }
+        },
+        {
+          "path": "**/*.md",
+          "skip_path": "**/*.secret.md",
+          "config": {
+            "trigger": "markdown-pipeline"
+          }
         }
       ]
     }

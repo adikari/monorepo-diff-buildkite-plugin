@@ -154,6 +154,10 @@ Declare a list of
     - assets/images/email
   config:
     trigger: email-deploy
+- path: services/webhooks
+  skip_path: services/webhooks/*.md
+  config:
+    trigger: webhooks-deploy
 ```
 
 ### `path`
@@ -163,6 +167,14 @@ If the `path` specified here in the appears in the `diff` output, a `trigger` st
 A list of paths can be provided to trigger the desired pipeline. Changes in any of the paths will initiate the pipeline provided in trigger.
 
 A `path` can also be a glob pattern. For example specify `path: "**/*.md"` to match all markdown files.
+
+### `skip_path`
+
+If the `skip_path` specified here in the appears in the `diff` output, the `trigger` step will not be added to the dynamically generated `pipeline.yaml`. However, if the `diff` output contains matches with `path` that don't match `skip_path`, the `trigger` step will still be added to the dynamically generated `pipeline.yaml`.
+
+A list of paths can be provided that should not trigger the desired pipeline. Changes in any of these paths will not initiate the pipeline provided in trigger.
+
+A `skip_path` can also be a glob pattern. For example specify `path: "**/*.md"` to not add the `trigger` step if only markdown files are modified.
 
 ### `config`
 
