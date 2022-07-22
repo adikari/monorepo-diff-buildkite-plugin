@@ -50,6 +50,37 @@ configuration:
               type: array
             env:
               type: array
+        nomatchConfig:
+          type: object
+          properties:
+            command:
+              type: string
+            trigger:
+              type: string
+            async:
+              type: boolean
+            label:
+              type: string
+            build:
+              type: object
+              properties:
+                message:
+                  type: string
+                commit:
+                  type: string
+                branch:
+                  type: string
+                env:
+                  type: array
+            agents:
+              type: object
+              properties:
+                queue:
+                  type: string
+            artifacts:
+              type: array
+            env:
+              type: array
     wait:
       type: boolean
     hooks:

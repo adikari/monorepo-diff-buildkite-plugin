@@ -29,9 +29,10 @@ type HookConfig struct {
 
 // WatchConfig Plugin watch configuration
 type WatchConfig struct {
-	RawPath interface{} `json:"path"`
-	Paths   []string
-	Step    Step `json:"config"`
+	RawPath     interface{} `json:"path"`
+	Paths       []string
+	Step        Step `json:"config"`
+	NomatchStep Step `json:"nomatchConfig"`
 }
 
 type Group struct {

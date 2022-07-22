@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.0]
+- Added support to upload steps if there is no match (`##NOMATCH##`)
+
 ## [2.3.0]
 
 ### Added

@@ -79,9 +79,13 @@ func diff(command string) ([]string, error) {
 
 func stepsToTrigger(files []string, watch []WatchConfig) ([]Step, error) {
 	steps := []Step{}
+	nomatchSteps := []Step{}
 
 	for _, w := range watch {
 		for _, p := range w.Paths {
+			if p == "##NOMATCH##" {
+				nomatchSteps = append(nomatchSteps, w.NomatchStep)
+			}
 			for _, f := range files {
 				match, err := matchPath(p, f)
 				if err != nil {
@@ -93,6 +97,9 @@ func stepsToTrigger(files []string, watch []WatchConfig) ([]Step, error) {
 				}
 			}
 		}
+	}
+	if len(nomatchSteps) > 0 && len(steps) < 1 {
+		steps = nomatchSteps
 	}
 
 	return dedupSteps(steps), nil
