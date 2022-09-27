@@ -32,7 +32,7 @@ func main() {
 
 	setupLogger(plugin.LogLevel)
 
-	if _, _, err := uploadPipeline(plugin, generatePipeline); err != nil {
-		log.Errorf("+++ failed to upload pipeline: %v", err)
+	if _, _, err = uploadPipeline(plugin, generatePipeline); err != nil {
+		log.Fatalf("+++ failed to upload pipeline: %v", err)
 	}
 }
