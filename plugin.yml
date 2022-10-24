@@ -1,6 +1,6 @@
-name: Monorepo Diff
+name: Monorepo-Diff
 description: Trigger pipelines on changes in watched folders
-author: https://github.com/monebag
+author: https://github.com/Anapaya
 requirements:
   - git
 configuration:

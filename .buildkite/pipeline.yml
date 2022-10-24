@@ -9,7 +9,7 @@ steps:
           run: plugin_test
   - label: ":bomb: Triggers"
     plugins:
-      - monebag/monorepo-diff:
+      - Anapaya/monorepo-diff:
           diff: "cat ./e2e/one-match-one-miss"
           watch:
             - path: "foo-service/"
@@ -23,7 +23,7 @@ steps:
             - command: echo "command hook 2"
   - label: ":bomb: Testing groups"
     plugins:
-      - monebag/monorepo-diff#v2.5.1:
+      - Anapaya/monorepo-diff:
           diff: "cat ./e2e/multiple-paths"
           watch:
             - path:
@@ -34,7 +34,7 @@ steps:
                 command: "echo i-am-running-in-a-group"
   - label: ":bomb: Testing hooks"
     plugins:
-      - monebag/monorepo-diff:
+      - Anapaya/monorepo-diff:
           diff: "cat ./e2e/multiple-paths"
           watch:
             - path: "user-service/"
@@ -53,7 +53,7 @@ steps:
             - command: echo "command hook 1"
   - label: ":bomb: Testing wait"
     plugins:
-      - monebag/monorepo-diff:
+      - Anapaya/monorepo-diff:
           diff: "cat ./e2e/multiple-paths"
           watch:
             - path:
@@ -64,7 +64,7 @@ steps:
           wait: true
   - label: ":bomb: Testing triggers and commands"
     plugins:
-      - monebag/monorepo-diff:
+      - Anapaya/monorepo-diff:
           diff: "cat ./e2e/commands-or-triggers"
           watch:
             - path: "user-service/"
