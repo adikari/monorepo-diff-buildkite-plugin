@@ -56,9 +56,7 @@ type Step struct {
 }
 
 // Agent is Buildkite agent definition
-type Agent struct {
-	Queue string `yaml:"queue,omitempty"`
-}
+type Agent map[string]string
 
 // Build is buildkite build definition
 type Build struct {
