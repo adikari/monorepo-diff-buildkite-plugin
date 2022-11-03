@@ -164,6 +164,13 @@ EOM
           "config": {
             "trigger": "markdown-pipeline"
           }
+        },
+
+        {
+          "path": "bat-service/",
+          "config": {
+            "command": ["echo one", "echo two"]
+          }
         }
       ]
     }
@@ -206,6 +213,9 @@ steps:
   soft_fail:
   - exit_status: 1
   - exit_status: "255"
+- command:
+  - echo one
+  - echo two
 - wait
 - command: echo "hello world"
 - command: cat ./foo-file.txt
