@@ -120,6 +120,15 @@
         "test",
         "infra"
       ]
+    },
+    {
+      "login": "nhurden",
+      "name": "Nicholas Hurden",
+      "avatar_url": "https://avatars.githubusercontent.com/u/316342?v=4",
+      "profile": "https://github.com/nhurden",
+      "contributions": [
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -127,5 +136,6 @@
   "projectOwner": "monebag",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "commitConvention": "angular"
 }
