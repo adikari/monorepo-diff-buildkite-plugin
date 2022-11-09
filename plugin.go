@@ -8,7 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-const pluginName = "github.com/chronotc/monorepo-diff"
+const pluginName = "github.com/monebag/monorepo-diff"
 
 // Plugin buildkite monorepo diff plugin structure
 type Plugin struct {

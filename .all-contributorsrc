@@ -124,7 +124,7 @@
   ],
   "contributorsPerLine": 7,
   "projectName": "monorepo-diff-buildkite-plugin",
-  "projectOwner": "chronotc",
+  "projectOwner": "monebag",
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": true

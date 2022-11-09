@@ -22,7 +22,7 @@ if ! [[ "${allowed[*]}" =~ ${kernel} ]]; then
   exit 3
 fi
 
-repo="https://github.com/chronotc/monorepo-diff-buildkite-plugin"
+repo="https://github.com/monebag/monorepo-diff-buildkite-plugin"
 executable="monorepo-diff-buildkite-plugin-${kernel}-${arch}"
 test_mode="${BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_TEST_MODE:-false}"
 

@@ -3,9 +3,9 @@
 First of all, thank you for your interest in contributing to this project.
 
 Before creating a pull request, please read and follow this contributing guide.
-Before participating in this project's activities, please read and follow [code of conduct](https://github.com/chronotc/monorepo-diff-buildkite-plugin/blob/master/CODE_OF_CONDUCT.md).
+Before participating in this project's activities, please read and follow [code of conduct](https://github.com/monebag/monorepo-diff-buildkite-plugin/blob/master/CODE_OF_CONDUCT.md).
 
-Please create an [issue](https://github.com/chronotc/monorepo-diff-buildkite-plugin/issues) before submitting a pull request. If it is a proposal for a new feature or changing existing functionality, initiate a discussion with maintainers first. If it's a fix for know bugs, a discussion is not required.
+Please create an [issue](https://github.com/monebag/monorepo-diff-buildkite-plugin/issues) before submitting a pull request. If it is a proposal for a new feature or changing existing functionality, initiate a discussion with maintainers first. If it's a fix for know bugs, a discussion is not required.
 
 ## Developing
 
@@ -13,13 +13,13 @@ Please create an [issue](https://github.com/chronotc/monorepo-diff-buildkite-plu
 - The project uses Makefile. Install `make` command.
 - Fork this repository.
 - Clone the forked repository.
--  Make changes (see [Formatting](https://github.com/chronotc/monorepo-diff-buildkite-plugin/blob/master/CONTRIBUTING.md#formatting)) and commit to your fork. Commit messages should follow the [Conventional Commits](https://www.conventionalcommits.org/) style.
-- Add appropriate unit tests (see [Testing](https://github.com/chronotc/monorepo-diff-buildkite-plugin/blob/master/CONTRIBUTING.md#testing)) for your changes.
+-  Make changes (see [Formatting](https://github.com/monebag/monorepo-diff-buildkite-plugin/blob/master/CONTRIBUTING.md#formatting)) and commit to your fork. Commit messages should follow the [Conventional Commits](https://www.conventionalcommits.org/) style.
+- Add appropriate unit tests (see [Testing](https://github.com/monebag/monorepo-diff-buildkite-plugin/blob/master/CONTRIBUTING.md#testing)) for your changes.
 - Update documentation if appropriate.
 - Create a pull request with your changes.
 - Github action will run the necessary checks against your pull request.
 - A maintainer will review the pull request once all checks are
-- A maintainer will merge and create a release (see [Releasing](https://github.com/chronotc/monorepo-diff-buildkite-plugin/blob/master/CONTRIBUTING.md#releasing)).
+- A maintainer will merge and create a release (see [Releasing](https://github.com/monebag/monorepo-diff-buildkite-plugin/blob/master/CONTRIBUTING.md#releasing)).
 
 ## Testing
 
@@ -38,8 +38,8 @@ All code must be formatted with `gofmt` (with the latest Go version) and pass `g
 
 One of the maintainers will create a release after merging the pull request.
 - Ensure documentation is updated appropriately.
-- Update [README.md]( https://github.com/chronotc/monorepo-diff-buildkite-plugin/blob/master/README.md ) to the next version number.
-- Update [ changelog ]( https://github.com/chronotc/monorepo-diff-buildkite-plugin/blob/master/CHANGELOG.md ) using guidelines from [Keep a Changelog](https://keepachangelog.com/).
+- Update [README.md]( https://github.com/monebag/monorepo-diff-buildkite-plugin/blob/master/README.md ) to the next version number.
+- Update [ changelog ]( https://github.com/monebag/monorepo-diff-buildkite-plugin/blob/master/CHANGELOG.md ) using guidelines from [Keep a Changelog](https://keepachangelog.com/).
 - Merge changes to master.
 - Create a new release. The version number must follow the format of `v<major>.<minor>.<patch>`. Eg. `v2.0.1`
 - Github actions automatically builds and attachs the binary to the release.

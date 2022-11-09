@@ -1,4 +1,4 @@
-module github.com/chronotc/monorepo-diff-buildkite-plugin
+module github.com/monebag/monorepo-diff-buildkite-plugin
 
 go 1.17
 
