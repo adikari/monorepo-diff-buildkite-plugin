@@ -7,6 +7,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestMain(m *testing.M) {
@@ -262,9 +263,10 @@ func TestGeneratePipeline(t *testing.T) {
   - trigger: foo-service-pipeline
     build:
       message: build message
-- wait
+- wait: null
 - command: echo "hello world"
-- command: cat ./file.txt`
+- command: cat ./file.txt
+`
 
 	plugin := Plugin{
 		Wait: true,
@@ -275,13 +277,39 @@ func TestGeneratePipeline(t *testing.T) {
 	}
 
 	pipeline, err := generatePipeline(steps, plugin)
+	require.NoError(t, err)
 	defer os.Remove(pipeline.Name())
 
-	if err != nil {
-		assert.Equal(t, true, false, err.Error())
+	got, err := ioutil.ReadFile(pipeline.Name())
+	require.NoError(t, err)
+
+	assert.Equal(t, want, string(got))
+}
+
+func TestGeneratePipelineWithNoSteps(t *testing.T) {
+	steps := []Step{}
+
+	want :=
+		`steps:
+- wait: null
+- command: echo "hello world"
+- command: cat ./file.txt
+`
+
+	plugin := Plugin{
+		Wait: true,
+		Hooks: []HookConfig{
+			{Command: "echo \"hello world\""},
+			{Command: "cat ./file.txt"},
+		},
 	}
 
-	got, _ := ioutil.ReadFile(pipeline.Name())
+	pipeline, err := generatePipeline(steps, plugin)
+	require.NoError(t, err)
+	defer os.Remove(pipeline.Name())
+
+	got, err := ioutil.ReadFile(pipeline.Name())
+	require.NoError(t, err)
 
 	assert.Equal(t, want, string(got))
 }

@@ -216,7 +216,7 @@ steps:
 - command:
   - echo one
   - echo two
-- wait
+- wait: null
 - command: echo "hello world"
 - command: cat ./foo-file.txt
 EOM

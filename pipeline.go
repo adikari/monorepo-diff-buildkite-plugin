@@ -12,9 +12,16 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// Pipeline is Buildkite pipeline definition
-type Pipeline struct {
-	Steps []Step
+// WaitStep represents a Buildkite Wait Step
+// https://buildkite.com/docs/pipelines/wait-step
+// We can't use Step here since the value for Wait is always nil
+// regardless of whether or not we want to include the key.
+type WaitStep struct{}
+
+func (WaitStep) MarshalYAML() (interface{}, error) {
+	return map[string]interface{}{
+		"wait": nil,
+	}, nil
 }
 
 // PipelineGenerator generates pipeline file
@@ -139,23 +146,30 @@ func dedupSteps(steps []Step) []Step {
 
 func generatePipeline(steps []Step, plugin Plugin) (*os.File, error) {
 	tmp, err := ioutil.TempFile(os.TempDir(), "bmrd-")
-	pipeline := Pipeline{Steps: steps}
-
 	if err != nil {
 		return nil, fmt.Errorf("could not create temporary pipeline file: %v", err)
+	}
+
+	yamlSteps := make([]yaml.Marshaler, len(steps))
+	for i, step := range steps {
+		yamlSteps[i] = step
+	}
+
+	if plugin.Wait {
+		yamlSteps = append(yamlSteps, WaitStep{})
+	}
+
+	for _, cmd := range plugin.Hooks {
+		yamlSteps = append(yamlSteps, Step{Command: cmd.Command})
+	}
+
+	pipeline := map[string][]yaml.Marshaler{
+		"steps": yamlSteps,
 	}
 
 	data, err := yaml.Marshal(&pipeline)
 	if err != nil {
 		return nil, fmt.Errorf("could not serialize the pipeline: %v", err)
-	}
-
-	if plugin.Wait {
-		data = append(data, "- wait"...)
-	}
-
-	for _, cmd := range plugin.Hooks {
-		data = append(data, "\n- command: "+cmd.Command...)
 	}
 
 	// Disable logging in context of go tests.
