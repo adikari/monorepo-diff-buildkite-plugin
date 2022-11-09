@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.0]
+
+### Fixed
+- Encode wait and hook steps with go-yaml by @nhurden in https://github.com/monebag/monorepo-diff-buildkite-plugin/pull/107
+- Rebuild plugin_test in the Makefile by @nhurden in https://github.com/monebag/monorepo-diff-buildkite-plugin/pull/108
+
+### Changed
+- Update paths to new org url by @adikari in https://github.com/monebag/monorepo-diff-buildkite-plugin/pull/110
+
 ## [2.4.0]
 - Support both "commands" and "command" key, of any type by @glittershark in https://github.com/monebag/monorepo-diff-buildkite-plugin/pull/104
 - use log.Fatalf when logging error by @pmenglund in https://github.com/monebag/monorepo-diff-buildkite-plugin/pull/102
