@@ -75,7 +75,8 @@
       "profile": "http://blog.englund.nu/",
       "contributions": [
         "code",
-        "test"
+        "test",
+        "bug"
       ]
     },
     {
