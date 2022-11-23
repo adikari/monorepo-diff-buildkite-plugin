@@ -37,9 +37,10 @@ func TestPluginShouldHaveDefaultValues(t *testing.T) {
 
 func TestPluginWithValidParameter(t *testing.T) {
 	param := ""
-	got, _ := initializePlugin(param)
+	got, err := initializePlugin(param)
 	expected := Plugin{}
 
+	assert.EqualError(t, err, "failed to parse plugin configuration")
 	assert.Equal(t, expected, got)
 }
 

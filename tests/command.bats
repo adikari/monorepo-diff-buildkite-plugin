@@ -186,9 +186,9 @@ EOM
 
   assert_success
 
-  assert_output --partial "--- :one: monorepo-diff"
-  assert_output --partial "Running diff command: echo foo-service/"
-  assert_output --partial "Output from diff: \nfoo-service/"
+  assert_output --partial "--- running monorepo-diff"
+  assert_output --partial "Running diff command: echo foo-service/ \nbat-service/"
+  assert_output --partial "Output from diff: \nfoo-service/ \nbat-service/"
 
   assert_output --partial << EOM
 steps:

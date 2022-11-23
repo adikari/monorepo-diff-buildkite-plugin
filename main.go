@@ -22,11 +22,12 @@ func setupLogger(logLevel string) {
 var Version string
 
 func main() {
-	log.Infof("--- :one: monorepo-diff %s", Version)
+	log.Infof("--- running monorepo-diff %s", Version)
 
 	plugin, err := initializePlugin(env("BUILDKITE_PLUGINS", ""))
 
 	if err != nil {
+		log.Debug(err)
 		log.Fatal(err)
 	}
 
