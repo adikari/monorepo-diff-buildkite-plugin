@@ -79,6 +79,8 @@ func (s Step) MarshalYAML() (interface{}, error) {
 }
 
 func initializePlugin(data string) (Plugin, error) {
+	log.Debugf("parsing plugin config: %v", data)
+
 	var pluginConfigs []map[string]json.RawMessage
 
 	if err := json.Unmarshal([]byte(data), &pluginConfigs); err != nil {
