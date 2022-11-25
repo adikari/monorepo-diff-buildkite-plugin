@@ -23,7 +23,7 @@ steps:
             - command: echo "command hook 2"
   - label: ":bomb: Testing groups"
     plugins:
-      - monebag/monorepo-diff:
+      - monebag/monorepo-diff#v2.5.1:
           diff: "cat ./e2e/multiple-paths"
           watch:
             - path:
