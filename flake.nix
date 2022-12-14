@@ -28,7 +28,7 @@
         monorepo-diff = pkgs.buildGo118Module ({
           inherit version;
           src = ./.;
-          vendorSha256 = pkgs.lib.fakeSha256;
+          vendorSha256 = "sha256-iEUbfIRJtyvXoE5VHra+07SIXmGSpWOHhVDI61vh0Ck=";
           pname = "monorepo-diff";
           ldflags = ''
             -X main.Version=${version}
