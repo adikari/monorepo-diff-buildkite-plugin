@@ -53,18 +53,18 @@ type Step struct {
 	Env       map[string]string `yaml:"env,omitempty"`
 	Async     bool              `yaml:"async,omitempty"`
 	SoftFail  interface{}       `json:"soft_fail" yaml:"soft_fail,omitempty"`
-  Notify    Notify            `yaml:"notify,omitempty"`
+  Notify    interface{}       `yaml:"notify,omitempty"`
 }
 
-// Notify is Buildkite notification definition
-type Notify struct {
-  Github GithubNotification `yaml:"github_commit_status,omitempty"`
-}
-
-// Github notification is Buildkite github commit status to post
-type GithubNotification struct {
-  Context string `yaml:"context,omitempty"`
-}
+// // Notify is Buildkite notification definition
+// type Notify struct {
+//   Github GithubNotification `yaml:"github_commit_status,omitempty"`
+// }
+//
+// // Github notification is Buildkite github commit status to post
+// type GithubNotification struct {
+//   Context string `yaml:"context,omitempty"`
+// }
 
 // Agent is Buildkite agent definition
 type Agent map[string]string
