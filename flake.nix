@@ -39,6 +39,7 @@
         apps = {
           default = mkApp {
             name = "monorepo-diff";
+            exePath = "/bin/monorepo-diff-buildkite-plugin";
             drv = monorepo-diff;
           };
         };
