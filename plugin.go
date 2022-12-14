@@ -57,12 +57,12 @@ type Step struct {
 }
 
 // Notify is Buildkite notification definition
-type Notify Struct {
+type Notify struct {
   Github GithubNotification `yaml:"github_commit_status,omitempty"`
 }
 
 // Github notification is Buildkite github commit status to post
-type GithubNotification Struct {
+type GithubNotification struct {
   Context string `yaml:"context,omitempty"`
 }
 
