@@ -102,7 +102,7 @@ func initializePlugin(data string) (Plugin, error) {
 	for _, p := range pluginConfigs {
 		for key, pluginConfig := range p {
       fmt.print(key)
-			if strings.HasPrefix(key, pluginName) {
+			if strings.Contains(key, pluginName) {
 				var plugin Plugin
 
 				if err := json.Unmarshal(pluginConfig, &plugin); err != nil {
