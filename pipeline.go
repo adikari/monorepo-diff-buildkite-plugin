@@ -145,8 +145,8 @@ func dedupSteps(steps []Step) []Step {
 }
 
 func generatePipeline(steps []Step, plugin Plugin) (*os.File, error) {
-  fmt.Printf("Steps:\n%s\n", string(steps))
-  fmt.Printf("Plugin:\n%s\n", string(plugin))
+  fmt.Printf("Steps:\n%+v\n", steps)
+  fmt.Printf("Plugin:\n%+v\n", plugin)
 
 	tmp, err := ioutil.TempFile(os.TempDir(), "bmrd-")
 	if err != nil {
