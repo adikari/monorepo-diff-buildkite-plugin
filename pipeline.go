@@ -145,6 +145,9 @@ func dedupSteps(steps []Step) []Step {
 }
 
 func generatePipeline(steps []Step, plugin Plugin) (*os.File, error) {
+  fmt.Printf("Steps:\n%s\n", string(steps))
+  fmt.Printf("Plugin:\n%s\n", string(plugin))
+
 	tmp, err := ioutil.TempFile(os.TempDir(), "bmrd-")
 	if err != nil {
 		return nil, fmt.Errorf("could not create temporary pipeline file: %v", err)
