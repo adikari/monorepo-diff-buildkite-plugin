@@ -8,7 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-const pluginName = "monorepo-diff-buildkite-plugin"
+const pluginName = "github.com/monebag/monorepo-diff-buildkite-plugin"
 
 // Plugin buildkite monorepo diff plugin structure
 type Plugin struct {
@@ -101,7 +101,7 @@ func initializePlugin(data string) (Plugin, error) {
 
 	for _, p := range pluginConfigs {
 		for key, pluginConfig := range p {
-			if strings.Contains(key, pluginName) {
+			if strings.HasPrefix(key, pluginName) {
 				var plugin Plugin
 
 				if err := json.Unmarshal(pluginConfig, &plugin); err != nil {
