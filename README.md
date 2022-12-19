@@ -18,7 +18,7 @@ If the version number is not provided then the most recent version of the plugin
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - Anapaya/monorepo-diff#v2.3.0-ana1:
+      - Anapaya/monorepo-diff#v2.5.1-ana:
           diff: "git diff --name-only HEAD~1"
           watch:
             - path: "bar-service/"
@@ -35,7 +35,7 @@ steps:
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - Anapaya/monorepo-diff#v2.3.0-ana1:
+      - Anapaya/monorepo-diff#v2.5.1-ana:
           diff: "git diff --name-only $(head -n 1 last_successful_build)"
           interpolation: false
           env:
@@ -131,7 +131,7 @@ Add `log_level` property to set the log level. Supported log levels are `debug` 
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - Anapaya/monorepo-diff#v2.3.0-ana1:
+      - Anapaya/monorepo-diff#v2.5.1-ana:
           diff: "git diff --name-only HEAD~1"
           log_level: "debug" # defaults to "info"
           watch:
@@ -162,6 +162,8 @@ If the `path` specified here in the appears in the `diff` output, a `trigger` st
 A list of paths can be provided to trigger the desired pipeline. Changes in any of the paths will initiate the pipeline provided in trigger.
 
 A `path` can also be a glob pattern. For example specify `path: "**/*.md"` to match all markdown files.
+
+Use `negate` to negate the matching logic and add a step when none of the provided paths match.
 
 ### `config`
 
@@ -207,7 +209,7 @@ hooks:
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - Anapaya/monorepo-diff#v2.3.0-ana1:
+      - Anapaya/monorepo-diff#v2.5.1-ana:
           diff: "git diff --name-only HEAD~1"
           watch:
             - path: app/cms/

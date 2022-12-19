@@ -230,6 +230,36 @@ func TestPipelinesStepsToTrigger(t *testing.T) {
 				{Trigger: "txt"},
 			},
 		},
+		"negated empty": {
+			ChangedFiles: []string{
+				"watch-path-1/text.txt",
+				"watch-path-2/.gitignore",
+			},
+			WatchConfigs: []WatchConfig{
+				{
+					Negate: true,
+					Paths:  []string{"watch-path-1"},
+					Step:   Step{Trigger: "service-1"},
+				},
+			},
+			Expected: []Step{},
+		},
+		"negated match": {
+			ChangedFiles: []string{
+				"watch-path-1/text.txt",
+				"watch-path-2/.gitignore",
+			},
+			WatchConfigs: []WatchConfig{
+				{
+					Negate: true,
+					Paths:  []string{"watch-path-3"},
+					Step:   Step{Trigger: "service-1"},
+				},
+			},
+			Expected: []Step{
+				{Trigger: "service-1"},
+			},
+		},
 	}
 	for name, tc := range testCases {
 		t.Run(name, func(t *testing.T) {

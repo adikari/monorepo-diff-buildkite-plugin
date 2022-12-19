@@ -88,6 +88,7 @@ func stepsToTrigger(files []string, watch []WatchConfig) ([]Step, error) {
 	steps := []Step{}
 
 	for _, w := range watch {
+		anyMatch := false
 		for _, p := range w.Paths {
 			for _, f := range files {
 				match, err := matchPath(p, f)
@@ -95,13 +96,15 @@ func stepsToTrigger(files []string, watch []WatchConfig) ([]Step, error) {
 					return nil, err
 				}
 				if match {
-					steps = append(steps, w.Step)
+					anyMatch = true
 					break
 				}
 			}
 		}
+		if w.Negate != anyMatch {
+			steps = append(steps, w.Step)
+		}
 	}
-
 	return dedupSteps(steps), nil
 }
 
