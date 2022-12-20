@@ -38,8 +38,6 @@ All code must be formatted with `gofmt` (with the latest Go version) and pass `g
 
 One of the maintainers will create a release after merging the pull request.
 - Ensure documentation is updated appropriately.
-- Update [README.md]( https://github.com/monebag/monorepo-diff-buildkite-plugin/blob/master/README.md ) to the next version number.
-- Update [ changelog ]( https://github.com/monebag/monorepo-diff-buildkite-plugin/blob/master/CHANGELOG.md ) using guidelines from [Keep a Changelog](https://keepachangelog.com/).
-- Merge changes to master.
-- Create a new release. The version number must follow the format of `v<major>.<minor>.<patch>`. Eg. `v2.0.1`
-- Github actions automatically builds and attachs the binary to the release.
+- Update all occurrences of plugin version in [README.md]( https://github.com/monebag/monorepo-diff-buildkite-plugin/blob/master/README.md ).
+- create and push the next tag version
+- Github actions will automatically create the release.
