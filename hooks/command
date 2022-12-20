@@ -87,7 +87,6 @@ download_binary_and_run() {
 
   local test_mode="${BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_TEST_MODE:-false}"
 
-  echo $_executable
   if [[ "$test_mode" == "false" ]]; then
     downloader "$_url" "$_executable"
 
