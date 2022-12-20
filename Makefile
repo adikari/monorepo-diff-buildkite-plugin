@@ -42,11 +42,6 @@ ifneq (${HAS_DOCKER},)
 	docker-compose run --rm plugin_lint
 endif
 
-.PHONY: clean
-clean-%:
-	rm -f coverage.out
-	rm -rf ${NAME}-$*-${ARCH}
-
 .PHONY: build
 build:
 ifneq (${HAS_GORELEASER},)
