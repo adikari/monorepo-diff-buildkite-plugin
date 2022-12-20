@@ -2,7 +2,7 @@ before:
   hooks:
     - go mod tidy
 builds:
-  - binary: safebox
+  - binary: monorepo-diff-buildkite-plugin
     env:
       - CGO_ENABLED=0
     goos:

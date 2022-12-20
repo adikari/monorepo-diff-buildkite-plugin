@@ -9,6 +9,7 @@ LDFLAGS += -X main.BuildSHA=${COMMIT}
 LDFLAGS += -X main.Version=${RELEASE_VERSION}
 
 HAS_DOCKER=$(shell command -v docker;)
+HAS_GORELEASER=$(shell command -v goreleaser;)
 
 .PHONY: all
 all: quality test
@@ -48,4 +49,9 @@ clean-%:
 
 .PHONY: build
 build:
-	goreleaser build --rm-dist
+ifneq (${HAS_GORELEASER},)
+	goreleaser build --rm-dist --skip-validate
+else
+	$(error goreleaser binary is missing, please install goreleaser)
+endif
+
