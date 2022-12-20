@@ -20,10 +20,20 @@ err() {
 }
 
 get_architecture() {
-  local _ostype="$(uname -s)"
-  local _cputype="$(uname -m)"
+  local _arch="$(arch)"
+  local _arm=("arm armhf aarch64 aarch64_be armv6l armv7l armv8l arm64e") # arm64
+  local _amd=("x86 x86pc i386 i686 i686-64 x64 x86_64 x86_64h athlon")    # amd64
 
-  RETVAL="$_ostype"_"$_cputype"
+  if [[ "${_arm[*]}" =~ ${_arch} ]]; then
+    _arch="arm64"
+  elif [[ "${amd[*]}" =~ ${arch} ]]; then
+    _arch="amd64"
+  elif [[ "${arch}" != "ppc64le" ]]; then
+    echo -e "ERROR: unsupported architecture \"${_arch}\"" >&2
+    exit 2
+  fi
+
+  RETVAL="$_arch"
 }
 
 need_cmd() {
@@ -63,24 +73,17 @@ get_version() {
 download_binary_and_run() {
   get_architecture || return 1
   local _arch="$RETVAL"
-
-  local _ext=""
-  case "$_arch" in
-    *windows*)
-      _ext=".exe"
-      ;;
-  esac
-
   local _executable="monorepo-diff-buildkite-plugin"
   local _repo="https://github.com/monebag/monorepo-diff-buildkite-plugin"
+  echo $_arch
 
   get_version || return 1
   local _version="$RETVAL"
 
   if [ -z ${_version} ]; then
-    _url=${_repo}/releases/latest/download/${_executable}_${_arch}${_ext}
+    _url=${_repo}/releases/latest/download/${_executable}_${_arch}
   else
-    _url=${_repo}/releases/download/${_version:1}/${_executable}_${_arch}${_ext}
+    _url=${_repo}/releases/download/${_version:1}/${_executable}_${_arch}
   fi
 
   local test_mode="${BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_TEST_MODE:-false}"
