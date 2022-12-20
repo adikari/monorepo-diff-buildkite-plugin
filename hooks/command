@@ -75,7 +75,6 @@ download_binary_and_run() {
   local _arch="$RETVAL"
   local _executable="monorepo-diff-buildkite-plugin"
   local _repo="https://github.com/monebag/monorepo-diff-buildkite-plugin"
-  echo $_arch
 
   get_version || return 1
   local _version="$RETVAL"
