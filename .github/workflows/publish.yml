@@ -19,6 +19,12 @@ jobs:
           go-version: '>=1.19.1'
           cache: true
 
+      - name: Check quality
+        run: make quality
+
+      - name: Run tests
+        run: make test
+
       - name: Release Binaries
         uses: goreleaser/goreleaser-action@v3
         with:
