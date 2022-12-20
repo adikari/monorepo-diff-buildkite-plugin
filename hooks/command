@@ -26,9 +26,9 @@ get_architecture() {
 
   if [[ "${_arm[*]}" =~ ${_arch} ]]; then
     _arch="arm64"
-  elif [[ "${amd[*]}" =~ ${arch} ]]; then
+  elif [[ "${_amd[*]}" =~ ${_arch} ]]; then
     _arch="amd64"
-  elif [[ "${arch}" != "ppc64le" ]]; then
+  elif [[ "${_arch}" != "ppc64le" ]]; then
     echo -e "ERROR: unsupported architecture \"${_arch}\"" >&2
     exit 2
   fi
