@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -euo pipefail
 
 check_cmd() {
@@ -20,7 +20,8 @@ err() {
 }
 
 get_architecture() {
-  local _arch="$(arch)"
+  local _ostype="$(uname -s)"
+  local _arch="$(uname -m)"
   local _arm=("arm armhf aarch64 aarch64_be armv6l armv7l armv8l arm64e") # arm64
   local _amd=("x86 x86pc i386 i686 i686-64 x64 x86_64 x86_64h athlon")    # amd64
 
@@ -33,7 +34,7 @@ get_architecture() {
     exit 2
   fi
 
-  RETVAL="$_arch"
+  RETVAL="${_ostype}_${_arch}"
 }
 
 need_cmd() {
