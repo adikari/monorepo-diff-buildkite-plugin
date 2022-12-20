@@ -19,10 +19,10 @@ func setupLogger(logLevel string) {
 }
 
 // Version of plugin
-var Version string
+var version string = "dev"
 
 func main() {
-	log.Infof("--- running monorepo-diff %s", Version)
+	log.Infof("--- running monorepo-diff-buildkite-plugin %s", version)
 
 	plugin, err := initializePlugin(env("BUILDKITE_PLUGINS", ""))
 

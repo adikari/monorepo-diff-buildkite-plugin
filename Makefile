@@ -1,12 +1,4 @@
 NAME=monorepo-diff-buildkite-plugin
-RELEASE_VERSION?= "0.0.0"
-ARCH?= "amd64"
-COMMIT=$(shell git rev-parse --short=7 HEAD)
-TIMESTAMP:=$(shell date -u '+%Y-%m-%dT%I:%M:%SZ')
-
-LDFLAGS += -X main.BuildTime=${TIMESTAMP}
-LDFLAGS += -X main.BuildSHA=${COMMIT}
-LDFLAGS += -X main.Version=${RELEASE_VERSION}
 
 HAS_DOCKER=$(shell command -v docker;)
 HAS_GORELEASER=$(shell command -v goreleaser;)
