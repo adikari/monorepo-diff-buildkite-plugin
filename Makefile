@@ -47,5 +47,5 @@ clean-%:
 	rm -rf ${NAME}-$*-${ARCH}
 
 .PHONY: build
-build-%: clean-%
-	GOOS=$* GOARCH=${ARCH} CGO_ENABLED=0 go build -ldflags '${LDFLAGS}' -o ${PWD}/${NAME}-$*-${ARCH}
+build:
+	goreleaser build --rm-dist
