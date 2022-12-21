@@ -39,8 +39,6 @@ type Group struct {
 	Steps []Step `yaml:"steps"`
 }
 
-// GithubCommitStatus  GithubNotification    `yaml:"github_commit_status,omitempty"`
-
 type GithubStatusNotification struct {
 	Context string `yaml:"context,omitempty"`
 }
@@ -178,15 +176,52 @@ func (plugin *Plugin) UnmarshalJSON(data []byte) error {
 }
 
 func setNotify(notifications *[]Notify, rawNotify *[]map[string]interface{}) {
-	emails := []string{}
-
 	for _, v := range *rawNotify {
-		if email := v["email"]; email != nil {
-			emails = append(emails, email.(string))
+		var notify Notify
+
+		if condition, ok := isString(v["if"]); ok {
+			notify.Condition = condition
+		}
+
+		if email, ok := isString(v["email"]); ok {
+			notify.Email = email
+			*notifications = append(*notifications, notify)
+			continue
+		}
+
+		if basecamp, ok := isString(v["basecamp_campfire"]); ok {
+			notify.Basecamp = basecamp
+			*notifications = append(*notifications, notify)
+			continue
+		}
+
+		if webhook, ok := isString(v["webhook"]); ok {
+			notify.Webhook = webhook
+			*notifications = append(*notifications, notify)
+			continue
+		}
+
+		if pagerduty, ok := isString(v["pagerduty_change_event"]); ok {
+			notify.PagerDuty = pagerduty
+			*notifications = append(*notifications, notify)
+			continue
+		}
+
+		if slack, ok := isString(v["slack"]); ok {
+			notify.Slack = slack
+			*notifications = append(*notifications, notify)
+			continue
+		}
+
+		if github, ok := v["github_commit_status"].(map[string]interface{}); ok {
+			if context, ok := isString(github["context"]); ok {
+				notify.GithubStatus = GithubStatusNotification{Context: context}
+				*notifications = append(*notifications, notify)
+			}
+			continue
 		}
 	}
 
-	// *notifications = append(*notifications, Notify{Email: emails})
 	*rawNotify = nil
 }
 
