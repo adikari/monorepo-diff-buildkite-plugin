@@ -26,6 +26,28 @@ configuration:
               type: string
             trigger:
               type: string
+            soft_fail:
+              type: [object, boolean]
+            notify:
+              type: [array]
+              properties:
+                email:
+                  type: string
+                basecamp_campfire:
+                  type: string
+                webhook:
+                  type: string
+                pagerduty_change_event:
+                  type: string
+                github_commit_status:
+                  type: object
+                  properties:
+                    context:
+                      type: string
+                slack:
+                  type: string
+                if:
+                  type: string
             async:
               type: boolean
             label:
