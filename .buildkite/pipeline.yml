@@ -18,6 +18,8 @@ steps:
             - path: "hello-service/"
               config:
                 trigger: "this-pipeline-does-not-exists"
+                notify:
+                  - email: subash@monebag.com
           hooks:
             - command: echo "command hook 1"
             - command: echo "command hook 2"

@@ -53,6 +53,58 @@ steps:
 EOM
 }
 
+@test "Pipeline is generated with notifications" {
+  export BUILDKITE_BRANCH="go-rewrite"
+  export BUILDKITE_MESSAGE="some message"
+  export BUILDKITE_COMMIT="commit-hash"
+
+  export BUILDKITE_PLUGINS='[{
+    "github.com/monebag/monorepo-diff-buildkite-plugin": {
+      "diff":"echo foo-service/",
+      "log_level": "debug",
+      "watch": [
+        {
+          "path":"foo-service/",
+          "config": {
+            "trigger":"foo-service"
+            "notify": [
+              { "email": "foo@gmail.com" },
+              { "email": "bar@gmail.com" },
+              { "basecamp_campfire": "https://basecamp-url" },
+              { "webhook": "https://webhook-url", "if": "build.state === failed" },
+              { "pagerduty_change_event": "636d22Yourc0418Key3b49eee3e8" },
+              { "github_commit_status": { "context" : "my-custom-status" } },
+              { "slack": "@someuser", "if": "build.state === passed" }
+            ]
+          },
+        }
+      ]
+    }
+  }]'
+
+  run $PWD/hooks/command
+
+  assert_success
+
+  assert_output --partial << EOM
+steps:
+- trigger: foo-service
+  build:
+    message: some message
+    branch: go-rewrite
+    commit: commit-hash
+  notify:
+  - email: foo@gmail.com
+  - basecamp_campfire: https://basecamp-url
+  - webhook: https://webhook-url
+    if: build.state === "failed"
+  - pagerduty_change_event: 636d22Yourc0418Key3b49eee3e8
+  - github_commit_status:
+      context: my-custom-status
+  - slack: '@someuser'
+    if: build.state === "passed"
+EOM
+}
 @test "Pipeline is generated with build config from env" {
   export BUILDKITE_BRANCH="go-rewrite"
   export BUILDKITE_MESSAGE="some message"
