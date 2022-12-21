@@ -8,11 +8,15 @@ steps:
             - path: "foo-service/"
               config:
                 trigger: "foo-service"
-                notify:
-                  - slack: "#alerts"
+
             - path: "hello-service/"
               config:
                 trigger: "this-pipeline-does-not-exists"
+            - path: "hello-service/"
+              config:
+                command: "echo running command"
+                notify:
+                  - slack: "#alerts"
           hooks:
             - command: echo "command hook 1"
             - command: echo "command hook 2"
