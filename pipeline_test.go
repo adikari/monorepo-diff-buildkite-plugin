@@ -5,27 +5,9 @@ import (
 	"os"
 	"testing"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
-
-func TestMain(m *testing.M) {
-	// disable logs in test
-	log.SetOutput(ioutil.Discard)
-
-	// set some env variables for using in tests
-	os.Setenv("BUILDKITE_COMMIT", "123")
-	os.Setenv("BUILDKITE_MESSAGE", "fix: temp file not correctly deleted")
-	os.Setenv("BUILDKITE_BRANCH", "go-rewrite")
-	os.Setenv("env3", "env-3")
-	os.Setenv("env4", "env-4")
-	os.Setenv("TEST_MODE", "true")
-
-	run := m.Run()
-
-	os.Exit(run)
-}
 
 func mockGeneratePipeline(steps []Step, plugin Plugin) (*os.File, error) {
 	mockFile, _ := os.Create("pipeline.txt")

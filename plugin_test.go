@@ -60,6 +60,10 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 				"env2=env-2",
 				"env3"
 			],
+		"notify": [
+							{ "email": "foo@gmail.com" },
+							{ "email": "bar@gmail.com" }
+						],
 			"watch": [
 				{
 					"path": "watch-path-1",
@@ -79,7 +83,12 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						],
 						"soft_fail": [{
 							"exit_status": "*"
-						}]
+						}],
+						"notify": [
+							{ "email": "foo@gmail.com" },
+							{ "email": "bar@gmail.com" },
+							{ "slack": { "channel": "tes"}}
+						]
 					}
 				},
 				{
@@ -170,6 +179,9 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						"hi":   "bye",
 					},
 					SoftFail: []interface{}{map[string]interface{}{"exit_status": "*"}},
+					Notify: []Notify{
+						{Email: []string{"foo@gmail.com", "bar@gmail.com"}},
+					},
 				},
 			},
 			{

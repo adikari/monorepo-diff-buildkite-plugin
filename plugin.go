@@ -39,32 +39,30 @@ type Group struct {
 	Steps []Step `yaml:"steps"`
 }
 
-// Step is buildkite pipeline definition
-type Step struct {
-	Group     string            `yaml:"group,omitempty"`
-	Trigger   string            `yaml:"trigger,omitempty"`
-	Label     string            `yaml:"label,omitempty"`
-	Build     Build             `yaml:"build,omitempty"`
-	Command   interface{}       `yaml:"command,omitempty"`
-	Commands  interface{}       `yaml:"commands,omitempty"`
-	Agents    Agent             `yaml:"agents,omitempty"`
-	Artifacts []string          `yaml:"artifacts,omitempty"`
-	RawEnv    interface{}       `json:"env" yaml:",omitempty"`
-	Env       map[string]string `yaml:"env,omitempty"`
-	Async     bool              `yaml:"async,omitempty"`
-	SoftFail  interface{}       `json:"soft_fail" yaml:"soft_fail,omitempty"`
-  Notify    interface{}       `yaml:"notify,omitempty"`
+// GithubCommitStatus  GithubNotification    `yaml:"github_commit_status,omitempty"`
+
+// Notify is Buildkite notification definition
+type Notify struct {
+	Email []string `yaml:"email,omitempty"`
 }
 
-// // Notify is Buildkite notification definition
-// type Notify struct {
-//   Github GithubNotification `yaml:"github_commit_status,omitempty"`
-// }
-//
-// // Github notification is Buildkite github commit status to post
-// type GithubNotification struct {
-//   Context string `yaml:"context,omitempty"`
-// }
+// Step is buildkite pipeline definition
+type Step struct {
+	Group     string                   `yaml:"group,omitempty"`
+	Trigger   string                   `yaml:"trigger,omitempty"`
+	Label     string                   `yaml:"label,omitempty"`
+	Build     Build                    `yaml:"build,omitempty"`
+	Command   interface{}              `yaml:"command,omitempty"`
+	Commands  interface{}              `yaml:"commands,omitempty"`
+	Agents    Agent                    `yaml:"agents,omitempty"`
+	Artifacts []string                 `yaml:"artifacts,omitempty"`
+	RawEnv    interface{}              `json:"env" yaml:",omitempty"`
+	Env       map[string]string        `yaml:"env,omitempty"`
+	Async     bool                     `yaml:"async,omitempty"`
+	SoftFail  interface{}              `json:"soft_fail" yaml:"soft_fail,omitempty"`
+	RawNotify []map[string]interface{} `json:"notify" yaml:",omitempty"`
+	Notify    []Notify                 `yaml:"notify,omitempty"`
+}
 
 // Agent is Buildkite agent definition
 type Agent map[string]string
@@ -76,6 +74,7 @@ type Build struct {
 	Commit  string            `yaml:"commit,omitempty"`
 	RawEnv  interface{}       `json:"env" yaml:",omitempty"`
 	Env     map[string]string `yaml:"env,omitempty"`
+	// Notify  []Notify          `yaml:"notify,omitempty"`
 }
 
 func (s Step) MarshalYAML() (interface{}, error) {
@@ -156,12 +155,29 @@ func (plugin *Plugin) UnmarshalJSON(data []byte) error {
 			setBuild(&plugin.Watch[i].Step.Build)
 		}
 
+		if plugin.Watch[i].Step.RawNotify != nil {
+			setNotify(&plugin.Watch[i].Step.Notify, &plugin.Watch[i].Step.RawNotify)
+		}
+
 		appendEnv(&plugin.Watch[i], plugin.Env)
 
 		p.RawPath = nil
 	}
 
 	return nil
+}
+
+func setNotify(notifications *[]Notify, rawNotify *[]map[string]interface{}) {
+	emails := []string{}
+
+	for _, v := range *rawNotify {
+		if email := v["email"]; email != nil {
+			emails = append(emails, email.(string))
+		}
+	}
+
+	*notifications = append(*notifications, Notify{Email: emails})
+	*rawNotify = nil
 }
 
 func setBuild(build *Build) {
