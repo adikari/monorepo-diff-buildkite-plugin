@@ -228,19 +228,15 @@ func TestGeneratePipeline(t *testing.T) {
 			Trigger:  "foo-service-pipeline",
 			Build:    Build{Message: "build message"},
 			SoftFail: true,
-			Notify: []Notify{
-				{Email: "foo@gmail.com"},
-				{Email: "bar@gmail.com"},
+			Notify: []StepNotify{
+				{Slack: "@adikari"},
 			},
 		},
 		{
 			Trigger: "notification-test",
 			Command: "command-to-run",
-			Notify: []Notify{
-				{Email: "foo@gmail.com"},
+			Notify: []StepNotify{
 				{Basecamp: "https://basecamp-url"},
-				{Webhook: "https://webhook-url"},
-				{PagerDuty: "636d22Yourc0418Key3b49eee3e8"},
 				{GithubStatus: GithubStatusNotification{Context: "my-custom-status"}},
 				{Slack: "@someuser", Condition: "build.state === \"passed\""},
 			},
@@ -252,22 +248,50 @@ func TestGeneratePipeline(t *testing.T) {
 		},
 	}
 
+	plugin := Plugin{
+		Wait: true,
+		Notify: []PluginNotify{
+			{Email: "foo@gmail.com"},
+			{Email: "bar@gmail.com"},
+			{Basecamp: "https://basecamp"},
+			{Webhook: "https://webhook"},
+			{Slack: "@adikari"},
+			{GithubStatus: GithubStatusNotification{Context: "github-context"}},
+		},
+		Hooks: []HookConfig{
+			{Command: "echo \"hello world\""},
+			{Command: "cat ./file.txt"},
+		},
+	}
+
+	pipeline, err := generatePipeline(steps, plugin)
+
+	require.NoError(t, err)
+	defer os.Remove(pipeline.Name())
+
+	got, err := ioutil.ReadFile(pipeline.Name())
+	require.NoError(t, err)
+
 	want :=
-		`steps:
+		`notify:
+- email: foo@gmail.com
+- email: bar@gmail.com
+- basecamp_campfire: https://basecamp
+- webhook: https://webhook
+- slack: '@adikari'
+- github_commit_status:
+    context: github-context
+steps:
 - trigger: foo-service-pipeline
   build:
     message: build message
   soft_fail: true
   notify:
-  - email: foo@gmail.com
-  - email: bar@gmail.com
+  - slack: '@adikari'
 - trigger: notification-test
   command: command-to-run
   notify:
-  - email: foo@gmail.com
   - basecamp_campfire: https://basecamp-url
-  - webhook: https://webhook-url
-  - pagerduty_change_event: 636d22Yourc0418Key3b49eee3e8
   - github_commit_status:
       context: my-custom-status
   - slack: '@someuser'
@@ -281,21 +305,6 @@ func TestGeneratePipeline(t *testing.T) {
 - command: echo "hello world"
 - command: cat ./file.txt
 `
-
-	plugin := Plugin{
-		Wait: true,
-		Hooks: []HookConfig{
-			{Command: "echo \"hello world\""},
-			{Command: "cat ./file.txt"},
-		},
-	}
-
-	pipeline, err := generatePipeline(steps, plugin)
-	require.NoError(t, err)
-	defer os.Remove(pipeline.Name())
-
-	got, err := ioutil.ReadFile(pipeline.Name())
-	require.NoError(t, err)
 
 	assert.Equal(t, want, string(got))
 }

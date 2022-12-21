@@ -24,6 +24,21 @@ func (WaitStep) MarshalYAML() (interface{}, error) {
 	}, nil
 }
 
+func (s Step) MarshalYAML() (interface{}, error) {
+	if s.Group == "" {
+		type Alias Step
+		return (Alias)(s), nil
+	}
+
+	label := s.Group
+	s.Group = ""
+	return Group{Label: label, Steps: []Step{s}}, nil
+}
+
+func (n PluginNotify) MarshalYAML() (interface{}, error) {
+	return n, nil
+}
+
 // PipelineGenerator generates pipeline file
 type PipelineGenerator func(steps []Step, plugin Plugin) (*os.File, error)
 
@@ -151,6 +166,7 @@ func generatePipeline(steps []Step, plugin Plugin) (*os.File, error) {
 	}
 
 	yamlSteps := make([]yaml.Marshaler, len(steps))
+
 	for i, step := range steps {
 		yamlSteps[i] = step
 	}
@@ -163,8 +179,17 @@ func generatePipeline(steps []Step, plugin Plugin) (*os.File, error) {
 		yamlSteps = append(yamlSteps, Step{Command: cmd.Command})
 	}
 
+	yamlNotify := make([]yaml.Marshaler, len(plugin.Notify))
+	for i, n := range plugin.Notify {
+		yamlNotify[i] = n
+	}
+
 	pipeline := map[string][]yaml.Marshaler{
 		"steps": yamlSteps,
+	}
+
+	if len(yamlNotify) > 0 {
+		pipeline["notify"] = yamlNotify
 	}
 
 	data, err := yaml.Marshal(&pipeline)

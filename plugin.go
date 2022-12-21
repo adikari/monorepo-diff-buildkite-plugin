@@ -20,6 +20,8 @@ type Plugin struct {
 	Watch         []WatchConfig
 	RawEnv        interface{} `json:"env"`
 	Env           map[string]string
+	RawNotify     []map[string]interface{} `json:"notify" yaml:",omitempty"`
+	Notify        []PluginNotify           `yaml:"notify,omitempty"`
 }
 
 // HookConfig Plugin hook configuration
@@ -39,19 +41,28 @@ type Group struct {
 	Steps []Step `yaml:"steps"`
 }
 
+// GithubStatusNotification is notification config for github_commit_status
 type GithubStatusNotification struct {
 	Context string `yaml:"context,omitempty"`
 }
 
-// Notify is Buildkite notification definition
-type Notify struct {
-	Email        string                   `yaml:"email,omitempty"`
-	Basecamp     string                   `yaml:"basecamp_campfire,omitempty"`
+// PluginNotify is notify configuration for pipeline
+type PluginNotify struct {
 	Slack        string                   `yaml:"slack,omitempty"`
-	Webhook      string                   `yaml:"webhook,omitempty"`
+	Email        string                   `yaml:"email,omitempty"`
 	PagerDuty    string                   `yaml:"pagerduty_change_event,omitempty"`
-	Condition    string                   `yaml:"if,omitempty"`
+	Webhook      string                   `yaml:"webhook,omitempty"`
+	Basecamp     string                   `yaml:"basecamp_campfire,omitempty"`
 	GithubStatus GithubStatusNotification `yaml:"github_commit_status,omitempty"`
+	Condition    string                   `yaml:"if,omitempty"`
+}
+
+// Notify is Buildkite notification definition
+type StepNotify struct {
+	Slack        string                   `yaml:"slack,omitempty"`
+	Basecamp     string                   `yaml:"basecamp_campfire,omitempty"`
+	GithubStatus GithubStatusNotification `yaml:"github_commit_status,omitempty"`
+	Condition    string                   `yaml:"if,omitempty"`
 }
 
 // Step is buildkite pipeline definition
@@ -69,7 +80,7 @@ type Step struct {
 	Async     bool                     `yaml:"async,omitempty"`
 	SoftFail  interface{}              `json:"soft_fail" yaml:"soft_fail,omitempty"`
 	RawNotify []map[string]interface{} `json:"notify" yaml:",omitempty"`
-	Notify    []Notify                 `yaml:"notify,omitempty"`
+	Notify    []StepNotify             `yaml:"notify,omitempty"`
 }
 
 // Agent is Buildkite agent definition
@@ -85,15 +96,57 @@ type Build struct {
 	// Notify  []Notify          `yaml:"notify,omitempty"`
 }
 
-func (s Step) MarshalYAML() (interface{}, error) {
-	if s.Group == "" {
-		type Alias Step
-		return (Alias)(s), nil
+// UnmarshalJSON set defaults properties
+func (plugin *Plugin) UnmarshalJSON(data []byte) error {
+	type plain Plugin
+
+	def := &plain{
+		Diff:          "git diff --name-only HEAD~1",
+		Wait:          false,
+		LogLevel:      "info",
+		Interpolation: true,
 	}
 
-	label := s.Group
-	s.Group = ""
-	return Group{Label: label, Steps: []Step{s}}, nil
+	_ = json.Unmarshal(data, def)
+
+	*plugin = Plugin(*def)
+
+	parseResult, err := parseEnv(plugin.RawEnv)
+	if err != nil {
+		return errors.New("failed to parse plugin configuration")
+	}
+
+	plugin.Env = parseResult
+	plugin.RawEnv = nil
+
+	setPluginNotify(&plugin.Notify, &plugin.RawNotify)
+
+	// Path can be string or an array of strings,
+	// handle both cases and create an array of paths.
+	for i, p := range plugin.Watch {
+		switch p.RawPath.(type) {
+		case string:
+			plugin.Watch[i].Paths = []string{plugin.Watch[i].RawPath.(string)}
+		case []interface{}:
+			for _, v := range plugin.Watch[i].RawPath.([]interface{}) {
+				plugin.Watch[i].Paths = append(plugin.Watch[i].Paths, v.(string))
+			}
+		}
+
+		if plugin.Watch[i].Step.Trigger != "" {
+			setBuild(&plugin.Watch[i].Step.Build)
+		}
+
+		if plugin.Watch[i].Step.RawNotify != nil {
+			setNotify(&plugin.Watch[i].Step.Notify, &plugin.Watch[i].Step.RawNotify)
+		}
+
+		appendEnv(&plugin.Watch[i], plugin.Env)
+
+		p.RawPath = nil
+	}
+
+	return nil
 }
 
 func initializePlugin(data string) (Plugin, error) {
@@ -124,60 +177,9 @@ func initializePlugin(data string) (Plugin, error) {
 	return Plugin{}, errors.New("could not initialize plugin")
 }
 
-// UnmarshalJSON set defaults properties
-func (plugin *Plugin) UnmarshalJSON(data []byte) error {
-	type plain Plugin
-
-	def := &plain{
-		Diff:          "git diff --name-only HEAD~1",
-		Wait:          false,
-		LogLevel:      "info",
-		Interpolation: true,
-	}
-
-	_ = json.Unmarshal(data, def)
-
-	*plugin = Plugin(*def)
-
-	parseResult, err := parseEnv(plugin.RawEnv)
-	if err != nil {
-		return errors.New("failed to parse plugin configuration")
-	}
-
-	plugin.Env = parseResult
-	plugin.RawEnv = nil
-
-	// Path can be string or an array of strings,
-	// handle both cases and create an array of paths.
-	for i, p := range plugin.Watch {
-		switch p.RawPath.(type) {
-		case string:
-			plugin.Watch[i].Paths = []string{plugin.Watch[i].RawPath.(string)}
-		case []interface{}:
-			for _, v := range plugin.Watch[i].RawPath.([]interface{}) {
-				plugin.Watch[i].Paths = append(plugin.Watch[i].Paths, v.(string))
-			}
-		}
-
-		if plugin.Watch[i].Step.Trigger != "" {
-			setBuild(&plugin.Watch[i].Step.Build)
-		}
-
-		if plugin.Watch[i].Step.RawNotify != nil {
-			setNotify(&plugin.Watch[i].Step.Notify, &plugin.Watch[i].Step.RawNotify)
-		}
-
-		appendEnv(&plugin.Watch[i], plugin.Env)
-
-		p.RawPath = nil
-	}
-
-	return nil
-}
-
-func setNotify(notifications *[]Notify, rawNotify *[]map[string]interface{}) {
+func setPluginNotify(notifications *[]PluginNotify, rawNotify *[]map[string]interface{}) {
 	for _, v := range *rawNotify {
-		var notify Notify
+		var notify PluginNotify
 
 		if condition, ok := isString(v["if"]); ok {
 			notify.Condition = condition
@@ -203,6 +205,38 @@ func setNotify(notifications *[]Notify, rawNotify *[]map[string]interface{}) {
 
 		if pagerduty, ok := isString(v["pagerduty_change_event"]); ok {
 			notify.PagerDuty = pagerduty
+			*notifications = append(*notifications, notify)
+			continue
+		}
+
+		if slack, ok := isString(v["slack"]); ok {
+			notify.Slack = slack
+			*notifications = append(*notifications, notify)
+			continue
+		}
+
+		if github, ok := v["github_commit_status"].(map[string]interface{}); ok {
+			if context, ok := isString(github["context"]); ok {
+				notify.GithubStatus = GithubStatusNotification{Context: context}
+				*notifications = append(*notifications, notify)
+			}
+			continue
+		}
+	}
+
+	*rawNotify = nil
+}
+
+func setNotify(notifications *[]StepNotify, rawNotify *[]map[string]interface{}) {
+	for _, v := range *rawNotify {
+		var notify StepNotify
+
+		if condition, ok := isString(v["if"]); ok {
+			notify.Condition = condition
+		}
+
+		if basecamp, ok := isString(v["basecamp_campfire"]); ok {
+			notify.Basecamp = basecamp
 			*notifications = append(*notifications, notify)
 			continue
 		}
