@@ -20,6 +20,8 @@ type Plugin struct {
 	Watch         []WatchConfig
 	RawEnv        interface{} `json:"env"`
 	Env           map[string]string
+	RawNotify     []map[string]interface{} `json:"notify" yaml:",omitempty"`
+	Notify        []PluginNotify           `yaml:"notify,omitempty"`
 }
 
 // HookConfig Plugin hook configuration
@@ -39,11 +41,13 @@ type Group struct {
 	Steps []Step `yaml:"steps"`
 }
 
+// GithubStatusNotification is notification config for github_commit_status
 type GithubStatusNotification struct {
 	Context string `yaml:"context,omitempty"`
 }
 
-type PipelineNotify struct {
+// PluginNotify is notify configuration for pipeline
+type PluginNotify struct {
 	Slack        string                   `yaml:"slack,omitempty"`
 	Email        string                   `yaml:"email,omitempty"`
 	PagerDuty    string                   `yaml:"pagerduty_change_event,omitempty"`
@@ -90,45 +94,6 @@ type Build struct {
 	RawEnv  interface{}       `json:"env" yaml:",omitempty"`
 	Env     map[string]string `yaml:"env,omitempty"`
 	// Notify  []Notify          `yaml:"notify,omitempty"`
-}
-
-func (s Step) MarshalYAML() (interface{}, error) {
-	if s.Group == "" {
-		type Alias Step
-		return (Alias)(s), nil
-	}
-
-	label := s.Group
-	s.Group = ""
-	return Group{Label: label, Steps: []Step{s}}, nil
-}
-
-func initializePlugin(data string) (Plugin, error) {
-	log.Debugf("parsing plugin config: %v", data)
-
-	var pluginConfigs []map[string]json.RawMessage
-
-	if err := json.Unmarshal([]byte(data), &pluginConfigs); err != nil {
-		log.Debug(err)
-		return Plugin{}, errors.New("failed to parse plugin configuration")
-	}
-
-	for _, p := range pluginConfigs {
-		for key, pluginConfig := range p {
-			if strings.HasPrefix(key, pluginName) {
-				var plugin Plugin
-
-				if err := json.Unmarshal(pluginConfig, &plugin); err != nil {
-					log.Debug(err)
-					return Plugin{}, errors.New("failed to parse plugin configuration")
-				}
-
-				return plugin, nil
-			}
-		}
-	}
-
-	return Plugin{}, errors.New("could not initialize plugin")
 }
 
 // UnmarshalJSON set defaults properties
@@ -180,6 +145,34 @@ func (plugin *Plugin) UnmarshalJSON(data []byte) error {
 	}
 
 	return nil
+}
+
+func initializePlugin(data string) (Plugin, error) {
+	log.Debugf("parsing plugin config: %v", data)
+
+	var pluginConfigs []map[string]json.RawMessage
+
+	if err := json.Unmarshal([]byte(data), &pluginConfigs); err != nil {
+		log.Debug(err)
+		return Plugin{}, errors.New("failed to parse plugin configuration")
+	}
+
+	for _, p := range pluginConfigs {
+		for key, pluginConfig := range p {
+			if strings.HasPrefix(key, pluginName) {
+				var plugin Plugin
+
+				if err := json.Unmarshal(pluginConfig, &plugin); err != nil {
+					log.Debug(err)
+					return Plugin{}, errors.New("failed to parse plugin configuration")
+				}
+
+				return plugin, nil
+			}
+		}
+	}
+
+	return Plugin{}, errors.New("could not initialize plugin")
 }
 
 func setNotify(notifications *[]StepNotify, rawNotify *[]map[string]interface{}) {

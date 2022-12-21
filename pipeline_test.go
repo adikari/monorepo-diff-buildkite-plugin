@@ -248,8 +248,40 @@ func TestGeneratePipeline(t *testing.T) {
 		},
 	}
 
+	plugin := Plugin{
+		Wait: true,
+		Notify: []PluginNotify{
+			{Email: "foo@gmail.com"},
+			{Email: "bar@gmail.com"},
+			{Basecamp: "https://basecamp"},
+			{Webhook: "https://webhook"},
+			{Slack: "@adikari"},
+			{GithubStatus: GithubStatusNotification{Context: "github-context"}},
+		},
+		Hooks: []HookConfig{
+			{Command: "echo \"hello world\""},
+			{Command: "cat ./file.txt"},
+		},
+	}
+
+	pipeline, err := generatePipeline(steps, plugin)
+
+	require.NoError(t, err)
+	defer os.Remove(pipeline.Name())
+
+	got, err := ioutil.ReadFile(pipeline.Name())
+	require.NoError(t, err)
+
 	want :=
-		`steps:
+		`notify:
+- email: foo@gmail.com
+- email: bar@gmail.com
+- basecamp_campfire: https://basecamp
+- webhook: https://webhook
+- slack: '@adikari'
+- github_commit_status:
+    context: github-context
+steps:
 - trigger: foo-service-pipeline
   build:
     message: build message
@@ -273,21 +305,6 @@ func TestGeneratePipeline(t *testing.T) {
 - command: echo "hello world"
 - command: cat ./file.txt
 `
-
-	plugin := Plugin{
-		Wait: true,
-		Hooks: []HookConfig{
-			{Command: "echo \"hello world\""},
-			{Command: "cat ./file.txt"},
-		},
-	}
-
-	pipeline, err := generatePipeline(steps, plugin)
-	require.NoError(t, err)
-	defer os.Remove(pipeline.Name())
-
-	got, err := ioutil.ReadFile(pipeline.Name())
-	require.NoError(t, err)
 
 	assert.Equal(t, want, string(got))
 }

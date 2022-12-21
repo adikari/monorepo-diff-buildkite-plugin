@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io/ioutil"
 	"os"
 	"testing"
 
@@ -13,7 +12,7 @@ func TestMain(m *testing.M) {
 	log.SetLevel(log.DebugLevel)
 
 	// disable logs in test
-	log.SetOutput(ioutil.Discard)
+	// log.SetOutput(ioutil.Discard)
 
 	// set some env variables for using in tests
 	os.Setenv("BUILDKITE_COMMIT", "123")
