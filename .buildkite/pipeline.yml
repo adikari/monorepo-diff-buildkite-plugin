@@ -8,7 +8,6 @@ steps:
             - path: "foo-service/"
               config:
                 trigger: "foo-service"
-
             - path: "hello-service/"
               config:
                 trigger: "this-pipeline-does-not-exists"
