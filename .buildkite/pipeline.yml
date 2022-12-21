@@ -15,14 +15,14 @@ steps:
             - path: "foo-service/"
               config:
                 trigger: "foo-service"
-            - path: "hello-service/"
-              config:
-                trigger: "this-pipeline-does-not-exists"
                 notify:
                   - email: subash@monebag.com
                   - slack: "@monebag"
                   - webhook: "https://webhook.com"
                     if: build.state === "passed"
+            - path: "hello-service/"
+              config:
+                trigger: "this-pipeline-does-not-exists"
           hooks:
             - command: echo "command hook 1"
             - command: echo "command hook 2"
