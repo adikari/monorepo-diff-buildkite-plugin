@@ -66,6 +66,7 @@ EOM
         { "email": "foo@gmail.com" },
         { "basecamp_campfire": "https://basecamp-url" },
         { "github_commit_status": { "context" : "my-custom-status" } },
+        { "pagerduty_change_event": "pagerduty-event" },
         { "slack": "@someuser" },
         { "webhook": "https://webhook-url" }
       ],
@@ -101,6 +102,7 @@ notify:
 - basecamp_campfire: https://basecamp-url
 - github_commit_status:
     context: my-custom-status
+- pagerduty_change_event: pagerduty-event
 - slack: '@someuser'
 - webhook: https://webhook-url
 steps:

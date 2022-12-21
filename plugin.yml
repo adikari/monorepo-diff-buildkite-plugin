@@ -13,6 +13,26 @@ configuration:
       type: boolean
     env:
       type: array
+    notify:
+      type: [array]
+      properties:
+        email:
+          type: string
+        webhook:
+          type: string
+        pagerduty_change_event:
+          type: string
+        basecamp_campfire:
+          type: string
+        github_commit_status:
+          type: object
+          properties:
+            context:
+              type: string
+        slack:
+          type: string
+        if:
+          type: string
     watch:
       type: array
       properties:
@@ -31,13 +51,7 @@ configuration:
             notify:
               type: [array]
               properties:
-                email:
-                  type: string
                 basecamp_campfire:
-                  type: string
-                webhook:
-                  type: string
-                pagerduty_change_event:
                   type: string
                 github_commit_status:
                   type: object
