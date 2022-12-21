@@ -49,6 +49,19 @@ steps:
               config:
                 command: "buildkite-agent pipeline upload ops/.buildkite/pipeline.yml"
                 label: "Upload pipeline"
+                notify:
+                  - email: foo@gmail.com
+                  - basecamp_campfire: https://basecamp-url
+                  - webhook: https://webhook-url
+                  - pagerduty_change_event: 636d22Yourc0418Key3b49eee3e8
+                  - github_commit_status:
+                      context: my-custom-status
+                  - slack: '@someuser'
+                    if: build.state === "passed"
+                # soft_fail: true
+                soft_fail:
+                  - exit_status: 1
+                  - exit_status: "255"
                 retry:
                   automatic:
                   - limit: 2

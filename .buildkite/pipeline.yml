@@ -1,16 +1,9 @@
 steps:
-  - label: ":lint-roller: Lint"
-    plugins:
-      - docker-compose#v3.3.0:
-          run: plugin_lint
-  - label: ":test_tube: Tests"
-    plugins:
-      - docker-compose#v3.3.0:
-          run: plugin_test
   - label: ":bomb: Triggers"
     plugins:
       - monebag/monorepo-diff:
           diff: "cat ./e2e/one-match-one-miss"
+          log_level: "debug"
           watch:
             - path: "foo-service/"
               config:
@@ -19,7 +12,6 @@ steps:
                   - email: subash@monebag.com
                   - slack: "@monebag"
                   - webhook: "https://webhook.com"
-                    if: build.state === "passed"
             - path: "hello-service/"
               config:
                 trigger: "this-pipeline-does-not-exists"
