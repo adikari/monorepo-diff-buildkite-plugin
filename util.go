@@ -37,3 +37,16 @@ func env(key, fallback string) string {
 
 	return fallback
 }
+
+func isString(val interface{}) (string, bool) {
+	if val == nil {
+		return "", false
+	}
+
+	switch val.(type) {
+	case string:
+		return val.(string), true
+	}
+
+	return "", false
+}

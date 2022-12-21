@@ -1,17 +1,15 @@
-FROM golang:1.19-alpine as go
-
-RUN apk add --no-cache git make \
-  && go install github.com/goreleaser/goreleaser@latest
+FROM goreleaser/goreleaser:v1.13.1-amd64 as go
 
 WORKDIR /plugin
 
 COPY . .
 
-RUN make build
+RUN goreleaser build --rm-dist --skip-validate --config .goreleaser-test.yml
 
 FROM buildkite/plugin-tester
 
-COPY . .
+COPY tests /plugin/tests
+COPY hooks /plugin/hooks
 
 COPY --from=go \
   /plugin/dist/monorepo-diff-buildkite-plugin_linux_amd64_v1/monorepo-diff-buildkite-plugin \

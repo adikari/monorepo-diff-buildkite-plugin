@@ -60,6 +60,10 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 				"env2=env-2",
 				"env3"
 			],
+		"notify": [
+							{ "email": "foo@gmail.com" },
+							{ "email": "bar@gmail.com" }
+						],
 			"watch": [
 				{
 					"path": "watch-path-1",
@@ -79,7 +83,16 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						],
 						"soft_fail": [{
 							"exit_status": "*"
-						}]
+						}],
+						"notify": [
+							{ "email": "foo@gmail.com" },
+							{ "email": "bar@gmail.com" },
+							{ "basecamp_campfire": "https://basecamp-url" },
+							{ "webhook": "https://webhook-url", "if": "build.state === 'failed'" },
+							{ "pagerduty_change_event": "636d22Yourc0418Key3b49eee3e8" },
+							{ "github_commit_status": { "context" : "my-custom-status" } },
+							{ "slack": "@someuser", "if": "build.state === 'passed'" }
+						]
 					}
 				},
 				{
@@ -170,6 +183,15 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						"hi":   "bye",
 					},
 					SoftFail: []interface{}{map[string]interface{}{"exit_status": "*"}},
+					Notify: []Notify{
+						{Email: "foo@gmail.com"},
+						{Email: "bar@gmail.com"},
+						{Basecamp: "https://basecamp-url"},
+						{Webhook: "https://webhook-url", Condition: "build.state === 'failed'"},
+						{PagerDuty: "636d22Yourc0418Key3b49eee3e8"},
+						{GithubStatus: GithubStatusNotification{Context: "my-custom-status"}},
+						{Slack: "@someuser", Condition: "build.state === 'passed'"},
+					},
 				},
 			},
 			{

@@ -5,27 +5,9 @@ import (
 	"os"
 	"testing"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
-
-func TestMain(m *testing.M) {
-	// disable logs in test
-	log.SetOutput(ioutil.Discard)
-
-	// set some env variables for using in tests
-	os.Setenv("BUILDKITE_COMMIT", "123")
-	os.Setenv("BUILDKITE_MESSAGE", "fix: temp file not correctly deleted")
-	os.Setenv("BUILDKITE_BRANCH", "go-rewrite")
-	os.Setenv("env3", "env-3")
-	os.Setenv("env4", "env-4")
-	os.Setenv("TEST_MODE", "true")
-
-	run := m.Run()
-
-	os.Exit(run)
-}
 
 func mockGeneratePipeline(steps []Step, plugin Plugin) (*os.File, error) {
 	mockFile, _ := os.Create("pipeline.txt")
@@ -243,8 +225,25 @@ func TestPipelinesStepsToTrigger(t *testing.T) {
 func TestGeneratePipeline(t *testing.T) {
 	steps := []Step{
 		{
-			Trigger: "foo-service-pipeline",
-			Build:   Build{Message: "build message"},
+			Trigger:  "foo-service-pipeline",
+			Build:    Build{Message: "build message"},
+			SoftFail: true,
+			Notify: []Notify{
+				{Email: "foo@gmail.com"},
+				{Email: "bar@gmail.com"},
+			},
+		},
+		{
+			Trigger: "notification-test",
+			Command: "command-to-run",
+			Notify: []Notify{
+				{Email: "foo@gmail.com"},
+				{Basecamp: "https://basecamp-url"},
+				{Webhook: "https://webhook-url"},
+				{PagerDuty: "636d22Yourc0418Key3b49eee3e8"},
+				{GithubStatus: GithubStatusNotification{Context: "my-custom-status"}},
+				{Slack: "@someuser", Condition: "build.state === \"passed\""},
+			},
 		},
 		{
 			Group:   "my group",
@@ -258,6 +257,21 @@ func TestGeneratePipeline(t *testing.T) {
 - trigger: foo-service-pipeline
   build:
     message: build message
+  soft_fail: true
+  notify:
+  - email: foo@gmail.com
+  - email: bar@gmail.com
+- trigger: notification-test
+  command: command-to-run
+  notify:
+  - email: foo@gmail.com
+  - basecamp_campfire: https://basecamp-url
+  - webhook: https://webhook-url
+  - pagerduty_change_event: 636d22Yourc0418Key3b49eee3e8
+  - github_commit_status:
+      context: my-custom-status
+  - slack: '@someuser'
+    if: build.state === "passed"
 - group: my group
   steps:
   - trigger: foo-service-pipeline

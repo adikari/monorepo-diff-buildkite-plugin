@@ -39,20 +39,37 @@ type Group struct {
 	Steps []Step `yaml:"steps"`
 }
 
+type GithubStatusNotification struct {
+	Context string `yaml:"context,omitempty"`
+}
+
+// Notify is Buildkite notification definition
+type Notify struct {
+	Email        string                   `yaml:"email,omitempty"`
+	Basecamp     string                   `yaml:"basecamp_campfire,omitempty"`
+	Slack        string                   `yaml:"slack,omitempty"`
+	Webhook      string                   `yaml:"webhook,omitempty"`
+	PagerDuty    string                   `yaml:"pagerduty_change_event,omitempty"`
+	Condition    string                   `yaml:"if,omitempty"`
+	GithubStatus GithubStatusNotification `yaml:"github_commit_status,omitempty"`
+}
+
 // Step is buildkite pipeline definition
 type Step struct {
-	Group     string            `yaml:"group,omitempty"`
-	Trigger   string            `yaml:"trigger,omitempty"`
-	Label     string            `yaml:"label,omitempty"`
-	Build     Build             `yaml:"build,omitempty"`
-	Command   interface{}       `yaml:"command,omitempty"`
-	Commands  interface{}       `yaml:"commands,omitempty"`
-	Agents    Agent             `yaml:"agents,omitempty"`
-	Artifacts []string          `yaml:"artifacts,omitempty"`
-	RawEnv    interface{}       `json:"env" yaml:",omitempty"`
-	Env       map[string]string `yaml:"env,omitempty"`
-	Async     bool              `yaml:"async,omitempty"`
-	SoftFail  interface{}       `json:"soft_fail" yaml:"soft_fail,omitempty"`
+	Group     string                   `yaml:"group,omitempty"`
+	Trigger   string                   `yaml:"trigger,omitempty"`
+	Label     string                   `yaml:"label,omitempty"`
+	Build     Build                    `yaml:"build,omitempty"`
+	Command   interface{}              `yaml:"command,omitempty"`
+	Commands  interface{}              `yaml:"commands,omitempty"`
+	Agents    Agent                    `yaml:"agents,omitempty"`
+	Artifacts []string                 `yaml:"artifacts,omitempty"`
+	RawEnv    interface{}              `json:"env" yaml:",omitempty"`
+	Env       map[string]string        `yaml:"env,omitempty"`
+	Async     bool                     `yaml:"async,omitempty"`
+	SoftFail  interface{}              `json:"soft_fail" yaml:"soft_fail,omitempty"`
+	RawNotify []map[string]interface{} `json:"notify" yaml:",omitempty"`
+	Notify    []Notify                 `yaml:"notify,omitempty"`
 }
 
 // Agent is Buildkite agent definition
@@ -65,6 +82,7 @@ type Build struct {
 	Commit  string            `yaml:"commit,omitempty"`
 	RawEnv  interface{}       `json:"env" yaml:",omitempty"`
 	Env     map[string]string `yaml:"env,omitempty"`
+	// Notify  []Notify          `yaml:"notify,omitempty"`
 }
 
 func (s Step) MarshalYAML() (interface{}, error) {
@@ -145,12 +163,66 @@ func (plugin *Plugin) UnmarshalJSON(data []byte) error {
 			setBuild(&plugin.Watch[i].Step.Build)
 		}
 
+		if plugin.Watch[i].Step.RawNotify != nil {
+			setNotify(&plugin.Watch[i].Step.Notify, &plugin.Watch[i].Step.RawNotify)
+		}
+
 		appendEnv(&plugin.Watch[i], plugin.Env)
 
 		p.RawPath = nil
 	}
 
 	return nil
+}
+
+func setNotify(notifications *[]Notify, rawNotify *[]map[string]interface{}) {
+	for _, v := range *rawNotify {
+		var notify Notify
+
+		if condition, ok := isString(v["if"]); ok {
+			notify.Condition = condition
+		}
+
+		if email, ok := isString(v["email"]); ok {
+			notify.Email = email
+			*notifications = append(*notifications, notify)
+			continue
+		}
+
+		if basecamp, ok := isString(v["basecamp_campfire"]); ok {
+			notify.Basecamp = basecamp
+			*notifications = append(*notifications, notify)
+			continue
+		}
+
+		if webhook, ok := isString(v["webhook"]); ok {
+			notify.Webhook = webhook
+			*notifications = append(*notifications, notify)
+			continue
+		}
+
+		if pagerduty, ok := isString(v["pagerduty_change_event"]); ok {
+			notify.PagerDuty = pagerduty
+			*notifications = append(*notifications, notify)
+			continue
+		}
+
+		if slack, ok := isString(v["slack"]); ok {
+			notify.Slack = slack
+			*notifications = append(*notifications, notify)
+			continue
+		}
+
+		if github, ok := v["github_commit_status"].(map[string]interface{}); ok {
+			if context, ok := isString(github["context"]); ok {
+				notify.GithubStatus = GithubStatusNotification{Context: context}
+				*notifications = append(*notifications, notify)
+			}
+			continue
+		}
+	}
+
+	*rawNotify = nil
 }
 
 func setBuild(build *Build) {
