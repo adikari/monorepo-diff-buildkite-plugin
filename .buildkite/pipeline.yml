@@ -31,7 +31,7 @@ steps:
                 command: "echo i-am-running-in-a-group"
   - label: ":bomb: Testing hooks"
     plugins:
-      - monebag/monorepo-diff#v2.5.3:
+      - monebag/monorepo-diff#v2.5.5:
           diff: "cat ./e2e/multiple-paths"
           watch:
             - path: "user-service/"

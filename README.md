@@ -35,7 +35,7 @@ steps:
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - monebag/monorepo-diff#v2.5.4:
+      - monebag/monorepo-diff#v2.5.5:
           diff: "git diff --name-only $(head -n 1 last_successful_build)"
           interpolation: false
           env:
@@ -144,7 +144,7 @@ Add `log_level` property to set the log level. Supported log levels are `debug` 
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - monebag/monorepo-diff#v2.5.4:
+      - monebag/monorepo-diff#v2.5.5:
           diff: "git diff --name-only HEAD~1"
           log_level: "debug" # defaults to "info"
           watch:
@@ -220,7 +220,7 @@ hooks:
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - monebag/monorepo-diff#v2.5.4:
+      - monebag/monorepo-diff#v2.5.5:
           diff: "git diff --name-only HEAD~1"
           watch:
             - path: app/cms/
