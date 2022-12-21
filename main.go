@@ -24,7 +24,11 @@ var version string = "dev"
 func main() {
 	log.Infof("--- running monorepo-diff-buildkite-plugin %s", version)
 
-	plugin, err := initializePlugin(env("BUILDKITE_PLUGINS", ""))
+	plugins := env("BUILDKITE_PLUGINS", "")
+
+	log.Debug("received plugin: \n%v", plugins)
+
+	plugin, err := initializePlugin(plugins)
 
 	if err != nil {
 		log.Debug(err)

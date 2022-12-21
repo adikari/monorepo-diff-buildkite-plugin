@@ -3,6 +3,7 @@ steps:
     plugins:
       - monebag/monorepo-diff:
           diff: "cat ./e2e/one-match-one-miss"
+          log_level: "debug"
           watch:
             - path: "foo-service/"
               config:
