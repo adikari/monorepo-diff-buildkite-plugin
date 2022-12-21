@@ -18,6 +18,19 @@ steps:
           hooks:
             - command: echo "command hook 1"
             - command: echo "command hook 2"
+
+  - label: ":bomb: Testing notifications"
+    plugins:
+      - monebag/monorepo-diff:
+          diff: "cat ./e2e/multiple-paths"
+          watch:
+            - path:
+                - "user-service/infrastructure/"
+              config:
+                command: "echo i-am-running-in-a-group"
+                notify:
+                  - email: subash@monebag.com
+
   - label: ":bomb: Testing groups"
     plugins:
       - monebag/monorepo-diff#v2.5.4:
@@ -29,6 +42,7 @@ steps:
               config:
                 group: "my group"
                 command: "echo i-am-running-in-a-group"
+
   - label: ":bomb: Testing hooks"
     plugins:
       - monebag/monorepo-diff#v2.5.5:
@@ -48,6 +62,7 @@ steps:
                 trigger: "this-pipeline-does-not-exists"
           hooks:
             - command: echo "command hook 1"
+
   - label: ":bomb: Testing wait"
     plugins:
       - monebag/monorepo-diff:
@@ -59,6 +74,7 @@ steps:
               config:
                 command: "echo i-am-running"
           wait: true
+
   - label: ":bomb: Testing triggers and commands"
     plugins:
       - monebag/monorepo-diff:

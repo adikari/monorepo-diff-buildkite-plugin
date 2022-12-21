@@ -18,7 +18,7 @@ If the version number is not provided then the most recent version of the plugin
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - monebag/monorepo-diff#v2.5.4:
+      - monebag/monorepo-diff#v2.5.5:
           diff: "git diff --name-only HEAD~1"
           watch:
             - path: "bar-service/"
