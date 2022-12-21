@@ -225,8 +225,9 @@ func TestPipelinesStepsToTrigger(t *testing.T) {
 func TestGeneratePipeline(t *testing.T) {
 	steps := []Step{
 		{
-			Trigger: "foo-service-pipeline",
-			Build:   Build{Message: "build message"},
+			Trigger:  "foo-service-pipeline",
+			Build:    Build{Message: "build message"},
+			SoftFail: true,
 		},
 		{
 			Group:   "my group",
@@ -240,6 +241,7 @@ func TestGeneratePipeline(t *testing.T) {
 - trigger: foo-service-pipeline
   build:
     message: build message
+  soft_fail: true
 - group: my group
   steps:
   - trigger: foo-service-pipeline
