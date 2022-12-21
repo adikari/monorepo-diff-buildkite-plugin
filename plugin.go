@@ -41,9 +41,19 @@ type Group struct {
 
 // GithubCommitStatus  GithubNotification    `yaml:"github_commit_status,omitempty"`
 
+type GithubStatusNotification struct {
+	Context string `yaml:"context,omitempty"`
+}
+
 // Notify is Buildkite notification definition
 type Notify struct {
-	Email []string `yaml:"email,omitempty"`
+	Email        string                   `yaml:"email,omitempty"`
+	Basecamp     string                   `yaml:"basecamp_campfire,omitempty"`
+	Slack        string                   `yaml:"slack,omitempty"`
+	Webhook      string                   `yaml:"webhook,omitempty"`
+	PagerDuty    string                   `yaml:"pagerduty_change_event,omitempty"`
+	Condition    string                   `yaml:"if,omitempty"`
+	GithubStatus GithubStatusNotification `yaml:"github_commit_status,omitempty"`
 }
 
 // Step is buildkite pipeline definition
@@ -176,7 +186,7 @@ func setNotify(notifications *[]Notify, rawNotify *[]map[string]interface{}) {
 		}
 	}
 
-	*notifications = append(*notifications, Notify{Email: emails})
+	// *notifications = append(*notifications, Notify{Email: emails})
 	*rawNotify = nil
 }
 

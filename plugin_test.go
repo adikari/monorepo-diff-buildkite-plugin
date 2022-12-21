@@ -179,8 +179,8 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						"hi":   "bye",
 					},
 					SoftFail: []interface{}{map[string]interface{}{"exit_status": "*"}},
-					Notify: []Notify{
-						{Email: []string{"foo@gmail.com", "bar@gmail.com"}},
+					Notify:   []Notify{
+						// {Email: []string{"foo@gmail.com", "bar@gmail.com"}},
 					},
 				},
 			},
