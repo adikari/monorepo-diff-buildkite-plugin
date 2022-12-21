@@ -20,6 +20,9 @@ steps:
                 trigger: "this-pipeline-does-not-exists"
                 notify:
                   - email: subash@monebag.com
+                  - slack: "@monebag"
+                  - webhook: "https://webhook.com"
+                    if: build.state === "passed"
           hooks:
             - command: echo "command hook 1"
             - command: echo "command hook 2"
