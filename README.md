@@ -42,6 +42,15 @@ steps:
             - env1=env-1 # this will be appended to all env configuration
           hooks:
             - command: "echo $(git rev-parse HEAD) > last_successful_build"
+          notify:
+            - email: foo@gmail.com
+            - basecamp_campfire: https://basecamp-url
+            - webhook: https://webhook-url
+            - pagerduty_change_event: 636d22Yourc0418Key3b49eee3e8
+            - github_commit_status:
+                context: my-custom-status
+            - slack: '@someuser'
+              if: build.state === "passed"
           watch:
             - path:
                 - "ops/terraform/"
@@ -49,11 +58,9 @@ steps:
               config:
                 command: "buildkite-agent pipeline upload ops/.buildkite/pipeline.yml"
                 label: "Upload pipeline"
+                # following configs are available in command. notify is not available in trigger step
                 notify:
-                  - email: foo@gmail.com
                   - basecamp_campfire: https://basecamp-url
-                  - webhook: https://webhook-url
-                  - pagerduty_change_event: 636d22Yourc0418Key3b49eee3e8
                   - github_commit_status:
                       context: my-custom-status
                   - slack: '@someuser'

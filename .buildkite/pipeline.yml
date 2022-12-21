@@ -11,7 +11,7 @@ steps:
             - path: "hello-service/"
               config:
                 trigger: "this-pipeline-does-not-exists"
-            - path: "hello-service/"
+            - path: "foo-service/"
               config:
                 command: "echo running command"
                 notify:
