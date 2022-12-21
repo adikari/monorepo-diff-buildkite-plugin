@@ -119,6 +119,8 @@ func (plugin *Plugin) UnmarshalJSON(data []byte) error {
 	plugin.Env = parseResult
 	plugin.RawEnv = nil
 
+	setPluginNotify(&plugin.Notify, &plugin.RawNotify)
+
 	// Path can be string or an array of strings,
 	// handle both cases and create an array of paths.
 	for i, p := range plugin.Watch {
@@ -175,6 +177,56 @@ func initializePlugin(data string) (Plugin, error) {
 	return Plugin{}, errors.New("could not initialize plugin")
 }
 
+func setPluginNotify(notifications *[]PluginNotify, rawNotify *[]map[string]interface{}) {
+	for _, v := range *rawNotify {
+		var notify PluginNotify
+
+		if condition, ok := isString(v["if"]); ok {
+			notify.Condition = condition
+		}
+
+		if email, ok := isString(v["email"]); ok {
+			notify.Email = email
+			*notifications = append(*notifications, notify)
+			continue
+		}
+
+		if basecamp, ok := isString(v["basecamp_campfire"]); ok {
+			notify.Basecamp = basecamp
+			*notifications = append(*notifications, notify)
+			continue
+		}
+
+		if webhook, ok := isString(v["webhook"]); ok {
+			notify.Webhook = webhook
+			*notifications = append(*notifications, notify)
+			continue
+		}
+
+		if pagerduty, ok := isString(v["pagerduty_change_event"]); ok {
+			notify.PagerDuty = pagerduty
+			*notifications = append(*notifications, notify)
+			continue
+		}
+
+		if slack, ok := isString(v["slack"]); ok {
+			notify.Slack = slack
+			*notifications = append(*notifications, notify)
+			continue
+		}
+
+		if github, ok := v["github_commit_status"].(map[string]interface{}); ok {
+			if context, ok := isString(github["context"]); ok {
+				notify.GithubStatus = GithubStatusNotification{Context: context}
+				*notifications = append(*notifications, notify)
+			}
+			continue
+		}
+	}
+
+	*rawNotify = nil
+}
+
 func setNotify(notifications *[]StepNotify, rawNotify *[]map[string]interface{}) {
 	for _, v := range *rawNotify {
 		var notify StepNotify
@@ -183,29 +235,11 @@ func setNotify(notifications *[]StepNotify, rawNotify *[]map[string]interface{})
 			notify.Condition = condition
 		}
 
-		// 		if email, ok := isString(v["email"]); ok {
-		// 			notify.Email = email
-		// 			*notifications = append(*notifications, notify)
-		// 			continue
-		// 		}
-
 		if basecamp, ok := isString(v["basecamp_campfire"]); ok {
 			notify.Basecamp = basecamp
 			*notifications = append(*notifications, notify)
 			continue
 		}
-
-		// if webhook, ok := isString(v["webhook"]); ok {
-		// 	notify.Webhook = webhook
-		// 	*notifications = append(*notifications, notify)
-		// 	continue
-		// }
-
-		// if pagerduty, ok := isString(v["pagerduty_change_event"]); ok {
-		// 	notify.PagerDuty = pagerduty
-		// 	*notifications = append(*notifications, notify)
-		// 	continue
-		// }
 
 		if slack, ok := isString(v["slack"]); ok {
 			notify.Slack = slack

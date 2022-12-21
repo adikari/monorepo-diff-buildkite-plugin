@@ -60,8 +60,15 @@ EOM
 
   export BUILDKITE_PLUGINS='[{
     "github.com/monebag/monorepo-diff-buildkite-plugin": {
-      "diff":"echo foo-service/",
+      "diff":"echo foo-service/ \nuser-service",
       "log_level": "debug",
+      "notify": [
+        { "email": "foo@gmail.com" },
+        { "basecamp_campfire": "https://basecamp-url" },
+        { "github_commit_status": { "context" : "my-custom-status" } },
+        { "slack": "@someuser" },
+        { "webhook": "https://webhook-url" }
+      ],
       "watch": [
         {
           "path":"foo-service/",
@@ -73,6 +80,12 @@ EOM
               { "slack": "@someuser", "if": "build.state === \"passed\"" }
             ]
           }
+        },
+        {
+          "path": "user-service",
+          "config": {
+            "command": "echo foo"
+          }
         }
       ]
     }
@@ -83,6 +96,13 @@ EOM
   assert_success
 
   assert_output --partial << EOM
+notify:
+- email: foo@gmail.com
+- basecamp_campfire: https://basecamp-url
+- github_commit_status:
+    context: my-custom-status
+- slack: '@someuser'
+- webhook: https://webhook-url
 steps:
 - trigger: foo-service
   build:
@@ -95,6 +115,7 @@ steps:
       context: my-custom-status
   - slack: '@someuser'
     if: build.state === "passed"
+- command: echo foo
 EOM
 }
 
