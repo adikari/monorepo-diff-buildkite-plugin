@@ -66,17 +66,17 @@ EOM
         {
           "path":"foo-service/",
           "config": {
-            "trigger":"foo-service"
+            "trigger":"foo-service",
             "notify": [
               { "email": "foo@gmail.com" },
               { "email": "bar@gmail.com" },
               { "basecamp_campfire": "https://basecamp-url" },
-              { "webhook": "https://webhook-url", "if": "build.state === failed" },
+              { "webhook": "https://webhook-url", "if": "build.state === \"failed\"" },
               { "pagerduty_change_event": "636d22Yourc0418Key3b49eee3e8" },
               { "github_commit_status": { "context" : "my-custom-status" } },
-              { "slack": "@someuser", "if": "build.state === passed" }
+              { "slack": "@someuser", "if": "build.state === \"passed\"" }
             ]
-          },
+          }
         }
       ]
     }
@@ -95,6 +95,7 @@ steps:
     commit: commit-hash
   notify:
   - email: foo@gmail.com
+  - email: bar@gmail.com
   - basecamp_campfire: https://basecamp-url
   - webhook: https://webhook-url
     if: build.state === "failed"
@@ -105,6 +106,7 @@ steps:
     if: build.state === "passed"
 EOM
 }
+
 @test "Pipeline is generated with build config from env" {
   export BUILDKITE_BRANCH="go-rewrite"
   export BUILDKITE_MESSAGE="some message"
@@ -160,6 +162,9 @@ EOM
           "config": {
             "trigger": "foo-service-pipeline",
             "label": "foo service pipeline",
+            "notify": [
+              { "email": "foo@gmail.com" }
+            ],
             "build": {
               "message": "some-message",
               "commit": "commit-hash",
@@ -256,6 +261,8 @@ steps:
   - coverage/**/*
   - tests/*
   async: true
+  notify:
+  - email: foo@gmail.com
 - group: my group
   steps:
   - command: echo "hello group"
