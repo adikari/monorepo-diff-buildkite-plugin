@@ -183,12 +183,8 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 						"hi":   "bye",
 					},
 					SoftFail: []interface{}{map[string]interface{}{"exit_status": "*"}},
-					Notify: []Notify{
-						{Email: "foo@gmail.com"},
-						{Email: "bar@gmail.com"},
+					Notify: []StepNotify{
 						{Basecamp: "https://basecamp-url"},
-						{Webhook: "https://webhook-url", Condition: "build.state === 'failed'"},
-						{PagerDuty: "636d22Yourc0418Key3b49eee3e8"},
 						{GithubStatus: GithubStatusNotification{Context: "my-custom-status"}},
 						{Slack: "@someuser", Condition: "build.state === 'passed'"},
 					},

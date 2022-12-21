@@ -43,15 +43,22 @@ type GithubStatusNotification struct {
 	Context string `yaml:"context,omitempty"`
 }
 
-// Notify is Buildkite notification definition
-type Notify struct {
-	Email        string                   `yaml:"email,omitempty"`
-	Basecamp     string                   `yaml:"basecamp_campfire,omitempty"`
+type PipelineNotify struct {
 	Slack        string                   `yaml:"slack,omitempty"`
-	Webhook      string                   `yaml:"webhook,omitempty"`
+	Email        string                   `yaml:"email,omitempty"`
 	PagerDuty    string                   `yaml:"pagerduty_change_event,omitempty"`
-	Condition    string                   `yaml:"if,omitempty"`
+	Webhook      string                   `yaml:"webhook,omitempty"`
+	Basecamp     string                   `yaml:"basecamp_campfire,omitempty"`
 	GithubStatus GithubStatusNotification `yaml:"github_commit_status,omitempty"`
+	Condition    string                   `yaml:"if,omitempty"`
+}
+
+// Notify is Buildkite notification definition
+type StepNotify struct {
+	Slack        string                   `yaml:"slack,omitempty"`
+	Basecamp     string                   `yaml:"basecamp_campfire,omitempty"`
+	GithubStatus GithubStatusNotification `yaml:"github_commit_status,omitempty"`
+	Condition    string                   `yaml:"if,omitempty"`
 }
 
 // Step is buildkite pipeline definition
@@ -69,7 +76,7 @@ type Step struct {
 	Async     bool                     `yaml:"async,omitempty"`
 	SoftFail  interface{}              `json:"soft_fail" yaml:"soft_fail,omitempty"`
 	RawNotify []map[string]interface{} `json:"notify" yaml:",omitempty"`
-	Notify    []Notify                 `yaml:"notify,omitempty"`
+	Notify    []StepNotify             `yaml:"notify,omitempty"`
 }
 
 // Agent is Buildkite agent definition
@@ -175,19 +182,19 @@ func (plugin *Plugin) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func setNotify(notifications *[]Notify, rawNotify *[]map[string]interface{}) {
+func setNotify(notifications *[]StepNotify, rawNotify *[]map[string]interface{}) {
 	for _, v := range *rawNotify {
-		var notify Notify
+		var notify StepNotify
 
 		if condition, ok := isString(v["if"]); ok {
 			notify.Condition = condition
 		}
 
-		if email, ok := isString(v["email"]); ok {
-			notify.Email = email
-			*notifications = append(*notifications, notify)
-			continue
-		}
+		// 		if email, ok := isString(v["email"]); ok {
+		// 			notify.Email = email
+		// 			*notifications = append(*notifications, notify)
+		// 			continue
+		// 		}
 
 		if basecamp, ok := isString(v["basecamp_campfire"]); ok {
 			notify.Basecamp = basecamp
@@ -195,17 +202,17 @@ func setNotify(notifications *[]Notify, rawNotify *[]map[string]interface{}) {
 			continue
 		}
 
-		if webhook, ok := isString(v["webhook"]); ok {
-			notify.Webhook = webhook
-			*notifications = append(*notifications, notify)
-			continue
-		}
+		// if webhook, ok := isString(v["webhook"]); ok {
+		// 	notify.Webhook = webhook
+		// 	*notifications = append(*notifications, notify)
+		// 	continue
+		// }
 
-		if pagerduty, ok := isString(v["pagerduty_change_event"]); ok {
-			notify.PagerDuty = pagerduty
-			*notifications = append(*notifications, notify)
-			continue
-		}
+		// if pagerduty, ok := isString(v["pagerduty_change_event"]); ok {
+		// 	notify.PagerDuty = pagerduty
+		// 	*notifications = append(*notifications, notify)
+		// 	continue
+		// }
 
 		if slack, ok := isString(v["slack"]); ok {
 			notify.Slack = slack

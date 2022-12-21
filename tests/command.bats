@@ -68,11 +68,7 @@ EOM
           "config": {
             "trigger":"foo-service",
             "notify": [
-              { "email": "foo@gmail.com" },
-              { "email": "bar@gmail.com" },
               { "basecamp_campfire": "https://basecamp-url" },
-              { "webhook": "https://webhook-url", "if": "build.state === \"failed\"" },
-              { "pagerduty_change_event": "636d22Yourc0418Key3b49eee3e8" },
               { "github_commit_status": { "context" : "my-custom-status" } },
               { "slack": "@someuser", "if": "build.state === \"passed\"" }
             ]
@@ -94,12 +90,7 @@ steps:
     branch: go-rewrite
     commit: commit-hash
   notify:
-  - email: foo@gmail.com
-  - email: bar@gmail.com
   - basecamp_campfire: https://basecamp-url
-  - webhook: https://webhook-url
-    if: build.state === "failed"
-  - pagerduty_change_event: 636d22Yourc0418Key3b49eee3e8
   - github_commit_status:
       context: my-custom-status
   - slack: '@someuser'
@@ -163,7 +154,7 @@ EOM
             "trigger": "foo-service-pipeline",
             "label": "foo service pipeline",
             "notify": [
-              { "email": "foo@gmail.com" }
+              { "slack": "@adikari" }
             ],
             "build": {
               "message": "some-message",
@@ -262,7 +253,7 @@ steps:
   - tests/*
   async: true
   notify:
-  - email: foo@gmail.com
+  - slack: '@adikari'
 - group: my group
   steps:
   - command: echo "hello group"
