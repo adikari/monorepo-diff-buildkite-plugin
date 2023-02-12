@@ -85,7 +85,7 @@ func diff(command string) ([]string, error) {
 	log.Infof("Running diff command: %s", command)
 
 	output, err := executeCommand(
-		os.Getenv("SHELL"),
+		env("SHELL", "bash"),
 		[]string{"-c", strings.Replace(command, "\n", " ", -1)},
 	)
 
