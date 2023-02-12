@@ -61,6 +61,16 @@ README.md`)
 	assert.Equal(t, want, got)
 }
 
+func TestDiffWithSubshell(t *testing.T) {
+	want := []string{
+		"user-service/infrastructure/cloudfront.yaml",
+		"user-service/serverless.yaml",
+	}
+	got, err := diff("echo $(cat e2e/multiple-paths)")
+	assert.NoError(t, err)
+	assert.Equal(t, want, got)
+}
+
 func TestPipelinesToTriggerGetsListOfPipelines(t *testing.T) {
 	want := []string{"service-1", "service-2", "service-4"}
 
