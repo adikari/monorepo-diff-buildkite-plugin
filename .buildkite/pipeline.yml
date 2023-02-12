@@ -34,7 +34,7 @@ steps:
 
   - label: ":bomb: Testing groups"
     plugins:
-      - monebag/monorepo-diff#v2.5.6:
+      - monebag/monorepo-diff#v2.5.7:
           diff: "cat ./e2e/multiple-paths"
           watch:
             - path:
@@ -46,7 +46,7 @@ steps:
 
   - label: ":bomb: Testing hooks"
     plugins:
-      - monebag/monorepo-diff#v2.5.6:
+      - monebag/monorepo-diff#v2.5.7:
           diff: "cat ./e2e/multiple-paths"
           watch:
             - path: "user-service/"
