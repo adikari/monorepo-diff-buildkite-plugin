@@ -35,10 +35,11 @@ steps:
   - label: ":bomb: Testing groups"
     plugins:
       - monebag/monorepo-diff#v2.5.7:
-          diff: "git diff --name-only $(head -n 1 last_successful_build)"
+          diff: "cat ./e2e/multiple-paths"
           watch:
             - path:
-                - "e2e"
+                - "user-service/infrastructure/"
+                - "product-service/infrastructure/"
               config:
                 group: "my group"
                 command: "echo i-am-running-in-a-group"
