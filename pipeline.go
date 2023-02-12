@@ -84,19 +84,16 @@ func uploadPipeline(plugin Plugin, generatePipeline PipelineGenerator) (string, 
 func diff(command string) ([]string, error) {
 	log.Infof("Running diff command: %s", command)
 
-	split := strings.Split(command, " ")
-	cmd, args := split[0], split[1:]
+	output, err := executeCommand(
+		os.Getenv("SHELL"),
+		[]string{"-c", strings.Replace(command, "\n", " ", -1)},
+	)
 
-	output, err := executeCommand(cmd, args)
 	if err != nil {
 		return nil, fmt.Errorf("diff command failed: %v", err)
 	}
 
-	f := func(c rune) bool {
-		return c == '\n'
-	}
-
-	return strings.FieldsFunc(strings.TrimSpace(output), f), nil
+	return strings.Fields(strings.TrimSpace(output)), nil
 }
 
 func stepsToTrigger(files []string, watch []WatchConfig) ([]Step, error) {

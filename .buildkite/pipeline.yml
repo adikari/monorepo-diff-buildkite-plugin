@@ -2,7 +2,7 @@ steps:
   - label: ":bomb: Triggers"
     plugins:
       - monebag/monorepo-diff:
-          diff: "git diff --name-only $(head -n 1 last_successful_build)"
+          diff: "cat ./e2e/one-match-one-miss"
           log_level: "debug"
           watch:
             - path: "foo-service/"
