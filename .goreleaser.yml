@@ -6,6 +6,9 @@ builds:
     env:
       - CGO_ENABLED=0
     goos:
+      - freebsd
+      - netbsd
+      - openbsd
       - linux
       - darwin
     goarch:
