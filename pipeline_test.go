@@ -236,7 +236,7 @@ func TestGeneratePipeline(t *testing.T) {
 	steps := []Step{
 		{
 			Trigger:  "foo-service-pipeline",
-			Build:    Build{Message: "build message"},
+			Build:    Build{Message: "build message", MetaData: map[string]string{"build_number": "123"}},
 			SoftFail: true,
 			Notify: []StepNotify{
 				{Slack: "@adikari"},
@@ -295,6 +295,8 @@ steps:
 - trigger: foo-service-pipeline
   build:
     message: build message
+    meta_data:
+      build_number: "123"
   soft_fail: true
   notify:
   - slack: '@adikari'
