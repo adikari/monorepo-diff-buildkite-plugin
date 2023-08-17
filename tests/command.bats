@@ -1,8 +1,7 @@
 #!/usr/bin/env bats
 
-load '/usr/local/lib/bats/load.bash'
-
 setup() {
+  load "$BATS_PLUGIN_PATH/load.bash"
   export BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_TEST_MODE="true"
 
   stub buildkite-agent pipeline upload
@@ -182,7 +181,11 @@ EOM
             "build": {
               "message": "some-message",
               "commit": "commit-hash",
-              "branch": "go-rewrite"
+              "branch": "go-rewrite",
+              "meta_data": {
+                "build_number": "123",
+                "build_message": "message"
+              }
             },
             "async": true,
             "agents": {
@@ -267,6 +270,9 @@ steps:
     message: some-message
     branch: go-rewrite
     commit: commit-hash
+    meta_data:
+      build_message: message
+      build_number: "123"
   agents:
     queue: foo-service-queue
   artifacts:
