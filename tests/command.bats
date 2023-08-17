@@ -181,7 +181,11 @@ EOM
             "build": {
               "message": "some-message",
               "commit": "commit-hash",
-              "branch": "go-rewrite"
+              "branch": "go-rewrite",
+              "meta_data": {
+                "build_number": "123",
+                "build_message": "message"
+              }
             },
             "async": true,
             "agents": {
@@ -266,6 +270,9 @@ steps:
     message: some-message
     branch: go-rewrite
     commit: commit-hash
+    meta_data:
+      build_message: message
+      build_number: "123"
   agents:
     queue: foo-service-queue
   artifacts:
