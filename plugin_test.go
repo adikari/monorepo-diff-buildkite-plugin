@@ -75,7 +75,10 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 					"config": {
 						"trigger": "service-2",
 						"build": {
-							"message": "some message"
+							"message": "some message",
+							"meta_data": {
+								"foo": "bar"
+							}
 						}
 					}
 				},
@@ -181,6 +184,9 @@ func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 							"env1": "env-1",
 							"env2": "env-2",
 							"env3": "env-3",
+						},
+						MetaData: map[string]string{
+							"foo": "bar",
 						},
 					},
 				},

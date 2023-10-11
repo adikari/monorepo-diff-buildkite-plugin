@@ -23,7 +23,6 @@ Check out the [example monorepo source code](https://github.com/buildkite/monore
 
 If the version number is not provided then the most recent version of the plugin will be used. Do not use version number as `master` or any branch names.
 
-
 #### `watch`
 
  It defines a list of paths or path to monitor for changes in the monorepo. It checks to see if there is a change to the subfolders specified in the path
@@ -166,7 +165,7 @@ The object values provided in this configuration will be appended to `env` prope
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - monebag/monorepo-diff#v2.5.8:
+      - monebag/monorepo-diff#v2.5.9:
           diff: "git diff --name-only HEAD~1"
           watch:
             - path: "foo-service/"

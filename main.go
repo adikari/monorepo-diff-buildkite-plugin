@@ -37,10 +37,6 @@ func main() {
 
 	setupLogger(plugin.LogLevel)
 
-	if env("BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_TEST_MODE", "false") == "true" {
-		return
-	}
-
 	if _, _, err = uploadPipeline(plugin, generatePipeline); err != nil {
 		log.Fatalf("+++ failed to upload pipeline: %v", err)
 	}

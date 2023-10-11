@@ -6,7 +6,7 @@ COPY . .
 
 RUN goreleaser build --rm-dist --skip-validate --config .goreleaser-test.yml
 
-FROM buildkite/plugin-tester
+FROM buildkite/plugin-tester:v3.0.1
 
 COPY tests /plugin/tests
 COPY hooks /plugin/hooks

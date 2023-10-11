@@ -77,6 +77,8 @@ configuration:
                   type: string
                 env:
                   type: array
+                meta_data:
+                  type: object
             agents:
               type: object
               properties:
