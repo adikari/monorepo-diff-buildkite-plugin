@@ -8,7 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-const pluginName = "github.com/monebag/monorepo-diff"
+const pluginName = "github.com/glydways/monorepo-diff"
 
 // Plugin buildkite monorepo diff plugin structure
 type Plugin struct {
@@ -22,6 +22,7 @@ type Plugin struct {
 	Env           map[string]string
 	RawNotify     []map[string]interface{} `json:"notify" yaml:",omitempty"`
 	Notify        []PluginNotify           `yaml:"notify,omitempty"`
+	Plugins       interface{}              `yaml:"plugins,omitempty"`
 }
 
 // HookConfig Plugin hook configuration
@@ -81,6 +82,7 @@ type Step struct {
 	SoftFail  interface{}              `json:"soft_fail" yaml:"soft_fail,omitempty"`
 	RawNotify []map[string]interface{} `json:"notify" yaml:",omitempty"`
 	Notify    []StepNotify             `yaml:"notify,omitempty"`
+	Plugins   interface{}              `yaml:"plugins,omitempty"`
 }
 
 // Agent is Buildkite agent definition
@@ -94,7 +96,6 @@ type Build struct {
 	RawEnv   interface{}       `json:"env" yaml:",omitempty"`
 	Env      map[string]string `yaml:"env,omitempty"`
 	MetaData map[string]string `json:"meta_data,omitempty" yaml:"meta_data,omitempty"`
-	// Notify  []Notify          `yaml:"notify,omitempty"`
 }
 
 // UnmarshalJSON set defaults properties

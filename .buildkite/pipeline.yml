@@ -1,7 +1,7 @@
 steps:
   - label: ":bomb: Triggers"
     plugins:
-      - monebag/monorepo-diff:
+      - glydways/monorepo-diff:
           diff: "cat ./e2e/one-match-one-miss"
           log_level: "debug"
           watch:
@@ -22,10 +22,8 @@ steps:
 
   - label: ":bomb: Testing notifications"
     plugins:
-      - monebag/monorepo-diff:
+      - glydways/monorepo-diff:
           diff: "cat ./e2e/multiple-paths"
-          notify:
-            - email: subash@monebag.com
           watch:
             - path:
                 - "user-service/infrastructure/"
@@ -34,7 +32,7 @@ steps:
 
   - label: ":bomb: Testing groups"
     plugins:
-      - monebag/monorepo-diff#v2.5.7:
+      - glydways/monorepo-diff#v2.5.7:
           diff: "cat ./e2e/multiple-paths"
           watch:
             - path:
@@ -46,7 +44,7 @@ steps:
 
   - label: ":bomb: Testing hooks"
     plugins:
-      - monebag/monorepo-diff#v2.5.7:
+      - glydways/monorepo-diff#v2.5.7:
           diff: "cat ./e2e/multiple-paths"
           watch:
             - path: "user-service/"
@@ -66,7 +64,7 @@ steps:
 
   - label: ":bomb: Testing wait"
     plugins:
-      - monebag/monorepo-diff:
+      - glydways/monorepo-diff:
           diff: "cat ./e2e/multiple-paths"
           watch:
             - path:
@@ -78,7 +76,7 @@ steps:
 
   - label: ":bomb: Testing triggers and commands"
     plugins:
-      - monebag/monorepo-diff:
+      - glydways/monorepo-diff:
           diff: "cat ./e2e/commands-or-triggers"
           watch:
             - path: "user-service/"

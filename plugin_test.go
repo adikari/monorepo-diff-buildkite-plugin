@@ -20,7 +20,7 @@ func TestPluginWithInvalidParameter(t *testing.T) {
 
 func TestPluginShouldHaveDefaultValues(t *testing.T) {
 	param := `[{
-		"github.com/monebag/monorepo-diff-buildkite-plugin#commit": {}
+		"github.com/glydways/monorepo-diff-buildkite-plugin#commit": {}
 	}]`
 
 	got, _ := initializePlugin(param)
@@ -46,7 +46,7 @@ func TestPluginWithValidParameter(t *testing.T) {
 
 func TestPluginShouldUnmarshallCorrectly(t *testing.T) {
 	param := `[{
-		"github.com/monebag/monorepo-diff-buildkite-plugin#commit": {
+		"github.com/glydways/monorepo-diff-buildkite-plugin#commit": {
 			"diff": "cat ./hello.txt",
 			"wait": true,
 			"log_level": "debug",
@@ -269,7 +269,7 @@ func TestPluginShouldOnlyFullyUnmarshallItselfAndNotOtherPlugins(t *testing.T) {
 			}
 		},
 		{
-			"github.com/monebag/monorepo-diff-buildkite-plugin#commit": {
+			"github.com/glydways/monorepo-diff-buildkite-plugin#commit": {
 				"watch": [
 					{
 						"env": [
@@ -295,7 +295,7 @@ func TestPluginShouldOnlyFullyUnmarshallItselfAndNotOtherPlugins(t *testing.T) {
 func TestPluginShouldErrorIfPluginConfigIsInvalid(t *testing.T) {
 	param := `[
 		{
-			"github.com/monebag/monorepo-diff-buildkite-plugin#commit": {
+			"github.com/glydways/monorepo-diff-buildkite-plugin#commit": {
 				"env": {
 					"anInvalidKey": "An Invalid Value"
 				},

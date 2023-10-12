@@ -20,7 +20,7 @@ setup() {
   LOG_LEVEL="debug"
 
   export BUILDKITE_PLUGINS='[{
-    "github.com/monebag/monorepo-diff-buildkite-plugin": {
+    "github.com/glydways/monorepo-diff-buildkite-plugin": {
       "diff":"echo foo-service/",
       "log_level": "debug",
       "watch": [
@@ -58,7 +58,7 @@ EOM
   export BUILDKITE_COMMIT="commit-hash"
 
   export BUILDKITE_PLUGINS='[{
-    "github.com/monebag/monorepo-diff-buildkite-plugin": {
+    "github.com/glydways/monorepo-diff-buildkite-plugin": {
       "diff":"echo foo-service/ \nuser-service",
       "log_level": "debug",
       "notify": [
@@ -126,7 +126,7 @@ EOM
   export BUILDKITE_COMMIT="commit-hash"
 
   export BUILDKITE_PLUGINS='[{
-    "github.com/monebag/monorepo-diff-buildkite-plugin": {
+    "github.com/glydways/monorepo-diff-buildkite-plugin": {
       "diff":"echo foo-service/",
       "log_level": "debug",
       "watch": [
@@ -161,7 +161,7 @@ EOM
 
   export BUILDKITE_PLUGINS='[
   {
-    "github.com/monebag/monorepo-diff-buildkite-plugin": {
+    "github.com/glydways/monorepo-diff-buildkite-plugin": {
       "diff": "echo foo-service/ \nbat-service/",
       "log_level": "debug",
       "wait": true,

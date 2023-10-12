@@ -1,6 +1,6 @@
-[![e2e status](https://badge.buildkite.com/719d0b895285367c9c57a09e07f1e853148d2509f0667e0ae8.svg?branch=master)](https://buildkite.com/monebag/monorepo-diff-buildkite-plugin)
-[![codecov](https://codecov.io/gh/monebag/monorepo-diff-buildkite-plugin/branch/master/graph/badge.svg?token=DQ3B4FIYD2)](https://codecov.io/gh/monebag/monorepo-diff-buildkite-plugin)
-[![Publish](https://github.com/monebag/monorepo-diff-buildkite-plugin/actions/workflows/publish.yml/badge.svg)](https://github.com/monebag/monorepo-diff-buildkite-plugin/actions/workflows/publish.yml)
+[![e2e status](https://badge.buildkite.com/719d0b895285367c9c57a09e07f1e853148d2509f0667e0ae8.svg?branch=master)](https://buildkite.com/glydways/monorepo-diff-buildkite-plugin)
+[![codecov](https://codecov.io/gh/glydways/monorepo-diff-buildkite-plugin/branch/master/graph/badge.svg?token=DQ3B4FIYD2)](https://codecov.io/gh/glydways/monorepo-diff-buildkite-plugin)
+[![Publish](https://github.com/glydways/monorepo-diff-buildkite-plugin/actions/workflows/publish.yml/badge.svg)](https://github.com/glydways/monorepo-diff-buildkite-plugin/actions/workflows/publish.yml)
 
 # monorepo-diff-buildkite-plugin
 
@@ -18,7 +18,7 @@ If the version number is not provided then the most recent version of the plugin
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - monebag/monorepo-diff#v2.5.9:
+      - glydways/monorepo-diff#v2.5.9:
           diff: "git diff --name-only HEAD~1"
           watch:
             - path: "bar-service/"
@@ -35,7 +35,7 @@ steps:
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - monebag/monorepo-diff#v2.5.9:
+      - glydways/monorepo-diff#v2.5.9:
           diff: "git diff --name-only $(head -n 1 last_successful_build)"
           interpolation: false
           env:
@@ -153,7 +153,7 @@ Add `log_level` property to set the log level. Supported log levels are `debug` 
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - monebag/monorepo-diff#v2.5.9:
+      - glydways/monorepo-diff#v2.5.9:
           diff: "git diff --name-only HEAD~1"
           log_level: "debug" # defaults to "info"
           watch:
@@ -229,7 +229,7 @@ hooks:
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - monebag/monorepo-diff#v2.5.9:
+      - glydways/monorepo-diff#v2.5.9:
           diff: "git diff --name-only HEAD~1"
           watch:
             - path: app/cms/
@@ -261,4 +261,4 @@ Using commands, it is also possible to use this to upload other pipeline definit
 
 ## How to Contribute
 
-Please read [contributing guide](https://github.com/monebag/monorepo-diff-buildkite-plugin/blob/master/CONTRIBUTING.md).
+Please read [contributing guide](https://github.com/glydways/monorepo-diff-buildkite-plugin/blob/master/CONTRIBUTING.md).

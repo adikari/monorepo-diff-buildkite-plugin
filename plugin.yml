@@ -1,6 +1,6 @@
 name: Monorepo Diff
 description: Trigger pipelines on changes in watched folders
-author: https://github.com/monebag
+author: https://github.com/glydways
 requirements:
   - git
 configuration:
