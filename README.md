@@ -4,6 +4,9 @@
 
 # monorepo-diff-buildkite-plugin
 
+NOTE - This is a fork of the original `monorepo-diff-buildkite-plugin` to be able to use additional plugins in downstream jobs.
+This should not be needed once upstream [PR merges](https://github.com/monebag/monorepo-diff-buildkite-plugin/pull/141).
+
 This plugin will assist you in triggering pipelines by watching folders in your `monorepo`.
 
 Check out this post to learn [**How to set up Continuous Integration for monorepo using Buildkite**](https://adikari.medium.com/set-up-continuous-integration-for-monorepo-using-buildkite-61539bb0ed76).
@@ -79,6 +82,12 @@ steps:
                   - "logs/*"
                 env:
                   - FOO=bar
+                plugins
+                  - seek-oss/aws-sm#v2.3.1:
+                    env:
+                      AUTH_SECRET:
+                        secret-id: "secret/id"
+                        json-key: ".key"
             - path: "foo-service/"
               config:
                 trigger: "deploy-foo-service"
