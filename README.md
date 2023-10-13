@@ -82,7 +82,7 @@ steps:
                   - "logs/*"
                 env:
                   - FOO=bar
-                plugins
+                plugins:
                   - seek-oss/aws-sm#v2.3.1:
                     env:
                       AUTH_SECRET:
