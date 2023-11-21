@@ -40,7 +40,7 @@ func (n PluginNotify) MarshalYAML() (interface{}, error) {
 }
 
 // PipelineGenerator generates pipeline file
-type PipelineGenerator func(steps []Step, plugin Plugin) (*os.File, error)
+type PipelineGenerator func(steps []Step, plugin Plugin) (*os.File, bool, error)
 
 func uploadPipeline(plugin Plugin, generatePipeline PipelineGenerator) (string, []string, error) {
 	diffOutput, err := diff(plugin.Diff)
@@ -61,12 +61,18 @@ func uploadPipeline(plugin Plugin, generatePipeline PipelineGenerator) (string, 
 		return "", []string{}, err
 	}
 
-	pipeline, err := generatePipeline(steps, plugin)
+	pipeline, hasSteps, err := generatePipeline(steps, plugin)
 	defer os.Remove(pipeline.Name())
 
 	if err != nil {
 		log.Error(err)
 		return "", []string{}, err
+	}
+
+	if !hasSteps {
+		// Handle the case where no steps were provided
+		log.Info("No steps generated. Skipping pipeline upload.")
+		return "", []string{}, nil
 	}
 
 	cmd := "buildkite-agent"
@@ -156,10 +162,10 @@ func dedupSteps(steps []Step) []Step {
 	return unique
 }
 
-func generatePipeline(steps []Step, plugin Plugin) (*os.File, error) {
+func generatePipeline(steps []Step, plugin Plugin) (*os.File, bool, error) {
 	tmp, err := ioutil.TempFile(os.TempDir(), "bmrd-")
 	if err != nil {
-		return nil, fmt.Errorf("could not create temporary pipeline file: %v", err)
+		return nil, false, fmt.Errorf("could not create temporary pipeline file: %v", err)
 	}
 
 	yamlSteps := make([]yaml.Marshaler, len(steps))
@@ -191,17 +197,22 @@ func generatePipeline(steps []Step, plugin Plugin) (*os.File, error) {
 
 	data, err := yaml.Marshal(&pipeline)
 	if err != nil {
-		return nil, fmt.Errorf("could not serialize the pipeline: %v", err)
+		return nil, false, fmt.Errorf("could not serialize the pipeline: %v", err)
 	}
-
+	
 	// Disable logging in context of go tests.
 	if env("TEST_MODE", "") != "true" {
 		fmt.Printf("Generated Pipeline:\n%s\n", string(data))
 	}
 
 	if err = ioutil.WriteFile(tmp.Name(), data, 0644); err != nil {
-		return nil, fmt.Errorf("could not write step to temporary file: %v", err)
+		return nil, false, fmt.Errorf("could not write step to temporary file: %v", err)
 	}
 
-	return tmp, nil
+	// Returns the temporary file and a boolean indicating whether or not the pipeline has steps
+	if len(yamlSteps) == 0 {
+		return tmp, false, nil
+	} else {
+		return tmp, true, nil
+	}
 }

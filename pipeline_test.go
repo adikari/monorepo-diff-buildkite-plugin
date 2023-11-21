@@ -9,11 +9,11 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func mockGeneratePipeline(steps []Step, plugin Plugin) (*os.File, error) {
+func mockGeneratePipeline(steps []Step, plugin Plugin) (*os.File, bool, error) {
 	mockFile, _ := os.Create("pipeline.txt")
 	defer mockFile.Close()
 
-	return mockFile, nil
+	return mockFile, true, nil
 }
 
 func TestUploadPipelineCallsBuildkiteAgentCommand(t *testing.T) {
@@ -37,6 +37,15 @@ func TestUploadPipelineCallsBuildkiteAgentCommandWithInterpolation(t *testing.T)
 func TestUploadPipelineCancelsIfThereIsNoDiffOutput(t *testing.T) {
 	plugin := Plugin{Diff: "echo"}
 	cmd, args, err := uploadPipeline(plugin, mockGeneratePipeline)
+
+	assert.Equal(t, "", cmd)
+	assert.Equal(t, []string{}, args)
+	assert.Equal(t, err, nil)
+}
+
+func TestUploadPipelineWithEmptyGeneratedPipeline(t *testing.T) {
+	plugin := Plugin{Diff: "echo ./bar-service"}
+	cmd, args, err := uploadPipeline(plugin, generatePipeline)
 
 	assert.Equal(t, "", cmd)
 	assert.Equal(t, []string{}, args)
@@ -274,7 +283,7 @@ func TestGeneratePipeline(t *testing.T) {
 		},
 	}
 
-	pipeline, err := generatePipeline(steps, plugin)
+	pipeline, _, err := generatePipeline(steps, plugin)
 
 	require.NoError(t, err)
 	defer os.Remove(pipeline.Name())
@@ -321,7 +330,7 @@ steps:
 	assert.Equal(t, want, string(got))
 }
 
-func TestGeneratePipelineWithNoSteps(t *testing.T) {
+func TestGeneratePipelineWithNoStepsAndHooks(t *testing.T) {
 	steps := []Step{}
 
 	want :=
@@ -339,7 +348,26 @@ func TestGeneratePipelineWithNoSteps(t *testing.T) {
 		},
 	}
 
-	pipeline, err := generatePipeline(steps, plugin)
+	pipeline, _, err := generatePipeline(steps, plugin)
+	require.NoError(t, err)
+	defer os.Remove(pipeline.Name())
+
+	got, err := ioutil.ReadFile(pipeline.Name())
+	require.NoError(t, err)
+
+	assert.Equal(t, want, string(got))
+}
+
+func TestGeneratePipelineWithNoStepsAndNoHooks(t *testing.T) {
+	steps := []Step{}
+
+	want :=
+		`steps: []
+`
+
+	plugin := Plugin{}
+
+	pipeline, _, err := generatePipeline(steps, plugin)
 	require.NoError(t, err)
 	defer os.Remove(pipeline.Name())
 

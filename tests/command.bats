@@ -298,3 +298,31 @@ steps:
 - command: cat ./foo-file.txt
 EOM
 }
+
+@test "Pipeline is generated as empty" {
+  DIFF_CMD="echo bar-service/"
+  LOG_LEVEL="debug"
+
+  export BUILDKITE_PLUGINS='[{
+    "github.com/monebag/monorepo-diff-buildkite-plugin": {
+      "diff":"echo bar-service/",
+      "log_level": "debug",
+      "watch": [
+        {
+          "path":"foo-service/",
+          "config": {
+            "trigger":"foo-service"
+          }
+        }
+      ]
+    }
+  }]'
+
+  run $PWD/hooks/command
+
+  assert_success
+
+  assert_output --partial << EOM
+steps: []
+EOM
+}
