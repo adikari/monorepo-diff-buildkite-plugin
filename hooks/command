@@ -65,15 +65,20 @@ downloader() {
   fi
 }
 
-
-
-download_binary_and_run() {
-  local _executable="monorepo-diff-buildkite-plugin"
-  local _repo="https://github.com/buildkite-plugins/monorepo-diff-buildkite-plugin"
-
+get_version() {
   local _plugin=${BUILDKITE_PLUGINS:-""}
   local _version=$(echo $_plugin | sed -e 's/.*monorepo-diff-buildkite-plugin//' -e 's/\".*//')
   RETVAL="$_version"
+}
+
+download_binary_and_run() {
+  get_architecture || return 1
+  local _arch="$RETVAL"
+  local _executable="monorepo-diff-buildkite-plugin"
+  local _repo="https://github.com/buildkite-plugins/monorepo-diff-buildkite-plugin"
+
+  get_version || return 1
+  local _version="$RETVAL"
 
   if [ -z ${_version} ]; then
     _url=${_repo}/releases/latest/download/${_executable}_${_arch}
