@@ -69,7 +69,7 @@ downloader() {
 
 download_binary_and_run() {
   local _executable="monorepo-diff-buildkite-plugin"
-  local _repo="https://github.com/monebag/monorepo-diff-buildkite-plugin"
+  local _repo="https://github.com/buildkite-plugins/monorepo-diff-buildkite-plugin"
 
   local _plugin=${BUILDKITE_PLUGINS:-""}
   local _version=$(echo $_plugin | sed -e 's/.*monorepo-diff-buildkite-plugin//' -e 's/\".*//')
