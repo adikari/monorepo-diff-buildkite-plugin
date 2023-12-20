@@ -42,67 +42,59 @@ Configuration supports 2 different step types.
     
     
     **Example**
-The  [**monorepo-diff buildkite plugin**](https://github.com/buildkite-plugins/monorepo-diff-buildkite-plugin), triggers pipelines by watching folders in the monorepo. The configuration supports running [Command](https://buildkite.com/docs/pipelines/command-step) and [Trigger](https://buildkite.com/docs/pipelines/trigger-step) steps
+    <br/>
+    When changes are detected in these paths of the monorepo, it triggers the other pipelines "cms-deploy" and "email-deploy"
 
-<br/>
+    ```yaml
+    steps:
+      - label: "Triggering pipelines with plugin"
+        plugins:
+          - monebag/monorepo-diff#v2.5.8:
+             watch:           
+              - path: app/cms/
+                config: # Required [trigger step configuration]
+                  trigger: cms-deploy # Required [trigger pipeline slug]
+              - path:
+                  - services/email
+                  - assets/images/email
+                config:
+                  trigger: email-deploy
+    ```
+      
+- [Command](https://buildkite.com/docs/pipelines/command-step)
+  
+    A `command` step runs one or more shell commands on one or more agents.
 
- **Example 1**
- <br/>
- 
- ```yaml
- steps:
-   - label: "Triggering pipelines"
-     plugins:
-       - buildkite-plugins/monorepo-diff#v1.0.1:
-           diff: "git diff --name-only HEAD~1"
-           watch:
-             - path: app/
-               config:
-                 trigger: "app-deploy"
-             - path: test/bin/
-               config:
-                 command: "echo Make Changes to Bin"
- ```
- 
- 
- * Changes to the path `app/` triggers the pipeline `app-deploy`
- * Changes to the path `test/bin` will run the respective configuration command
- 
- <br/>
- 
- ⚠️  Warning : The user has to explictly state the paths they want to monitor. For instance if a user,  is only watching path `app/` changes made to `app/bin` will not trigger the configuration. This is because the subfolder `/bin` was not specified.
- 
- <br/>
- 
-  **Example 2**
-  <br/>
+
+    **Example**
+     <br/>
      
- 
- ```yaml
-     steps:
-       - label: "Triggering pipelines with plugin"
-         plugins:
-           - buildkite-plugins/monorepo-diff#v1.0.1:
-              watch:           
-               - path: test/.buildkite/
-                 config: # Required [trigger step configuration]
-                   trigger: test-pipeline # Required [trigger pipeline slug]
-               - path:
-                   - app/
-                   - app/bin/service/
-                 config:
-                     trigger: "data-generator"
-                     label: ":package: Generate data"
-                     build:
-                       meta_data:
-                         release-version: "1.1"
- ```
- 
- * When changes are detected in the path `test/.buildkite/`  it triggers the pipeline `test-pipeline`
- * If the changes are made to either `app/` or `app/bin/service/` it triggers the pipeline `data-generator`
- 
+     When changes are detected in these paths, it triggers other steps or pipelines with relevant commands, labels, and agent configurations 
+      
+  ```yaml
+      steps:
+        - label: "Triggering pipelines"
+          plugins:
+            - monebag/monorepo-diff#v2.5.8:
+                diff: "git diff --name-only HEAD~1"
+                watch:
+                  - path: app/cms/
+                    config:
+                      group: ":rocket: deployment"
+                      command: "netlify --production deploy"
+                      label: ":netlify: Deploy to production"
+                      agents:
+                        queue: "deploy"
+                      env:
+                        - FOO=bar
+                  - path: app/service/
+                    config:
+                      command: "buildkite-agent pipeline upload ./frontend/.buildkite/pipeline.yaml"
+  
+  ```
+      
+  :warning: Warning: There is currently limited support for command configuration. Only the `command` property can be provided at this point in time. 
 
-<br/>
 
 
 #### `diff` (optional)
@@ -150,7 +142,7 @@ git diff --name-only "$LATEST_TAG"
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - buildkite-plugins/monorepo-diff#v1.0.1:
+      - monebag/monorepo-diff#v2.5.8:
           diff: "git diff --name-only HEAD~1"
           watch:
             - path: "bar-service/"
@@ -174,7 +166,7 @@ The object values provided in this configuration will be appended to `env` prope
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - buildkite-plugins/monorepo-diff#v1.0.1:
+      - monebag/monorepo-diff#v2.5.8:
           diff: "git diff --name-only HEAD~1"
           watch:
             - path: "foo-service/"
@@ -196,7 +188,7 @@ Add `log_level` property to set the log level. Supported log levels are `debug` 
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - buildkite-plugins/monorepo-diff#v1.0.1:
+      - monebag/monorepo-diff#v2.5.8:
           diff: "git diff --name-only HEAD~1"
           log_level: "debug" # defaults to "info"
           watch:
@@ -229,7 +221,7 @@ By setting `wait` to `true`, the build will wait until the triggered pipeline bu
 steps:
   - label: "Triggering pipelines"
     plugins:
-      - buildkite-plugins/monorepo-diff#v1.0.1:
+      - monebag/monorepo-diff#v2.5.8:
           diff: "git diff --name-only $(head -n 1 last_successful_build)"
           interpolation: false
           env:

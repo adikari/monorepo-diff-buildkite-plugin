@@ -1,6 +1,6 @@
-module github.com/buildkite-plugins/monorepo-diff-buildkite-plugin
+module github.com/monebag/monorepo-diff-buildkite-plugin
 
-go 1.21.1
+go 1.19
 
 require (
 	github.com/bmatcuk/doublestar/v2 v2.0.4
