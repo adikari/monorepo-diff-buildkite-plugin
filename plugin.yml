@@ -1,6 +1,6 @@
 name: Monorepo Diff
 description: Trigger pipelines on changes in watched folders
-author: https://github.com/buildkite-plugins
+author: https://github.com/monebag
 requirements:
   - git
 configuration:
