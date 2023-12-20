@@ -28,5 +28,3 @@
 monorepo-diff-buildkite-plugin*
 .envrc
 dist
-
-dist/
