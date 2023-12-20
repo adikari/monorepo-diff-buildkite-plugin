@@ -39,14 +39,7 @@ Configuration supports 2 different step types.
 
     The configuration for the `trigger` step https://buildkite.com/docs/pipelines/trigger-step
   
-    
-    
-    **Example**
-The  [**monorepo-diff buildkite plugin**](https://github.com/buildkite-plugins/monorepo-diff-buildkite-plugin), triggers pipelines by watching folders in the monorepo. The configuration supports running [Command](https://buildkite.com/docs/pipelines/command-step) and [Trigger](https://buildkite.com/docs/pipelines/trigger-step) steps
-
-<br/>
-
- **Example 1**
+ **Example**
  <br/>
  
  ```yaml
@@ -74,7 +67,7 @@ The  [**monorepo-diff buildkite plugin**](https://github.com/buildkite-plugins/m
  
  <br/>
  
-  **Example 2**
+  **Example**
   <br/>
      
  
