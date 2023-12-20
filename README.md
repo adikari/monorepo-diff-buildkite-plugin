@@ -55,7 +55,7 @@ Configuration supports 2 different step types.
                 config: # Required [trigger step configuration]
                   trigger: cms-deploy # Required [trigger pipeline slug]
               - path:
-                  - services/email
+                  - services/email/
                   - assets/images/email
                 config:
                   trigger: email-deploy
