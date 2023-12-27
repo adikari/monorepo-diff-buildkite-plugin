@@ -69,7 +69,6 @@ steps:
 
 **Example**
 <br/>
-
 ```yaml
 steps:
   - label: "Triggering pipelines with plugin"
