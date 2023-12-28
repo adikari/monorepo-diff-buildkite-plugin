@@ -1,7 +1,20 @@
 steps:
+  - label: ":shell: Shellcheck"
+    plugins:
+      shellcheck#v1.3.0:
+        files:
+          - hooks/**
+          - lib/**
+          - commands/**
+
+  - label: ":sparkles: Lint"
+    plugins:
+      plugin-linter#v3.2.0:
+        id: monorepo-diff
+
   - label: ":bomb: Triggers"
     plugins:
-      - monebag/monorepo-diff:
+      - ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
           diff: "cat ./e2e/one-match-one-miss"
           log_level: "debug"
           watch:
@@ -14,18 +27,14 @@ steps:
             - path: "foo-service/"
               config:
                 command: "echo running command"
-                notify:
-                  - slack: "#alerts"
           hooks:
             - command: echo "command hook 1"
             - command: echo "command hook 2"
 
   - label: ":bomb: Testing notifications"
     plugins:
-      - monebag/monorepo-diff:
+      - ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
           diff: "cat ./e2e/multiple-paths"
-          notify:
-            - email: subash@monebag.com
           watch:
             - path:
                 - "user-service/infrastructure/"
@@ -34,7 +43,7 @@ steps:
 
   - label: ":bomb: Testing groups"
     plugins:
-      - monebag/monorepo-diff#v2.5.7:
+      - ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
           diff: "cat ./e2e/multiple-paths"
           watch:
             - path:
@@ -46,7 +55,7 @@ steps:
 
   - label: ":bomb: Testing hooks"
     plugins:
-      - monebag/monorepo-diff#v2.5.7:
+      - ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
           diff: "cat ./e2e/multiple-paths"
           watch:
             - path: "user-service/"
@@ -66,7 +75,7 @@ steps:
 
   - label: ":bomb: Testing wait"
     plugins:
-      - monebag/monorepo-diff:
+      - ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
           diff: "cat ./e2e/multiple-paths"
           watch:
             - path:
@@ -78,7 +87,7 @@ steps:
 
   - label: ":bomb: Testing triggers and commands"
     plugins:
-      - monebag/monorepo-diff:
+      - ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
           diff: "cat ./e2e/commands-or-triggers"
           watch:
             - path: "user-service/"
