@@ -1,7 +1,3 @@
-[![e2e status](https://badge.buildkite.com/719d0b895285367c9c57a09e07f1e853148d2509f0667e0ae8.svg?branch=master)](https://buildkite.com/monebag/monorepo-diff-buildkite-plugin)
-[![codecov](https://codecov.io/gh/monebag/monorepo-diff-buildkite-plugin/branch/master/graph/badge.svg?token=DQ3B4FIYD2)](https://codecov.io/gh/monebag/monorepo-diff-buildkite-plugin)
-[![Publish](https://github.com/monebag/monorepo-diff-buildkite-plugin/actions/workflows/publish.yml/badge.svg)](https://github.com/monebag/monorepo-diff-buildkite-plugin/actions/workflows/publish.yml)
-
 # Monorepo-diff-buildkite-plugin
 
 This Monorepo plugin will assist you in triggering pipelines, as well as run commands in your CI by watching folders in your `monorepo`.
@@ -256,6 +252,10 @@ steps:
 
           wait: true
 ```
+
+## Thanks :heart:
+
+Thanks to [Monebag](https://github.com/monebag/) for authoring the original Buildkite Monorepo Plugin.
 
 ## License
 
