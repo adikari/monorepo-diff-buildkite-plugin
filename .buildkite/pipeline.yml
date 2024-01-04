@@ -1,3 +1,6 @@
+env:
+  BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_TEST_MODE: true
+
 steps:
   - label: ":shell: Shellcheck"
     plugins:
@@ -13,12 +16,20 @@ steps:
         id: monorepo-diff
 
   - label: ":linux: Build"
-    command: make linux
+    command: make local
+    plugins:
+      - artifacts#1.9.2:
+          upload:
+            - from: dist/monorepo-diff-buildkite-plugin_linux_amd64_v1/monorepo-diff-buildkite-plugin
+              to: monorepo-diff-buildkite-plugin
 
   - wait:
 
   - label: ":bomb: Triggers"
     plugins:
+      - artifacts#v1.9.2:
+          download:
+            - "monorepo-diff-buildkite-plugin"
       - ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
           diff: "cat ./e2e/one-match-one-miss"
           log_level: "debug"
@@ -38,6 +49,9 @@ steps:
 
   - label: ":bomb: Testing notifications"
     plugins:
+      - artifacts#v1.9.2:
+          download:
+            - "monorepo-diff-buildkite-plugin"
       - ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
           diff: "cat ./e2e/multiple-paths"
           watch:
@@ -48,6 +62,9 @@ steps:
 
   - label: ":bomb: Testing groups"
     plugins:
+      - artifacts#v1.9.2:
+          download:
+            - "monorepo-diff-buildkite-plugin"
       - ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
           diff: "cat ./e2e/multiple-paths"
           watch:
@@ -60,6 +77,9 @@ steps:
 
   - label: ":bomb: Testing hooks"
     plugins:
+      - artifacts#v1.9.2:
+          download:
+            - "monorepo-diff-buildkite-plugin"
       - ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
           diff: "cat ./e2e/multiple-paths"
           watch:
@@ -80,6 +100,9 @@ steps:
 
   - label: ":bomb: Testing wait"
     plugins:
+      - artifacts#v1.9.2:
+          download:
+            - "monorepo-diff-buildkite-plugin"
       - ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
           diff: "cat ./e2e/multiple-paths"
           watch:
@@ -92,6 +115,9 @@ steps:
 
   - label: ":bomb: Testing triggers and commands"
     plugins:
+      - artifacts#v1.9.2:
+          download:
+            - "monorepo-diff-buildkite-plugin"
       - ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
           diff: "cat ./e2e/commands-or-triggers"
           watch:

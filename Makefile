@@ -42,10 +42,10 @@ else
 	$(error goreleaser binary is missing, please install goreleaser)
 endif
 
-.PHONY: linux
+.PHONY: local
 linux:
 ifneq (${HAS_GORELEASER},)
-	goreleaser build --clean --snapshot --single-target -f .goreleaser-test.yml
+	goreleaser build --clean --snapshot --single-target
 else
 	$(error goreleaser-test binary is missing, please install goreleaser)
 endif
