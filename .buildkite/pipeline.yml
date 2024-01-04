@@ -18,7 +18,7 @@ steps:
   - label: ":linux: Build"
     command: make local
     plugins:
-      - artifacts#1.9.2:
+      - artifacts#v1.9.2:
           upload:
             - from: dist/monorepo-diff-buildkite-plugin_linux_amd64_v1/monorepo-diff-buildkite-plugin
               to: monorepo-diff-buildkite-plugin
