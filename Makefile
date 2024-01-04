@@ -44,8 +44,6 @@ endif
 
 .PHONY: local
 local:
-ifneq (${HAS_GORELEASER},)
-	goreleaser build --clean --snapshot --single-target
-else
-	$(error goreleaser-test binary is missing, please install goreleaser)
-endif
+	rm -f ${NAME}
+	go build -o ${NAME}
+	chmod +x ${NAME}
