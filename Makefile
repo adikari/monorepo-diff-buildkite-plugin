@@ -43,7 +43,7 @@ else
 endif
 
 .PHONY: local
-linux:
+local:
 ifneq (${HAS_GORELEASER},)
 	goreleaser build --clean --snapshot --single-target
 else
