@@ -12,6 +12,11 @@ steps:
       plugin-linter#v3.2.0:
         id: monorepo-diff
 
+  - label: ":linux: Build"
+    command: make linux
+
+  - wait:
+
   - label: ":bomb: Triggers"
     plugins:
       - ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:

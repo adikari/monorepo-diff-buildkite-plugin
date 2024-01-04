@@ -37,8 +37,15 @@ endif
 .PHONY: build
 build:
 ifneq (${HAS_GORELEASER},)
-	goreleaser build --rm-dist --skip-validate
+	goreleaser build --clean --skip-validate
 else
 	$(error goreleaser binary is missing, please install goreleaser)
 endif
 
+.PHONY: linux
+linux:
+ifneq (${HAS_GORELEASER},)
+	goreleaser build --clean --snapshot --single-target -f .goreleaser-test.yml
+else
+	$(error goreleaser-test binary is missing, please install goreleaser)
+endif
