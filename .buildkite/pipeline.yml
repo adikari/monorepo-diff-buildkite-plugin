@@ -18,7 +18,12 @@ steps:
   - label: ":linux: Build"
     command: make local
     artifact_paths: monorepo-diff-buildkite-plugin
-    
+    plugins:
+      - docker#v5.9.0:
+          image: "golang"
+          always-pull: true
+          workdir: /plugin
+  
   - wait:
 
   - label: ":bomb: Triggers"
