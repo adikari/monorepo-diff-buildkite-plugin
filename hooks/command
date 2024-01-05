@@ -93,10 +93,11 @@ download_binary_and_run() {
       say "failed to download $_url"
       exit 1
     fi
-
-    chmod +x ${_executable}
   fi
 
+  # todo: move it to a more secure place
+  chmod +x ${_executable}
+  
   ./${_executable}
 }
 
