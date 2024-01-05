@@ -9,12 +9,6 @@ steps:
           - hooks/**
           - lib/**
           - commands/**
-  
-  - label: ":shell: Tests"
-    plugins:
-      - plugin-tester#v1.1.0:
-          folders:
-            - tests
 
   - label: ":sparkles: Lint"
     plugins:

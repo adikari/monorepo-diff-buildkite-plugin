@@ -239,7 +239,7 @@ func TestGeneratePipeline(t *testing.T) {
 			Build:    Build{Message: "build message"},
 			SoftFail: true,
 			Notify: []StepNotify{
-				{Slack: "@test"},
+				{Slack: "@adikari"},
 			},
 		},
 		{
@@ -265,7 +265,7 @@ func TestGeneratePipeline(t *testing.T) {
 			{Email: "bar@gmail.com"},
 			{Basecamp: "https://basecamp"},
 			{Webhook: "https://webhook"},
-			{Slack: "@test"},
+			{Slack: "@adikari"},
 			{GithubStatus: GithubStatusNotification{Context: "github-context"}},
 		},
 		Hooks: []HookConfig{
@@ -288,7 +288,7 @@ func TestGeneratePipeline(t *testing.T) {
 - email: bar@gmail.com
 - basecamp_campfire: https://basecamp
 - webhook: https://webhook
-- slack: '@test'
+- slack: '@adikari'
 - github_commit_status:
     context: github-context
 steps:
@@ -297,7 +297,7 @@ steps:
     message: build message
   soft_fail: true
   notify:
-  - slack: '@test'
+  - slack: '@adikari'
 - trigger: notification-test
   command: command-to-run
   notify:
