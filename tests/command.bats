@@ -1,8 +1,7 @@
 #!/usr/bin/env bats
 
-load '/usr/local/lib/bats/load.bash'
-
 setup() {
+  load "$BATS_PLUGIN_PATH/load.bash"
   export BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_TEST_MODE="true"
 
   stub buildkite-agent pipeline upload
@@ -177,7 +176,7 @@ EOM
             "trigger": "foo-service-pipeline",
             "label": "foo service pipeline",
             "notify": [
-              { "slack": "@adikari" }
+              { "slack": "@test" }
             ],
             "build": {
               "message": "some-message",
@@ -274,7 +273,7 @@ steps:
   - tests/*
   async: true
   notify:
-  - slack: '@adikari'
+  - slack: '@test'
 - group: my group
   steps:
   - command: echo "hello group"
