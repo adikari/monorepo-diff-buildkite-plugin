@@ -48,6 +48,10 @@ configuration:
               type: string
             soft_fail:
               type: [object, boolean]
+            parallelism:
+              type: [object, integer]
+            timeout_in_minutes:
+              type: [object, integer]
             notify:
               type: [array]
               properties:
