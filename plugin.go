@@ -23,6 +23,8 @@ type Plugin struct {
 	RawNotify     []map[string]interface{} `json:"notify" yaml:",omitempty"`
 	Notify        []PluginNotify           `yaml:"notify,omitempty"`
 	Plugins       interface{}              `yaml:"plugins,omitempty"`
+	Timeout       int                      `yaml:"timeout_in_minutes,omitempty"`
+	Parallel      int                      `yaml:"parallelism,omitempty"`
 }
 
 // HookConfig Plugin hook configuration
