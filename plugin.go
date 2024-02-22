@@ -23,8 +23,6 @@ type Plugin struct {
 	RawNotify     []map[string]interface{} `json:"notify" yaml:",omitempty"`
 	Notify        []PluginNotify           `yaml:"notify,omitempty"`
 	Plugins       interface{}              `yaml:"plugins,omitempty"`
-	Timeout       int                      `yaml:"timeout_in_minutes,omitempty"`
-	Parallel      int                      `yaml:"parallelism,omitempty"`
 }
 
 // HookConfig Plugin hook configuration
@@ -85,8 +83,8 @@ type Step struct {
 	RawNotify []map[string]interface{} `json:"notify" yaml:",omitempty"`
 	Notify    []StepNotify             `yaml:"notify,omitempty"`
 	Plugins   interface{}              `yaml:"plugins,omitempty"`
-	Timeout   int                      `yaml:"timeout_in_minutes,omitempty"`
-	Parallel  int                      `yaml:"parallelism,omitempty"`
+	Timeout   interface{}              `yaml:"timeout_in_minutes,omitempty"`
+	Parallel  interface{}              `yaml:"parallelism,omitempty"`
 }
 
 // Agent is Buildkite agent definition
