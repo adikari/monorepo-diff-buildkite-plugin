@@ -65,6 +65,7 @@ steps:
 
 **Example**
 <br/>
+
 ```yaml
 steps:
   - label: "Triggering pipelines with plugin"
@@ -255,7 +256,7 @@ steps:
 
 ## Thanks :heart:
 
-Thanks to [Monebag](https://github.com/monebag/) for authoring the original Buildkite Monorepo Plugin.
+Thanks to [@chronotc](https://github.com/chronotc) and [Monebag](https://github.com/monebag/) for authoring the original Buildkite Monorepo Plugin.
 
 ## License
 
